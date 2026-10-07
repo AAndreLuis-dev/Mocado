@@ -1,0 +1,32 @@
+import { expect } from 'vitest';
+import { mulberry32, type Generator, type GenOptions } from '../src';
+
+/** generate → validate for many seeds; also checks determinism and format round-trip. */
+export function roundTrip<O extends object>(
+  gen: Generator<O>,
+  opts: O = {} as O,
+  n = 5000,
+): string[] {
+  const rng = mulberry32(42);
+  const out: string[] = [];
+  for (let i = 0; i < n; i++) {
+    const masked = i % 2 === 0;
+    const v = gen.generate({ ...opts, rng, masked } as O & GenOptions);
+    if (!gen.validate(v)) throw new Error(`invalid generated value: ${v}`);
+    const other = gen.format(v, { masked: !masked });
+    if (!gen.validate(other)) throw new Error(`invalid after format: ${other}`);
+    expect(gen.format(other, { masked })).toBe(v);
+    out.push(v);
+  }
+  const a = gen.generate({ ...opts, rng: mulberry32(7) } as O & GenOptions);
+  const b = gen.generate({ ...opts, rng: mulberry32(7) } as O & GenOptions);
+  expect(a).toBe(b);
+  return out;
+}
+
+/** Changing the last check digit must invalidate the value. */
+export function mutateLastDigit(value: string): string {
+  const i = value.search(/\d(?=\D*$)/);
+  const d = Number(value[i]);
+  return value.slice(0, i) + ((d + 1) % 10) + value.slice(i + 1);
+}

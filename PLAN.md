@@ -73,7 +73,7 @@ Gate de toda fase: `pnpm lint && pnpm typecheck && pnpm test` (e `pnpm e2e` a pa
 `git init` (branch `main`), workspace pnpm, `tsconfig` strict compartilhado, ESLint flat + Prettier, Vitest, WXT com React/Tailwind/i18n gerando um popup "olá", playground Vite vazio, CI (`lint`, `typecheck`, `test`, `build`, `zip` Chrome + Firefox + sources, com upload como artifacts), `CLAUDE.md`, `docs/decisions.md`, `LICENSE` MIT.
 **Aceite:** `pnpm i && pnpm lint && pnpm typecheck && pnpm test && pnpm build` passam; `wxt build -b firefox` gera um MV3 com `browser_specific_settings.gecko.id`; o manifest lista apenas `activeTab, scripting, storage, contextMenus`.
 
-### [ ] Fase 2 — Core: documentos principais
+### [x] Fase 2 — Core: documentos principais
 
 RNG/seed, helpers de máscara, interface `Generator`. CPF (com UF → 9º dígito pela região fiscal), CNPJ numérico e alfanumérico (DV módulo 11 sobre `ASCII−48`, pesos 5..2,9..2 / 6..2,9..2; opção `numerico|alfanumerico|aleatorio`).
 **Aceite:** `12.ABC.345/01DE-35` valida; CPFs/CNPJs conhecidos validam; 10 mil iterações gera→valida = 100%; mutar 1 caractere → inválido; a mesma seed gera a mesma saída; `format` ida e volta.

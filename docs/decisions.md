@@ -11,3 +11,9 @@ Formato: data, decisão e porquê. A mais recente fica no fim.
 - **Sem host permissions fixas.** Tudo roda por gesto do usuário (atalho, menu de contexto, popup), o que concede `activeTab`. O build e2e (`MASSA_E2E=1`) adiciona `http://localhost/*` porque o Playwright não consegue apertar atalhos de extensão.
 - **Geração no background, preenchimento no content.** O content script não importa o core nem os datasets, e fica pequeno.
 - **Dataset de CEP** montado uma vez por script de dev (ViaCEP), versionado como JSON. Em runtime não há rede nenhuma.
+
+## 2026-10-06: Core, documentos principais
+
+- **`Generator` só para tipos validáveis.** Nome, lorem, senha etc. são funções `generate` simples; forçar `validate/format` neles seria cerimônia vazia.
+- **CNPJ alfanumérico:** a raiz tem 8 caracteres `[0-9A-Z]` com ao menos uma letra (para ser visivelmente alfanumérico), e a filial é `0001`. Os mesmos pesos e o mesmo DV servem para os dois tipos (`ASCII − 48`), validados com o exemplo oficial `12.ABC.345/01DE-35`. O padrão é `numerico`.
+- **Teste de mutação** altera só o último DV. Em CNPJ alfanumérico, uma mudança de valor múltipla de 11 na raiz não é detectada pelo módulo 11; é limitação do algoritmo, não bug.
