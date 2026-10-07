@@ -5,7 +5,7 @@ export default defineBackground(() => {
   browser.runtime.onMessage.addListener(
     (msg: BackgroundMessage, _sender, sendResponse: (r: FillResult) => void) => {
       if (msg.type === 'fill-tab') {
-        fillTab(msg.tabId).then((r) =>
+        fillTab(msg.tabId, msg.reuseId).then((r) =>
           sendResponse(r.ok ? { ok: true, filled: r.filled } : { ok: false, error: r.error }),
         );
         return true; // async response

@@ -23,7 +23,9 @@ export const test = base.extend<{
   context: async ({}, use) => {
     const context = await chromium.launchPersistentContext('', {
       channel: 'chromium', // new headless supports extensions
-      args: [`--disable-extensions-except=${EXT}`, `--load-extension=${EXT}`],
+      locale: 'pt-BR',
+      env: { ...process.env, LANG: 'pt_BR.UTF-8', LANGUAGE: 'pt_BR' }, // chrome.i18n follows the UI locale
+      args: [`--disable-extensions-except=${EXT}`, `--load-extension=${EXT}`, '--lang=pt-BR'],
     });
     await use(context);
     await context.close();
@@ -33,17 +35,17 @@ export const test = base.extend<{
     await use(sw);
   },
   fill: async ({ sw }, use) => {
-    await use(
-      (page) =>
-        sw.evaluate(async (url) => {
-          const g = globalThis as unknown as {
-            chrome: typeof browser;
-            massaFillTab: (id: number) => Promise<unknown>;
-          };
-          const [tab] = await g.chrome.tabs.query({ url });
-          return g.massaFillTab(tab!.id!);
-        }, page.url().split('#')[0]!) as Promise<FillOutcome>,
-    );
+    await use(async (page) => {
+      await page.bringToFront(); // several tabs may share the URL: target the active one
+      return sw.evaluate(async (url) => {
+        const g = globalThis as unknown as {
+          chrome: typeof browser;
+          massaFillTab: (id: number) => Promise<unknown>;
+        };
+        const [tab] = await g.chrome.tabs.query({ url, active: true });
+        return g.massaFillTab(tab!.id!);
+      }, page.url().split('#')[0]!) as Promise<FillOutcome>;
+    });
   },
   pageErrors: async ({ context }, use) => {
     const errors: string[] = [];
