@@ -118,3 +118,30 @@ field:
   veiculoModelo: Modelo
   veiculoAno: Ano
   texto: Texto
+
+history:
+  title: Histórico de perfis
+  search: Buscar por qualquer valor (CPF, nome, domínio…)
+  allDomains: Todos os domínios
+  favoritesOnly: Só favoritos
+  empty: Nenhum perfil ainda. Preencha um formulário para começar.
+  noResults: Nada encontrado.
+  labelPlaceholder: 'Sem rótulo (ex.: admin teste)'
+  labelAria: Rótulo do perfil
+  favorite: Favoritar
+  unfavorite: Remover dos favoritos
+  reuse: Reusar este perfil
+  pinnedHint: Fixado. O próximo preenchimento (atalho, popup ou menu) usará este perfil.
+  delete: Excluir
+  confirmDelete: Confirmar exclusão
+  export: Exportar JSON
+  import: Importar JSON
+  imported: '$1 perfis importados.'
+  importError: Arquivo inválido.
+  details: Ver dados
+  hide: Ocultar dados
+  usedIn: Usado em
+  count: '$1 perfis'
+  pessoa: Pessoa
+  empresa: Empresa
+  avulso: Avulso

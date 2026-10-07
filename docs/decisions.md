@@ -49,3 +49,13 @@ Formato: data, decisão e porquê. A mais recente fica no fim.
 - **Observer:** depois do 1º preenchimento, um `MutationObserver` (debounce de 250 ms) preenche, com o mesmo perfil, campos novos e vazios. Ele não enxerga mutações dentro de shadow roots nem de iframes (limitação do MutationObserver); esses campos entram no próximo gatilho.
 - **e2e:** Chromium com `channel: 'chromium'` (o novo headless carrega extensões). O build `MASSA_E2E=1` vai para `.output/e2e`, para não contaminar o build de produção.
 - **Import attributes em JSON** (`with { type: 'json' }`) no core: o Node ESM exige (o Playwright importa o core para validar).
+
+## 2026-10-07: Histórico
+
+- **`StorageAdapter`** e a implementação `LocalStorageAdapter` ficam no mesmo arquivo (`src/history.ts`). O histórico inteiro vive numa chave do `storage.local` (≈ 10 mil perfis na quota de 10 MB). Essa simplificação está marcada com `ponytail:`; o IndexedDB entra atrás da mesma interface se o volume exigir.
+- **Reuso não duplica:** um registro tem `uses[]` (domínio, URL, data). Reusar adiciona um uso ao mesmo registro, e assim "qual CPF foi usado em qual cadastro" fica num lugar só. O filtro por domínio olha todos os usos.
+- **Busca** casa texto sem acento e sem caixa, e também só alfanuméricos (a partir de 3 caracteres): colar um CPF sem máscara acha o CPF mascarado.
+- **"Reusar" na página de histórico fixa o perfil** (`pinned`, uso único). O próximo preenchimento usa o perfil fixado e depois o desafixa. No popup, "Reusar" preenche direto (ali há `activeTab`).
+- **Importação é validada** campo a campo (`sanitize`): chaves desconhecidas são descartadas, só valores string; arquivo sem `records` gera erro. Por padrão o modo é `merge` por id.
+- **Preenchimentos avulsos** (campo focado, "Gerar X aqui") também viram registros do tipo `avulso`.
+- **e2e em pt-BR:** `chrome.i18n` segue o idioma da UI do Chromium, e o Playwright precisa de `LANG/LANGUAGE=pt_BR` no ambiente (`--lang` sozinho não basta no headless).

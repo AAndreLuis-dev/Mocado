@@ -3,6 +3,7 @@ import { i18n } from '#i18n';
 import { defaultOptions, GENERATORS, type Result } from '@/src/generators';
 import { sendToBackground } from '@/src/messages';
 import { Button, CopyButton, fieldLabel, selectClass } from '@/src/ui';
+import { Recent } from './Recent';
 
 const optionLabel = (value: string) => {
   if (value === '') return i18n.t('opt.ufAny');
@@ -44,10 +45,12 @@ export function App() {
     setResult(g.run(o, m));
   }
 
-  async function fillPage() {
+  async function fillPage(reuseId?: string) {
     const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
     if (tab?.id === undefined) return;
-    const res = await sendToBackground({ type: 'fill-tab', tabId: tab.id }).catch(() => null);
+    const res = await sendToBackground({ type: 'fill-tab', tabId: tab.id, reuseId }).catch(
+      () => null,
+    );
     if (!res || !res.ok) return setStatus(i18n.t('popup.fillError'));
     if (res.filled === 0) return setStatus(i18n.t('popup.noFields'));
     window.close();
@@ -73,7 +76,7 @@ export function App() {
         </label>
       </header>
 
-      <Button variant="primary" className="py-2" onClick={fillPage}>
+      <Button variant="primary" className="py-2" onClick={() => fillPage()}>
         {i18n.t('popup.fillPage')}
       </Button>
       {status && (
@@ -160,6 +163,21 @@ export function App() {
           </div>
         )}
       </section>
+
+      <Recent onReuse={(id) => void fillPage(id)} />
+
+      <nav className="flex gap-3 text-sm">
+        <a
+          href="#"
+          className="text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-400"
+          onClick={(e) => {
+            e.preventDefault();
+            void browser.tabs.create({ url: browser.runtime.getURL('/history.html') });
+          }}
+        >
+          {i18n.t('popup.history')}
+        </a>
+      </nav>
 
       <footer className="text-[11px] text-zinc-500">{i18n.t('disclaimer')}</footer>
     </main>

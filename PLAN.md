@@ -58,7 +58,7 @@ apps/extension/
   wxt.config.ts
   entrypoints/{background.ts, injected.ts (unlisted), popup/, manage/}
   src/detect/{classify.ts,synonyms.ts,collect.ts}  src/fill/fill.ts
-  src/storage/{adapter.ts,local.ts}  src/messages.ts  src/settings.ts
+  src/history.ts (StorageAdapter + LocalStorageAdapter)  src/messages.ts  src/settings.ts
   locales/{pt_BR,en}.yml
   e2e/*.spec.ts  playwright.config.ts
 apps/playground/  {pf.html, pj.html (React), mascaras.html (IMask), spa.html, nomes-ruins.html}
@@ -94,7 +94,7 @@ Classificador por pontuação (autocomplete > name/id > label/aria > placeholder
 **e2e:** Playwright com Chromium carregando a extensão (`launchPersistentContext` + `--load-extension`). Atalhos de extensão não podem ser disparados no Playwright, então um build `MASSA_E2E=1` adiciona `host_permissions: http://localhost/*` (somente nesse build) e o teste chama `fillActiveTab()` pelo service worker.
 **Aceite:** as 5 páginas preenchidas com valores válidos para o tipo detectado; na página React, o `<pre data-testid="state">` reflete os valores; as máscaras ficam no formato correto; o formulário que surge depois de um clique é preenchido pelo observer; zero erros de console/pageerror; testes unitários do classificador com uma tabela de ~60 casos de input → tipo.
 
-### [ ] Fase 6 — Histórico
+### [x] Fase 6 — Histórico
 
 `StorageAdapter` + implementação local; registro gravado a cada preenchimento; aba Histórico com busca por qualquer valor (normalizada: só alfanuméricos, então CPF com ou sem máscara casa), filtro por domínio, rótulo editável, favoritar, copiar campo, reusar (fixar/popup), excluir, export/import JSON (validado na importação). Últimos perfis no popup.
 **Aceite:** testes unitários do adapter (com mock de `storage`); e2e: preenche → acha pelo CPF colado → reusa → os mesmos valores aparecem no formulário; export → limpar → import restaura tudo.

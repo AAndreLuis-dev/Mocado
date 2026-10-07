@@ -118,3 +118,30 @@ field:
   veiculoModelo: Model
   veiculoAno: Year
   texto: Text
+
+history:
+  title: Profile history
+  search: Search any value (CPF, name, domain…)
+  allDomains: All domains
+  favoritesOnly: Favorites only
+  empty: No profiles yet. Fill a form to get started.
+  noResults: Nothing found.
+  labelPlaceholder: 'No label (e.g. admin test)'
+  labelAria: Profile label
+  favorite: Favorite
+  unfavorite: Remove from favorites
+  reuse: Reuse this profile
+  pinnedHint: Pinned. The next fill (shortcut, popup or menu) will use this profile.
+  delete: Delete
+  confirmDelete: Confirm delete
+  export: Export JSON
+  import: Import JSON
+  imported: '$1 profiles imported.'
+  importError: Invalid file.
+  details: Show data
+  hide: Hide data
+  usedIn: Used on
+  count: '$1 profiles'
+  pessoa: Person
+  empresa: Company
+  avulso: Single field
