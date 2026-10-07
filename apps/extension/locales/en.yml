@@ -145,3 +145,47 @@ history:
   pessoa: Person
   empresa: Company
   avulso: Single field
+
+cmdFillForm: Fill the whole form
+cmdFillField: Fill only the focused field
+
+menu:
+  fillForm: Fill form
+  generateHere: Generate here
+  markAs: Mark this field as
+  history: Profile history
+  options: Options
+
+tabs:
+  history: History
+  options: Options
+  overrides: Corrected fields
+
+options:
+  title: Options
+  saved: Saved.
+  masked: Use masks by default (when the field gives no hint)
+  cnpjTipo: Default CNPJ type
+  uf: Preferred state
+  ufRandom: Random
+  idade: Age range
+  idadeMin: Minimum age
+  idadeMax: Maximum age
+  blocked: Domains where Massa never acts
+  blockedHint: One per line. Subdomains included (e.g. bank.com).
+  theme: Theme
+  themeSystem: System
+  themeLight: Light
+  themeDark: Dark
+  fillPasswords: Fill password fields
+  observe: Fill fields that appear later (SPAs, modals, wizards)
+  shortcuts: Shortcuts
+  shortcutsHint: 'Change them at chrome://extensions/shortcuts (Chrome/Edge/Brave/Opera) or about:addons → gear → Manage Extension Shortcuts (Firefox).'
+  shortcutUnset: (not set)
+  privacy: No data leaves the browser. No network, no telemetry.
+
+overrides:
+  hint: Use the context menu “Mark this field as” to correct a detected type. Corrections apply per domain.
+  empty: No saved corrections.
+  remove: Remove
+  removeDomain: Remove all for this domain

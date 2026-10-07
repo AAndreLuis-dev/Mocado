@@ -4,4 +4,4 @@ import { ManageApp } from '@/src/manage/App';
 import { initTheme } from '@/src/theme';
 
 initTheme();
-createRoot(document.getElementById('root')!).render(<ManageApp initial="history" />);
+createRoot(document.getElementById('root')!).render(<ManageApp initial="options" />);

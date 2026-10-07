@@ -1,1 +1,4 @@
 @import 'tailwindcss';
+
+/* Theme is chosen in Options (system/light/dark): `.dark` on <html> instead of the media query. */
+@custom-variant dark (&:where(.dark, .dark *));

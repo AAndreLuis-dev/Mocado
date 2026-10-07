@@ -145,3 +145,47 @@ history:
   pessoa: Pessoa
   empresa: Empresa
   avulso: Avulso
+
+cmdFillForm: Preencher o formulário inteiro
+cmdFillField: Preencher só o campo focado
+
+menu:
+  fillForm: Preencher formulário
+  generateHere: Gerar aqui
+  markAs: Marcar este campo como
+  history: Histórico de perfis
+  options: Opções
+
+tabs:
+  history: Histórico
+  options: Opções
+  overrides: Campos corrigidos
+
+options:
+  title: Opções
+  saved: Salvo.
+  masked: Usar máscara por padrão (quando o campo não indica o formato)
+  cnpjTipo: Tipo de CNPJ padrão
+  uf: UF preferida
+  ufRandom: Aleatória
+  idade: Faixa de idade
+  idadeMin: Idade mínima
+  idadeMax: Idade máxima
+  blocked: Domínios onde o Massa nunca atua
+  blockedHint: 'Um por linha. Subdomínios incluídos (ex.: banco.com.br).'
+  theme: Tema
+  themeSystem: Do sistema
+  themeLight: Claro
+  themeDark: Escuro
+  fillPasswords: Preencher campos de senha
+  observe: Preencher campos que aparecem depois (SPAs, modais, wizards)
+  shortcuts: Atalhos
+  shortcutsHint: 'Altere em chrome://extensions/shortcuts (Chrome/Edge/Brave/Opera) ou em about:addons → engrenagem → Gerenciar atalhos (Firefox).'
+  shortcutUnset: (sem atalho)
+  privacy: Nenhum dado sai do navegador. Sem rede, sem telemetria.
+
+overrides:
+  hint: Use o menu de contexto “Marcar este campo como” para corrigir o tipo detectado. As correções valem por domínio.
+  empty: Nenhuma correção salva.
+  remove: Remover
+  removeDomain: Remover todas deste domínio

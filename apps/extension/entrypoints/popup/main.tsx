@@ -1,5 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import '@/assets/tailwind.css';
+import { initTheme } from '@/src/theme';
 import { App } from './App';
 
+initTheme();
 createRoot(document.getElementById('root')!).render(<App />);

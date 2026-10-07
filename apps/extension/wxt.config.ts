@@ -12,6 +12,16 @@ export default defineConfig({
     description: '__MSG_extDescription__',
     default_locale: 'pt_BR',
     permissions: ['activeTab', 'scripting', 'storage', 'contextMenus'],
+    commands: {
+      'fill-form': {
+        suggested_key: { default: 'Ctrl+Shift+F', mac: 'Command+Shift+F' },
+        description: '__MSG_cmdFillForm__',
+      },
+      'fill-field': {
+        suggested_key: { default: 'Alt+Shift+F', mac: 'Alt+Shift+F' },
+        description: '__MSG_cmdFillField__',
+      },
+    },
     // e2e only: Playwright cannot press extension shortcuts, so tests inject via host permission.
     ...(e2e ? { host_permissions: ['http://localhost/*'] } : {}),
     ...(browser === 'firefox' && {
