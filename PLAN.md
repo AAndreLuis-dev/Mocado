@@ -99,7 +99,7 @@ Classificador por pontuação (autocomplete > name/id > label/aria > placeholder
 `StorageAdapter` + implementação local; registro gravado a cada preenchimento; aba Histórico com busca por qualquer valor (normalizada: só alfanuméricos, então CPF com ou sem máscara casa), filtro por domínio, rótulo editável, favoritar, copiar campo, reusar (fixar/popup), excluir, export/import JSON (validado na importação). Últimos perfis no popup.
 **Aceite:** testes unitários do adapter (com mock de `storage`); e2e: preenche → acha pelo CPF colado → reusa → os mesmos valores aparecem no formulário; export → limpar → import restaura tudo.
 
-### [ ] Fase 7 — Acionamento e opções
+### [x] Fase 7 — Acionamento e opções
 
 `commands`: preencher formulário (`Ctrl+Shift+F` / `Command+Shift+F`) e preencher o campo focado (atalho sugerido a ser validado contra conflitos de Chrome/Firefox e registrado em decisions; o usuário pode remapear). Menu de contexto em `editable`: "Gerar <tipo> aqui" (submenu), "Preencher formulário", "Marcar este campo como →". Opções: máscara padrão, tipo de CNPJ, UF preferida, faixa de idade, domínios bloqueados, tema claro/escuro/sistema, preencher senhas, observer on/off. Overrides por domínio aplicados na detecção.
 **Aceite:** e2e de override (marca campo1 como CPF → recarrega → preenche CPF); domínio bloqueado não é preenchido; unitários das opções com defaults.

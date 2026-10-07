@@ -177,6 +177,16 @@ export function App() {
         >
           {i18n.t('popup.history')}
         </a>
+        <a
+          href="#"
+          className="text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-400"
+          onClick={(e) => {
+            e.preventDefault();
+            void browser.runtime.openOptionsPage();
+          }}
+        >
+          {i18n.t('popup.options')}
+        </a>
       </nav>
 
       <footer className="text-[11px] text-zinc-500">{i18n.t('disclaimer')}</footer>

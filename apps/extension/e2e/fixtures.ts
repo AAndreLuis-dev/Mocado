@@ -16,6 +16,11 @@ export const test = base.extend<{
   sw: Worker;
   /** Triggers a whole-form fill on `page` the same way the shortcut/popup do. */
   fill: (page: Page) => Promise<FillOutcome>;
+  /**
+   * Calls a background hook (`globalThis.massa[method]`) for `page`'s tab: the strings '$TAB_ID'
+   * and '$TAB' in `args` are replaced by the tab id / tab object (shortcuts and menus need them).
+   */
+  bg: (page: Page, method: string, ...args: unknown[]) => Promise<FillOutcome | undefined>;
   /** Console errors and uncaught exceptions raised by the page. */
   pageErrors: string[];
 }>({
@@ -34,18 +39,25 @@ export const test = base.extend<{
     const sw = context.serviceWorkers()[0] ?? (await context.waitForEvent('serviceworker'));
     await use(sw);
   },
-  fill: async ({ sw }, use) => {
-    await use(async (page) => {
+  bg: async ({ sw }, use) => {
+    await use(async (page, method, ...args) => {
       await page.bringToFront(); // several tabs may share the URL: target the active one
-      return sw.evaluate(async (url) => {
-        const g = globalThis as unknown as {
-          chrome: typeof browser;
-          massaFillTab: (id: number) => Promise<unknown>;
-        };
-        const [tab] = await g.chrome.tabs.query({ url, active: true });
-        return g.massaFillTab(tab!.id!);
-      }, page.url().split('#')[0]!) as Promise<FillOutcome>;
+      return sw.evaluate(
+        async ({ url, method, args }) => {
+          const g = globalThis as unknown as {
+            chrome: typeof browser;
+            massa: Record<string, (...a: unknown[]) => Promise<unknown>>;
+          };
+          const [tab] = await g.chrome.tabs.query({ url, active: true });
+          const resolved = args.map((a) => (a === '$TAB_ID' ? tab!.id : a === '$TAB' ? tab : a));
+          return g.massa[method]!(...resolved);
+        },
+        { url: page.url().split('#')[0]!, method, args },
+      ) as Promise<FillOutcome | undefined>;
     });
+  },
+  fill: async ({ bg }, use) => {
+    await use((page) => bg(page, 'fillTab', '$TAB_ID') as Promise<FillOutcome>);
   },
   pageErrors: async ({ context }, use) => {
     const errors: string[] = [];

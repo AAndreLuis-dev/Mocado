@@ -59,3 +59,14 @@ Formato: data, decisão e porquê. A mais recente fica no fim.
 - **Importação é validada** campo a campo (`sanitize`): chaves desconhecidas são descartadas, só valores string; arquivo sem `records` gera erro. Por padrão o modo é `merge` por id.
 - **Preenchimentos avulsos** (campo focado, "Gerar X aqui") também viram registros do tipo `avulso`.
 - **e2e em pt-BR:** `chrome.i18n` segue o idioma da UI do Chromium, e o Playwright precisa de `LANG/LANGUAGE=pt_BR` no ambiente (`--lang` sozinho não basta no headless).
+
+## 2026-10-07: Acionamento, opções e overrides
+
+- **Atalhos:** `fill-form` = `Ctrl+Shift+F` (Mac: `Command+Shift+F`, como pedido) e `fill-field` = `Alt+Shift+F`. Escolhas evitadas: `Ctrl+Shift+E` (Network Monitor do Firefox) e `Ctrl+Shift+Y` (Downloads do Firefox no Linux). No Mac, `Cmd+Shift+F` pode conflitar com o modo de tela cheia/apresentação de alguns navegadores. Por isso a página de Opções lista os atalhos atuais e explica como remapear.
+- **Menu de contexto:** "Preencher formulário" (página e campos), submenus "Gerar aqui" e "Marcar este campo como" (28 tipos mais comuns) e "Histórico de perfis" no ícone da extensão. "Marcar como" salva o override e já preenche o campo com o novo tipo.
+- **Overrides** ficam em `storage.local.overrides[hostname][seletorEstável]`. São lidos pelo script injetado a cada varredura e editáveis/removíveis na aba "Campos corrigidos".
+- **Opções e Histórico são o mesmo app React** com abas (`#history`, `#options`, `#overrides`). Os dois entrypoints só mudam a aba inicial; `options_ui` abre em aba (`open_in_tab`).
+- **Tema:** variante `dark` do Tailwind por classe (`@custom-variant`), aplicada por `initTheme()` a partir das Opções (sistema/claro/escuro), e atualizada ao vivo via `storage.onChanged`.
+- **Máscara:** a "máscara padrão" das Opções vale para preenchimento quando o campo não dá pista. O toggle do popup vale só para os geradores avulsos do popup (preferência local).
+- **Hooks de teste:** `globalThis.massa` no background expõe `fillTab`, `onCommand`, `onMenuClick` etc. O e2e chama os mesmos handlers de atalho e menu, já que o Playwright não aciona os de verdade.
+- **`web-ext lint`:** 0 erros. Avisos conhecidos: `innerHTML` interno do react-dom e `data_collection_permissions` sem suporte em versões antigas do Firefox Android.
