@@ -1,0 +1,9 @@
+node_modules
+.output
+.wxt
+dist
+coverage
+pnpm-lock.yaml
+packages/core/src/data/*.json
+playwright-report
+test-results
