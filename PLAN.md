@@ -104,7 +104,7 @@ Classificador por pontuação (autocomplete > name/id > label/aria > placeholder
 `commands`: preencher formulário (`Ctrl+Shift+F` / `Command+Shift+F`) e preencher o campo focado (atalho sugerido a ser validado contra conflitos de Chrome/Firefox e registrado em decisions; o usuário pode remapear). Menu de contexto em `editable`: "Gerar <tipo> aqui" (submenu), "Preencher formulário", "Marcar este campo como →". Opções: máscara padrão, tipo de CNPJ, UF preferida, faixa de idade, domínios bloqueados, tema claro/escuro/sistema, preencher senhas, observer on/off. Overrides por domínio aplicados na detecção.
 **Aceite:** e2e de override (marca campo1 como CPF → recarrega → preenche CPF); domínio bloqueado não é preenchido; unitários das opções com defaults.
 
-### [ ] Fase 8 — Polimento e publicação
+### [x] Fase 8 — Polimento e publicação
 
 i18n EN completo, README PT + seção EN + aviso "Dados fictícios, matematicamente válidos, apenas para testes de software." + GIF (gravado do e2e com vídeo do Playwright + ffmpeg, se disponível; senão, item no checklist), `CONTRIBUTING.md`, `PRIVACY.md`, `docs/publishing.md` (textos da loja, justificativa de cada permissão, lista de screenshots), `pnpm zip` gerando `massa-chrome.zip`, `massa-firefox.zip` e `massa-sources.zip`; `web-ext lint` no build do Firefox.
 **Aceite:** CI verde (local: o mesmo script que o CI roda); `web-ext lint` sem erros; tamanho do content script verificado.

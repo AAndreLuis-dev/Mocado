@@ -89,3 +89,25 @@ test('options: preferences are saved and used (UF, unmasked, passwords)', async 
   expect(await page.locator('#cpf').inputValue()).toMatch(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/); // maxlength=14 still wins
   expect(await page.locator('#senha').inputValue()).not.toBe('');
 });
+
+test('popup → background message path ("Preencher página")', async ({ context, sw }) => {
+  const page = await context.newPage();
+  await page.goto('/pf.html');
+  const tabId = await sw.evaluate(async () => {
+    const g = globalThis as unknown as { chrome: typeof browser };
+    const [tab] = await g.chrome.tabs.query({ url: 'http://localhost:5174/pf.html' });
+    return tab!.id!;
+  });
+  const extId = new URL(sw.url()).host;
+  const popup = await context.newPage();
+  await popup.goto(`chrome-extension://${extId}/popup.html`);
+  const res = await popup.evaluate(
+    (id) => browser.runtime.sendMessage({ type: 'fill-tab', tabId: id }),
+    tabId,
+  );
+  expect(res).toMatchObject({ ok: true });
+  expect(await page.locator('#nome').inputValue()).not.toBe('');
+  // the popup lists it under "Últimos perfis"
+  await popup.reload();
+  await expect(popup.getByRole('button', { name: 'Reusar' })).toHaveCount(1);
+});

@@ -5,7 +5,6 @@ disclaimer: Dados fictícios, matematicamente válidos, apenas para testes de so
 popup:
   fillPage: Preencher página
   fillError: Não foi possível preencher esta página.
-  filled: '$1 campos preenchidos'
   noFields: Nenhum campo reconhecido nesta página.
   masked: Com máscara
   generate: Gerar
@@ -120,7 +119,6 @@ field:
   texto: Texto
 
 history:
-  title: Histórico de perfis
   search: Buscar por qualquer valor (CPF, nome, domínio…)
   allDomains: Todos os domínios
   favoritesOnly: Só favoritos
@@ -136,12 +134,16 @@ history:
   confirmDelete: Confirmar exclusão
   export: Exportar JSON
   import: Importar JSON
-  imported: '$1 perfis importados.'
+  imported:
+    1: 1 perfil importado.
+    n: $1 perfis importados.
   importError: Arquivo inválido.
   details: Ver dados
   hide: Ocultar dados
   usedIn: Usado em
-  count: '$1 perfis'
+  count:
+    1: 1 perfil
+    n: $1 perfis
   pessoa: Pessoa
   empresa: Empresa
   avulso: Avulso
@@ -154,7 +156,6 @@ menu:
   generateHere: Gerar aqui
   markAs: Marcar este campo como
   history: Histórico de perfis
-  options: Opções
 
 tabs:
   history: Histórico
@@ -162,7 +163,6 @@ tabs:
   overrides: Campos corrigidos
 
 options:
-  title: Opções
   saved: Salvo.
   masked: Usar máscara por padrão (quando o campo não indica o formato)
   cnpjTipo: Tipo de CNPJ padrão

@@ -70,3 +70,11 @@ Formato: data, decisão e porquê. A mais recente fica no fim.
 - **Máscara:** a "máscara padrão" das Opções vale para preenchimento quando o campo não dá pista. O toggle do popup vale só para os geradores avulsos do popup (preferência local).
 - **Hooks de teste:** `globalThis.massa` no background expõe `fillTab`, `onCommand`, `onMenuClick` etc. O e2e chama os mesmos handlers de atalho e menu, já que o Playwright não aciona os de verdade.
 - **`web-ext lint`:** 0 erros. Avisos conhecidos: `innerHTML` interno do react-dom e `data_collection_permissions` sem suporte em versões antigas do Firefox Android.
+
+## 2026-10-07: Polimento e publicação
+
+- **ZIPs:** `massa-chrome.zip`, `massa-firefox.zip` e `massa-sources.zip`. O ZIP de fontes parte da raiz do monorepo (o core é um pacote do workspace) e exclui `node_modules`, saídas, testes e o playground. O WXT imprime avisos "Could not get stats" ao listar esses arquivos, porque resolve os caminhos a partir de `apps/extension`. O conteúdo do ZIP está correto (conferido com `unzip`).
+- **Ícones** gerados a partir de `assets/icon.svg` pelo Chromium do Playwright (`pnpm --filter extension icons`), sem nova dependência. Os PNGs são versionados.
+- **GIF do README:** quadros 1280×800 capturados por uma spec do Playwright que só roda com `MASSA_DEMO=1`. O Pillow monta o GIF (~160 KB). Os mesmos quadros servem de screenshots para as lojas.
+- **i18n:** um teste garante que `en.yml` tem exatamente as mesmas chaves de `pt_BR.yml`. Contagens usam a forma plural do `@wxt-dev/i18n`.
+- **Orçamento do script injetado:** 25 kB, verificado no build (hoje são 16,4 kB).

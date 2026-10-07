@@ -20,6 +20,7 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+      - run: pnpm --filter extension lint:firefox
       - run: pnpm --filter extension exec playwright install --with-deps chromium
       - run: pnpm e2e
       - run: pnpm zip

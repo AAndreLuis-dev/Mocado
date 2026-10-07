@@ -6,12 +6,15 @@
   "scripts": {
     "dev": "wxt",
     "dev:firefox": "wxt -b firefox --mv3",
-    "build": "wxt build && wxt build -b firefox --mv3",
+    "build": "wxt build && wxt build -b firefox --mv3 && node scripts/check-size.mjs",
     "zip": "wxt zip && wxt zip -b firefox --mv3",
     "typecheck": "wxt prepare && tsc --noEmit",
     "test": "vitest run",
     "e2e": "MASSA_E2E=1 wxt build && playwright test",
-    "postinstall": "wxt prepare"
+    "postinstall": "wxt prepare",
+    "icons": "tsx scripts/build-icons.ts",
+    "lint:firefox": "web-ext lint -s .output/firefox-mv3 --warnings-as-errors=false",
+    "demo": "MASSA_E2E=1 wxt build && MASSA_DEMO=1 playwright test e2e/demo.spec.ts && python3 scripts/demo-gif.py .output/demo ../../docs/demo.gif"
   },
   "dependencies": {
     "@massa/core": "workspace:*",
@@ -30,6 +33,7 @@
     "jsdom": "^30.1.2",
     "tailwindcss": "^4.3.3",
     "web-ext": "^10.7.0",
-    "wxt": "^0.21.4"
+    "wxt": "^0.21.4",
+    "tsx": "^4.23.15"
   }
 }
