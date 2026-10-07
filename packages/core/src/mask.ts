@@ -20,11 +20,20 @@ export const maskIf = (raw: string, pattern: string, masked: boolean): string =>
 
 /** Mod-11 check digit with the common "remainder < 2 → 0" rule. */
 export function mod11(values: readonly number[], weights: readonly number[]): number {
-  const sum = values.reduce((acc, v, i) => acc + v * (weights[i] ?? 0), 0);
-  const r = sum % 11;
+  const r = weighted(values, weights) % 11;
   return r < 2 ? 0 : 11 - r;
 }
 
 export const toNums = (s: string): number[] => [...s].map((c) => c.charCodeAt(0) - 48);
 
 export const allSame = (s: string): boolean => /^(.)\1*$/.test(s);
+
+/** Σ value[i] × weight[i], left to right. */
+export const weighted = (values: readonly number[], weights: readonly number[]): number =>
+  values.reduce((acc, v, i) => acc + v * (weights[i] ?? 0), 0);
+
+/** [from, from+1, …, to] */
+export const range = (from: number, to: number): number[] =>
+  Array.from({ length: to - from + 1 }, (_, i) => from + i);
+
+export const pad = (n: number, size: number): string => String(n).padStart(size, '0');

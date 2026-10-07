@@ -78,7 +78,7 @@ Gate de toda fase: `pnpm lint && pnpm typecheck && pnpm test` (e `pnpm e2e` a pa
 RNG/seed, helpers de máscara, interface `Generator`. CPF (com UF → 9º dígito pela região fiscal), CNPJ numérico e alfanumérico (DV módulo 11 sobre `ASCII−48`, pesos 5..2,9..2 / 6..2,9..2; opção `numerico|alfanumerico|aleatorio`).
 **Aceite:** `12.ABC.345/01DE-35` valida; CPFs/CNPJs conhecidos validam; 10 mil iterações gera→valida = 100%; mutar 1 caractere → inválido; a mesma seed gera a mesma saída; `format` ida e volta.
 
-### [ ] Fase 3 — Core: demais geradores + compostos
+### [x] Fase 3 — Core: demais geradores + compostos
 
 RG SSP-SP (DV mod 11, "X"), CNH, PIS/PASEP, Título (com UF, regra especial de SP/MG), IE das 27 UFs, RENAVAM, Certidões (matrícula de 32 dígitos, nascimento/casamento/óbito), placa antiga/Mercosul, marca/modelo, cartão (Visa, MC, Amex, Elo, Hipercard, Diners: prefixos, tamanho, Luhn, validade futura, CVV 3/4), conta bancária (BB, Itaú, Bradesco, Caixa, Santander, com DV próprio de cada um), nome (gênero), e-mail derivado, telefone fixo/celular com DDD da UF, nascimento por faixa de idade, sexo, mãe/pai, senha configurável, endereço (dataset ViaCEP), lorem, número, UUID. Compostos `pessoa` (UF única para CPF, título, DDD e endereço) e `empresa` (IE da UF do endereço).
 **Aceite:** cada gerador validável passa em 5 mil iterações; fixtures com exemplos oficiais conhecidos por UF de IE e por banco; testes de coerência de `pessoa`/`empresa` (região do CPF ↔ UF, DDD ↔ UF, título ↔ UF, IE ↔ UF); cobertura do core ≥ 90% de linhas.
