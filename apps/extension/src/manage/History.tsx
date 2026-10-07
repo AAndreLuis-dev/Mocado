@@ -166,7 +166,7 @@ export function History() {
   async function importJson(file: File) {
     try {
       const n = await history.importAll(JSON.parse(await file.text()));
-      setMessage(t('history.imported', [String(n)]));
+      setMessage(i18n.t('history.imported', n));
       refresh();
     } catch {
       setMessage(t('history.importError'));
@@ -205,7 +205,7 @@ export function History() {
         </label>
       </div>
       <div className="flex flex-wrap items-center gap-2 text-sm">
-        <span className="text-zinc-500">{t('history.count', [String(records.length)])}</span>
+        <span className="text-zinc-500">{i18n.t('history.count', records.length)}</span>
         <span className="flex-1" />
         <Button onClick={exportJson}>{t('history.export')}</Button>
         <label className="cursor-pointer rounded-md border border-zinc-300 px-3 py-1.5 text-sm font-medium hover:bg-zinc-100 focus-within:outline-2 focus-within:outline-emerald-600 dark:border-zinc-600 dark:hover:bg-zinc-700">

@@ -1,5 +1,6 @@
 import { defineConfig } from 'wxt';
 import tailwindcss from '@tailwindcss/vite';
+import { resolve } from 'node:path';
 
 const e2e = process.env.MASSA_E2E === '1';
 
@@ -7,6 +8,22 @@ export default defineConfig({
   modules: ['@wxt-dev/module-react', '@wxt-dev/i18n/module'],
   vite: () => ({ plugins: [tailwindcss()] }),
   outDir: e2e ? '.output/e2e' : '.output',
+  zip: {
+    artifactTemplate: 'massa-{{browser}}.zip',
+    sourcesTemplate: 'massa-sources.zip',
+    // AMO needs the whole monorepo to rebuild (core is a workspace package).
+    sourcesRoot: resolve(import.meta.dirname, '../..'),
+    excludeSources: [
+      '**/node_modules/**',
+      '**/.output/**',
+      '**/dist/**',
+      '**/coverage/**',
+      '**/playwright-report/**',
+      '**/test-results/**',
+      'docs/*.gif',
+      'apps/playground/**',
+    ],
+  },
   manifest: ({ browser }) => ({
     name: '__MSG_extName__',
     description: '__MSG_extDescription__',

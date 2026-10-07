@@ -5,7 +5,6 @@ disclaimer: Fictitious, mathematically valid data, for software testing only.
 popup:
   fillPage: Fill page
   fillError: Could not fill this page.
-  filled: '$1 fields filled'
   noFields: No recognized fields on this page.
   masked: Masked
   generate: Generate
@@ -120,7 +119,6 @@ field:
   texto: Text
 
 history:
-  title: Profile history
   search: Search any value (CPF, name, domain…)
   allDomains: All domains
   favoritesOnly: Favorites only
@@ -136,12 +134,16 @@ history:
   confirmDelete: Confirm delete
   export: Export JSON
   import: Import JSON
-  imported: '$1 profiles imported.'
+  imported:
+    1: 1 profile imported.
+    n: $1 profiles imported.
   importError: Invalid file.
   details: Show data
   hide: Hide data
   usedIn: Used on
-  count: '$1 profiles'
+  count:
+    1: 1 profile
+    n: $1 profiles
   pessoa: Person
   empresa: Company
   avulso: Single field
@@ -154,7 +156,6 @@ menu:
   generateHere: Generate here
   markAs: Mark this field as
   history: Profile history
-  options: Options
 
 tabs:
   history: History
@@ -162,7 +163,6 @@ tabs:
   overrides: Corrected fields
 
 options:
-  title: Options
   saved: Saved.
   masked: Use masks by default (when the field gives no hint)
   cnpjTipo: Default CNPJ type
