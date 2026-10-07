@@ -26,7 +26,7 @@ import {
 } from './pessoal';
 import { endereco } from './endereco';
 import { lorem } from './extras';
-import EMPRESAS from './data/empresas.json';
+import EMPRESAS from './data/empresas.json' with { type: 'json' };
 
 /** Every field the extension can detect and fill. */
 export const FIELD_TYPES = [

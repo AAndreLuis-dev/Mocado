@@ -20,6 +20,8 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+      - run: pnpm --filter extension exec playwright install --with-deps chromium
+      - run: pnpm e2e
       - run: pnpm zip
       - uses: actions/upload-artifact@v4
         with:

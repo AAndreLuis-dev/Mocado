@@ -2,7 +2,7 @@ import { type Generator } from './types';
 import { defaultRng, digits, int, pick, type Rng } from './rng';
 import { maskIf, onlyDigits } from './mask';
 import { UFS, type UF } from './uf';
-import CEPS from './data/ceps.json';
+import CEPS from './data/ceps.json' with { type: 'json' };
 
 export interface Endereco {
   cep: string;

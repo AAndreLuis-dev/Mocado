@@ -1,6 +1,6 @@
 import { type Generator } from './types';
 import { defaultRng, digits, int, letters, pick, type Rng } from './rng';
-import VEICULOS from './data/veiculos.json';
+import VEICULOS from './data/veiculos.json' with { type: 'json' };
 
 export type PlacaTipo = 'antiga' | 'mercosul' | 'aleatorio';
 

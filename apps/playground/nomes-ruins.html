@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>5. Campos com nomes ruins</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <h1>Campos com nomes ruins</h1>
+    <form>
+      <label for="c1">Nome completo</label><input id="c1" name="campo1" />
+      <input name="campo2" placeholder="Digite seu CPF" />
+      <input name="txtDoc" aria-label="CPF do titular" />
+      <table>
+        <tr>
+          <td>Data de nascimento:</td>
+          <td><input name="campo4" /></td>
+        </tr>
+        <tr>
+          <td>CEP</td>
+          <td><input name="campo5" /></td>
+        </tr>
+      </table>
+      <span id="lbl-mail">Seu e-mail</span><input name="campo6" aria-labelledby="lbl-mail" />
+      <input name="campo7" title="Telefone celular" />
+      <input name="campo8" />
+    </form>
+  </body>
+</html>

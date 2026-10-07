@@ -2,8 +2,8 @@ import { type Generator } from './types';
 import { defaultRng, digits, int, pick, type Rng } from './rng';
 import { maskIf, onlyDigits, pad } from './mask';
 import { DDD, UFS, type UF } from './uf';
-import NOMES from './data/nomes.json';
-import SOBRENOMES from './data/sobrenomes.json';
+import NOMES from './data/nomes.json' with { type: 'json' };
+import SOBRENOMES from './data/sobrenomes.json' with { type: 'json' };
 
 export type Sexo = 'M' | 'F';
 export const SEXO_LABEL: Record<Sexo, string> = { M: 'Masculino', F: 'Feminino' };

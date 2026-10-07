@@ -37,3 +37,15 @@ Formato: data, decisão e porquê. A mais recente fica no fim.
 - **Gerador escolhido e máscara do popup** ficam em `localStorage`, como conveniência por usuário (dentro de try/catch). A máscara padrão global entra pelas Opções na fase 7.
 - **Regenerar em handlers, não em `useEffect`.** A regra `react-hooks/set-state-in-effect` (v7) proíbe `setState` síncrono em efeito.
 - **Testes de UI:** o `fakeBrowser` do WXT não implementa `i18n.getMessage`. O `vitest.setup.ts` carrega o `pt_BR.yml` real via `@wxt-dev/i18n/build`, e assim os testes também pegam chaves faltando.
+
+## 2026-10-06: Detecção, preenchimento e e2e
+
+- **Script injetado (`entrypoints/injected.ts`) + `scripting.executeScript({ func, args })`** em vez de `runtime` messaging. O script expõe `globalThis.__massa` no mundo isolado, e o background chama `__massa.scan()` / `__massa.fill(perfil)` e recebe o retorno direto. Assim não há `sendResponse`/`return true` e nenhuma diferença entre Chrome e Firefox.
+- **O injetado lê `storage.local` direto** (configurações e overrides), sem o wrapper `storage.defineItem` do WXT: ~9 KB a menos (16 KB minificado).
+- **Classificador:** pontuação por fonte (autocomplete 100, label/aria 45, name/id 40, placeholder 30, title 20, texto próximo 15) × força da frase (frases mais longas valem mais; palavras genéricas como "nome", "doc", "numero" valem metade), mais dicas de `type`. Mínimo de 12 pontos. Ignora busca, captcha, token e OTP.
+- **Texto próximo** só conta quando não há `<label>`, e nunca "atravessa" outro campo: o texto antes de um campo anterior pertence a ele.
+- **Formato:** `pattern` (testado contra amostras com e sem máscara) > `maxlength` > `placeholder` em forma de máscara > padrão das Opções. `type=number` → sem máscara.
+- **Preenchimento:** setter nativo do protótipo do _realm_ do elemento (iframes têm protótipos próprios) + `input`/`change`/`blur`. Se os dígitos finais diferirem (máscara que só aceita digitação), redigita caractere a caractere. Radios: sexo casa por rótulo; outros grupos sem seleção recebem a 1ª opção. Checkboxes: só os `required`. Selects sem tipo e vazios: opção aleatória não vazia.
+- **Observer:** depois do 1º preenchimento, um `MutationObserver` (debounce de 250 ms) preenche, com o mesmo perfil, campos novos e vazios. Ele não enxerga mutações dentro de shadow roots nem de iframes (limitação do MutationObserver); esses campos entram no próximo gatilho.
+- **e2e:** Chromium com `channel: 'chromium'` (o novo headless carrega extensões). O build `MASSA_E2E=1` vai para `.output/e2e`, para não contaminar o build de produção.
+- **Import attributes em JSON** (`with { type: 'json' }`) no core: o Node ESM exige (o Playwright importa o core para validar).

@@ -14,7 +14,7 @@ import {
   UFS,
 } from '../src';
 import { mutateLastDigit, roundTrip } from './helpers';
-import IE_FIXTURES from './ie-fixtures.json';
+import IE_FIXTURES from './ie-fixtures.json' with { type: 'json' };
 
 describe('rg (SSP-SP)', () => {
   test('known DV rules', () => {

@@ -21,7 +21,7 @@ pnpm workspace
 └─ apps/playground      Vite multipágina: 5 fixtures (HTML puro, React controlado, máscaras, SPA/modal, nomes ruins)
 ```
 
-**Fluxo de preenchimento:** gatilho → `scripting.executeScript` (com `activeTab`) injeta `content.js` uma vez por aba → o content detecta os campos (documento principal, iframes same-origin via `contentDocument`, shadow roots abertos) e devolve `[{ref, tipo, formato}]` → o background escolhe o composto (havendo CNPJ/razão social → `empresa`, senão `pessoa`, senão avulso), gera os dados, manda os valores e grava o registro no histórico → o content preenche. O content script não carrega datasets nem o core e fica pequeno (meta: < 25 KB minificado).
+**Fluxo de preenchimento:** gatilho → `scripting.executeScript` (com `activeTab`) injeta `injected.js` uma vez por aba → o content detecta os campos (documento principal, iframes same-origin via `contentDocument`, shadow roots abertos) e devolve `[{ref, tipo, formato}]` → o background escolhe o composto (havendo CNPJ/razão social → `empresa`, senão `pessoa`, senão avulso), gera os dados, manda os valores e grava o registro no histórico → o content preenche. O content script não carrega datasets nem o core e fica pequeno (meta: < 25 KB minificado).
 
 **Decisões-chave** (todas vão para `docs/decisions.md`):
 
@@ -56,7 +56,7 @@ packages/core/
   test/*.test.ts
 apps/extension/
   wxt.config.ts
-  entrypoints/{background.ts, content.ts (unlisted), popup/, manage/}
+  entrypoints/{background.ts, injected.ts (unlisted), popup/, manage/}
   src/detect/{classify.ts,synonyms.ts,collect.ts}  src/fill/fill.ts
   src/storage/{adapter.ts,local.ts}  src/messages.ts  src/settings.ts
   locales/{pt_BR,en}.yml
@@ -88,7 +88,7 @@ RG SSP-SP (DV mod 11, "X"), CNH, PIS/PASEP, Título (com UF, regra especial de S
 Geradores avulsos estilo 4devs (seletor de tipo + opções: máscara, UF, tipo de CNPJ, bandeira etc.), botão gerar/copiar, toggle de máscara e o botão "Preencher página" (stub até a fase 5).
 **Aceite:** gerar e copiar funcionam em todos os tipos; teste de componente (Vitest + Testing Library) cobrindo gerar/copiar/máscara; build do Firefox OK.
 
-### [ ] Fase 5 — Detecção + preenchimento + playground + e2e
+### [x] Fase 5 — Detecção + preenchimento + playground + e2e
 
 Classificador por pontuação (autocomplete > name/id > label/aria > placeholder > type/maxlength/pattern > texto próximo), sinônimos PT/EN, detecção de formato, iframes same-origin, shadow DOM aberto, preenchimento compatível com frameworks, MutationObserver, as 5 páginas do playground e o fluxo completo do background.
 **e2e:** Playwright com Chromium carregando a extensão (`launchPersistentContext` + `--load-extension`). Atalhos de extensão não podem ser disparados no Playwright, então um build `MASSA_E2E=1` adiciona `host_permissions: http://localhost/*` (somente nesse build) e o teste chama `fillActiveTab()` pelo service worker.
