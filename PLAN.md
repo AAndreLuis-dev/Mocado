@@ -83,7 +83,7 @@ RNG/seed, helpers de máscara, interface `Generator`. CPF (com UF → 9º dígit
 RG SSP-SP (DV mod 11, "X"), CNH, PIS/PASEP, Título (com UF, regra especial de SP/MG), IE das 27 UFs, RENAVAM, Certidões (matrícula de 32 dígitos, nascimento/casamento/óbito), placa antiga/Mercosul, marca/modelo, cartão (Visa, MC, Amex, Elo, Hipercard, Diners: prefixos, tamanho, Luhn, validade futura, CVV 3/4), conta bancária (BB, Itaú, Bradesco, Caixa, Santander, com DV próprio de cada um), nome (gênero), e-mail derivado, telefone fixo/celular com DDD da UF, nascimento por faixa de idade, sexo, mãe/pai, senha configurável, endereço (dataset ViaCEP), lorem, número, UUID. Compostos `pessoa` (UF única para CPF, título, DDD e endereço) e `empresa` (IE da UF do endereço).
 **Aceite:** cada gerador validável passa em 5 mil iterações; fixtures com exemplos oficiais conhecidos por UF de IE e por banco; testes de coerência de `pessoa`/`empresa` (região do CPF ↔ UF, DDD ↔ UF, título ↔ UF, IE ↔ UF); cobertura do core ≥ 90% de linhas.
 
-### [ ] Fase 4 — Popup
+### [x] Fase 4 — Popup
 
 Geradores avulsos estilo 4devs (seletor de tipo + opções: máscara, UF, tipo de CNPJ, bandeira etc.), botão gerar/copiar, toggle de máscara e o botão "Preencher página" (stub até a fase 5).
 **Aceite:** gerar e copiar funcionam em todos os tipos; teste de componente (Vitest + Testing Library) cobrindo gerar/copiar/máscara; build do Firefox OK.

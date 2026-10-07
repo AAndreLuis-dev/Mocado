@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [WxtVitest()],
   test: {
     environment: 'jsdom',
+    setupFiles: ['vitest.setup.ts'],
     include: ['src/**/*.test.{ts,tsx}', 'entrypoints/**/*.test.{ts,tsx}'],
     passWithNoTests: true,
   },

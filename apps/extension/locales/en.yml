@@ -1,2 +1,120 @@
 extName: Massa
 extDescription: Generates and fills Brazilian test data (CPF, CNPJ, address…) right into forms. Everything stays local.
+disclaimer: Fictitious, mathematically valid data, for software testing only.
+
+popup:
+  fillPage: Fill page
+  fillError: Could not fill this page.
+  filled: '$1 fields filled'
+  noFields: No recognized fields on this page.
+  masked: Masked
+  generate: Generate
+  copy: Copy
+  copied: Copied!
+  copyAll: Copy all
+  generator: Generator
+  history: History
+  options: Options
+  recent: Recent profiles
+  reuse: Reuse
+  pinned: 'Next fill will use: $1'
+  unpin: Unpin
+
+gen:
+  cpf: CPF
+  cnpj: CNPJ
+  rg: RG
+  cnh: Driver's license (CNH)
+  pis: PIS/PASEP
+  titulo: Voter ID (título)
+  ie: State registration (IE)
+  renavam: RENAVAM
+  certidao: Civil certificate
+  placa: License plate
+  veiculo: Vehicle
+  cartao: Credit card
+  conta: Bank account
+  nome: Name
+  email: E-mail
+  telefone: Phone
+  endereco: Address
+  nascimento: Birth date
+  senha: Password
+  pessoa: Person (full)
+  empresa: Company (full)
+  lorem: Lorem ipsum
+  numero: Random number
+  uuid: UUID
+
+opt:
+  uf: State
+  ufAny: Any
+  tipo: Type
+  bandeira: Brand
+  banco: Bank
+  sexo: Sex
+  tamanho: Length
+  simbolos: Symbols
+  paragrafos: Paragraphs
+  idade: Age
+  numerico: Numeric
+  alfanumerico: Alphanumeric
+  aleatorio: Random
+  antiga: Old (AAA-9999)
+  mercosul: Mercosul (AAA9A99)
+  nascimento: Birth
+  casamento: Marriage
+  obito: Death
+  fixo: Landline
+  celular: Mobile
+  M: Male
+  F: Female
+  sim: Yes
+  nao: No
+
+field:
+  nome: Full name
+  primeiroNome: First name
+  sobrenome: Last name
+  sexo: Sex
+  nascimento: Birth date
+  idade: Age
+  mae: Mother's name
+  pai: Father's name
+  cpf: CPF
+  rg: RG
+  cnh: CNH
+  pis: PIS/PASEP
+  titulo: Voter ID
+  certidao: Certificate
+  email: E-mail
+  telefone: Landline
+  celular: Mobile
+  senha: Password
+  cep: ZIP (CEP)
+  logradouro: Street
+  numero: Number
+  complemento: Complement
+  bairro: District
+  cidade: City
+  uf: State
+  cnpj: CNPJ
+  razaoSocial: Legal name
+  nomeFantasia: Trade name
+  ie: State registration
+  dataAbertura: Opening date
+  cartaoNumero: Card number
+  cartaoNome: Name on card
+  cartaoValidade: Expiry
+  cartaoCvv: CVV
+  cartaoBandeira: Brand
+  banco: Bank
+  nomeBanco: Bank name
+  agencia: Branch
+  conta: Account
+  placa: Plate
+  renavam: RENAVAM
+  veiculoMarca: Make
+  veiculoModelo: Model
+  veiculoAno: Year
+  texto: Text

@@ -30,3 +30,10 @@ Formato: data, decisão e porquê. A mais recente fica no fim.
 - **Compostos sempre geram valores mascarados** quando `masked` é true. O content script remove a máscara se o campo pedir só dígitos (por maxlength/pattern).
 - **Dataset de CEP:** 253 endereços reais de 2 a 4 cidades por UF (ViaCEP, out/2026). CEPs com sufixo ≥ 900 (grandes usuários e caixas postais) ficam de fora.
 - **`valorAvulso(tipo)`** gera um perfil inteiro e devolve um campo. Custa microssegundos e garante coerência sem um gerador por campo.
+
+## 2026-10-06: Popup
+
+- **Registro único de geradores** (`apps/extension/src/generators.ts`): `id`, opções (listas de valores) e `run`. O popup renderiza qualquer gerador de forma genérica; os rótulos vêm do i18n (`gen.*`, `opt.*`, `field.*`).
+- **Gerador escolhido e máscara do popup** ficam em `localStorage`, como conveniência por usuário (dentro de try/catch). A máscara padrão global entra pelas Opções na fase 7.
+- **Regenerar em handlers, não em `useEffect`.** A regra `react-hooks/set-state-in-effect` (v7) proíbe `setState` síncrono em efeito.
+- **Testes de UI:** o `fakeBrowser` do WXT não implementa `i18n.getMessage`. O `vitest.setup.ts` carrega o `pt_BR.yml` real via `@wxt-dev/i18n/build`, e assim os testes também pegam chaves faltando.
