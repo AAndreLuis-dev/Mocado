@@ -1,0 +1,5 @@
+{
+  "nomes": ["Alfa", "Horizonte", "Nova Era", "Prime", "Sol Nascente", "Vale Verde", "Rede Sul", "Atlântico", "Cerrado", "Aurora", "Pioneira", "Estrela", "Bandeirante", "Litoral", "Planalto", "Serra Azul", "Ipê", "Jacarandá", "Tupã", "Ômega", "Vértice", "Cristal", "Brisa", "Âncora"],
+  "ramos": ["Comércio", "Serviços", "Tecnologia", "Alimentos", "Logística", "Construções", "Consultoria", "Engenharia", "Distribuidora", "Transportes", "Informática", "Materiais Elétricos", "Confecções", "Produtos Naturais", "Contabilidade"],
+  "sufixos": ["Ltda", "Ltda", "Ltda", "S.A.", "ME", "EPP"]
+}

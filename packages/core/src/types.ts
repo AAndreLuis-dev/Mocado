@@ -9,6 +9,6 @@ export interface GenOptions {
 /** Common contract for every type whose value has verifiable structure. */
 export interface Generator<O extends object = object> {
   generate(opts?: O & GenOptions): string;
-  validate(value: string): boolean;
-  format(value: string, opts: { masked: boolean }): string;
+  validate(value: string, opts?: Partial<O>): boolean;
+  format(value: string, opts: { masked: boolean } & Partial<O>): string;
 }

@@ -1,0 +1,12 @@
+{
+  "Chevrolet": ["Onix", "Onix Plus", "Tracker", "Spin", "S10", "Montana", "Cruze"],
+  "Volkswagen": ["Gol", "Polo", "Virtus", "T-Cross", "Nivus", "Saveiro", "Amarok"],
+  "Fiat": ["Mobi", "Argo", "Cronos", "Strada", "Toro", "Pulse", "Fastback"],
+  "Ford": ["Ka", "EcoSport", "Ranger", "Territory", "Maverick"],
+  "Toyota": ["Corolla", "Corolla Cross", "Yaris", "Hilux", "SW4"],
+  "Hyundai": ["HB20", "HB20S", "Creta", "Tucson"],
+  "Renault": ["Kwid", "Sandero", "Logan", "Duster", "Oroch", "Kardian"],
+  "Honda": ["City", "Civic", "HR-V", "WR-V", "Fit"],
+  "Jeep": ["Renegade", "Compass", "Commander"],
+  "Nissan": ["Kicks", "Versa", "Frontier", "Sentra"]
+}

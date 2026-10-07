@@ -7,3 +7,4 @@ pnpm-lock.yaml
 packages/core/src/data/*.json
 playwright-report
 test-results
+packages/core/test/ie-fixtures.json
