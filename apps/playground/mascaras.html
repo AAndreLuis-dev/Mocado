@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>3. Campos com máscara (IMask)</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <h1>Campos com máscara</h1>
+    <form>
+      <label>CPF <input name="cpf" placeholder="000.000.000-00" /></label>
+      <label>CNPJ <input name="cnpj" placeholder="00.000.000/0000-00" /></label>
+      <label>CEP <input name="cep" placeholder="00000-000" /></label>
+      <label>Celular <input name="celular" placeholder="(00) 00000-0000" /></label>
+      <label>CPF (somente números) <input name="cpf_numeros" maxlength="11" /></label>
+    </form>
+    <script type="module" src="/src/mascaras.ts"></script>
+  </body>
+</html>

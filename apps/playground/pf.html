@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>1. Cadastro PF (HTML puro)</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <h1>Cadastro de pessoa física</h1>
+    <form id="form">
+      <label for="nome">Nome completo</label><input id="nome" name="nome" required />
+      <label for="cpf">CPF</label><input id="cpf" name="cpf" maxlength="14" required />
+      <label for="rg">RG</label><input id="rg" name="rg" />
+      <label for="nasc">Data de nascimento</label><input id="nasc" name="nascimento" type="date" />
+      <fieldset>
+        <legend>Sexo</legend>
+        <label><input type="radio" name="sexo" value="M" /> Masculino</label>
+        <label><input type="radio" name="sexo" value="F" /> Feminino</label>
+      </fieldset>
+      <label for="email">E-mail</label><input id="email" name="email" type="email" />
+      <label for="cel">Celular</label><input id="cel" name="celular" type="tel" />
+      <label for="cep">CEP</label><input id="cep" name="cep" /> <label for="log">Logradouro</label
+      ><input id="log" name="logradouro" /> <label for="num">Número</label
+      ><input id="num" name="numero" /> <label for="comp">Complemento</label
+      ><input id="comp" name="complemento" /> <label for="bairro">Bairro</label
+      ><input id="bairro" name="bairro" /> <label for="cidade">Cidade</label
+      ><input id="cidade" name="cidade" /> <label for="uf">Estado</label
+      ><select id="uf" name="uf">
+        <option value="">Selecione</option>
+        <option value="AC">Acre</option>
+        <option value="AL">Alagoas</option>
+        <option value="AP">Amapá</option>
+        <option value="AM">Amazonas</option>
+        <option value="BA">Bahia</option>
+        <option value="CE">Ceará</option>
+        <option value="DF">Distrito Federal</option>
+        <option value="ES">Espírito Santo</option>
+        <option value="GO">Goiás</option>
+        <option value="MA">Maranhão</option>
+        <option value="MT">Mato Grosso</option>
+        <option value="MS">Mato Grosso do Sul</option>
+        <option value="MG">Minas Gerais</option>
+        <option value="PA">Pará</option>
+        <option value="PB">Paraíba</option>
+        <option value="PR">Paraná</option>
+        <option value="PE">Pernambuco</option>
+        <option value="PI">Piauí</option>
+        <option value="RJ">Rio de Janeiro</option>
+        <option value="RN">Rio Grande do Norte</option>
+        <option value="RS">Rio Grande do Sul</option>
+        <option value="RO">Rondônia</option>
+        <option value="RR">Roraima</option>
+        <option value="SC">Santa Catarina</option>
+        <option value="SP">São Paulo</option>
+        <option value="SE">Sergipe</option>
+        <option value="TO">Tocantins</option>
+      </select>
+      <label for="senha">Senha</label><input id="senha" name="senha" type="password" />
+      <label><input type="checkbox" name="termos" required /> Li e aceito os termos</label>
+      <button>Cadastrar</button>
+    </form>
+  </body>
+</html>
