@@ -1,2 +1,120 @@
 extName: Massa
 extDescription: Gera e preenche dados de teste brasileiros (CPF, CNPJ, endereço…) direto no formulário. Tudo local.
+disclaimer: Dados fictícios, matematicamente válidos, apenas para testes de software.
+
+popup:
+  fillPage: Preencher página
+  fillError: Não foi possível preencher esta página.
+  filled: '$1 campos preenchidos'
+  noFields: Nenhum campo reconhecido nesta página.
+  masked: Com máscara
+  generate: Gerar
+  copy: Copiar
+  copied: Copiado!
+  copyAll: Copiar tudo
+  generator: Gerador
+  history: Histórico
+  options: Opções
+  recent: Últimos perfis
+  reuse: Reusar
+  pinned: 'Próximo preenchimento usará: $1'
+  unpin: Desafixar
+
+gen:
+  cpf: CPF
+  cnpj: CNPJ
+  rg: RG
+  cnh: CNH
+  pis: PIS/PASEP
+  titulo: Título de eleitor
+  ie: Inscrição estadual
+  renavam: RENAVAM
+  certidao: Certidão
+  placa: Placa
+  veiculo: Veículo
+  cartao: Cartão de crédito
+  conta: Conta bancária
+  nome: Nome
+  email: E-mail
+  telefone: Telefone
+  endereco: Endereço
+  nascimento: Data de nascimento
+  senha: Senha
+  pessoa: Pessoa (completa)
+  empresa: Empresa (completa)
+  lorem: Lorem ipsum
+  numero: Número aleatório
+  uuid: UUID
+
+opt:
+  uf: UF
+  ufAny: Qualquer
+  tipo: Tipo
+  bandeira: Bandeira
+  banco: Banco
+  sexo: Sexo
+  tamanho: Tamanho
+  simbolos: Símbolos
+  paragrafos: Parágrafos
+  idade: Idade
+  numerico: Numérico
+  alfanumerico: Alfanumérico
+  aleatorio: Aleatório
+  antiga: Antiga (AAA-9999)
+  mercosul: Mercosul (AAA9A99)
+  nascimento: Nascimento
+  casamento: Casamento
+  obito: Óbito
+  fixo: Fixo
+  celular: Celular
+  M: Masculino
+  F: Feminino
+  sim: Sim
+  nao: Não
+
+field:
+  nome: Nome completo
+  primeiroNome: Primeiro nome
+  sobrenome: Sobrenome
+  sexo: Sexo
+  nascimento: Data de nascimento
+  idade: Idade
+  mae: Nome da mãe
+  pai: Nome do pai
+  cpf: CPF
+  rg: RG
+  cnh: CNH
+  pis: PIS/PASEP
+  titulo: Título de eleitor
+  certidao: Certidão
+  email: E-mail
+  telefone: Telefone fixo
+  celular: Celular
+  senha: Senha
+  cep: CEP
+  logradouro: Logradouro
+  numero: Número
+  complemento: Complemento
+  bairro: Bairro
+  cidade: Cidade
+  uf: UF
+  cnpj: CNPJ
+  razaoSocial: Razão social
+  nomeFantasia: Nome fantasia
+  ie: Inscrição estadual
+  dataAbertura: Data de abertura
+  cartaoNumero: Número do cartão
+  cartaoNome: Nome no cartão
+  cartaoValidade: Validade
+  cartaoCvv: CVV
+  cartaoBandeira: Bandeira
+  banco: Banco
+  nomeBanco: Nome do banco
+  agencia: Agência
+  conta: Conta
+  placa: Placa
+  renavam: RENAVAM
+  veiculoMarca: Marca
+  veiculoModelo: Modelo
+  veiculoAno: Ano
+  texto: Texto
