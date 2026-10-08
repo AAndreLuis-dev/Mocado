@@ -1,11 +1,5 @@
-import { Check, ChevronDown, Copy } from 'lucide-react';
-import {
-  useState,
-  type ButtonHTMLAttributes,
-  type InputHTMLAttributes,
-  type ReactNode,
-  type SelectHTMLAttributes,
-} from 'react';
+import { Check, Copy } from 'lucide-react';
+import { useState, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import { t } from '../../infra/browser/i18n';
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
@@ -99,52 +93,6 @@ export function CopyIconButton({ value, label }: { value: string; label: string 
     >
       {state === 'copied' ? <Check size={15} /> : <Copy size={15} />}
     </IconButton>
-  );
-}
-
-/** Native checkbox drawn as a switch (keeps checkbox semantics for forms and tests). */
-export function Switch({
-  label,
-  hint,
-  className = '',
-  ...props
-}: Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & { label: ReactNode; hint?: ReactNode }) {
-  return (
-    <label className={`flex cursor-pointer items-start justify-between gap-4 ${className}`}>
-      <span className="flex flex-col gap-0.5">
-        <span>{label}</span>
-        {hint && <span className="text-xs text-grafite">{hint}</span>}
-      </span>
-      <input
-        type="checkbox"
-        role="switch"
-        className="relative mt-0.5 h-5 w-9 shrink-0 cursor-pointer appearance-none rounded-full bg-linha transition-colors before:absolute before:top-0.5 before:left-0.5 before:size-4 before:rounded-full before:bg-ficha before:shadow-sm before:transition-transform checked:bg-caneta checked:before:translate-x-4"
-        {...props}
-      />
-    </label>
-  );
-}
-
-/** Native select with the app's look and a chevron. */
-export function Select({
-  className = '',
-  children,
-  ...props
-}: SelectHTMLAttributes<HTMLSelectElement>) {
-  return (
-    <span className={`relative inline-flex ${className}`}>
-      <select
-        className="h-8 w-full cursor-pointer appearance-none rounded-md border border-linha bg-ficha pr-7 pl-2.5 text-sm text-tinta hover:border-grafite/60"
-        {...props}
-      >
-        {children}
-      </select>
-      <ChevronDown
-        size={14}
-        aria-hidden
-        className="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 text-grafite"
-      />
-    </span>
   );
 }
 

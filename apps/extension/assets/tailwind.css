@@ -80,13 +80,6 @@
 }
 
 @layer components {
-  /* The perforated top edge of a form slip. */
-  .picote {
-    background-image: radial-gradient(circle at 50% 0, var(--papel) 3px, transparent 3.5px);
-    background-size: 12px 6px;
-    background-repeat: repeat-x;
-  }
-
   /* Rubber stamp: double border, ink that doesn't quite cover, slight tilt. */
   .carimbo {
     display: inline-block;

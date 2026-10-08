@@ -13,7 +13,7 @@ import { optionLabel, t } from '../../infra/browser/i18n';
 import { shortcuts as loadShortcuts } from '../../infra/browser/navigation';
 import { preferences } from '../../infra/container';
 import { Kbd } from '../components/controls';
-import { Stamp } from '../components/ficha';
+import { Stamp } from '../components/brand';
 import {
   Band,
   Box,
