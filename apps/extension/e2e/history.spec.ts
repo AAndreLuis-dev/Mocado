@@ -18,20 +18,17 @@ test('histórico: busca pelo CPF, reuso, export/import', async ({
   await hist.goto(`chrome-extension://${extId}/history.html`);
   await expect(hist.getByTestId('record')).toHaveCount(1);
 
-  // paste the CPF without mask → still found
   await hist.getByRole('searchbox').fill(cpf.replace(/\D/g, ''));
   await expect(hist.getByTestId('record')).toHaveCount(1);
   await hist.getByRole('searchbox').fill('99999999999');
   await expect(hist.getByTestId('record')).toHaveCount(0);
   await hist.getByRole('searchbox').fill('');
 
-  // label + favorite persist
   await hist.getByLabel('Rótulo do perfil').fill('admin teste');
   await hist.getByLabel('Rótulo do perfil').blur();
   await hist.getByRole('button', { name: 'Favoritar' }).click();
   await expect(hist.getByRole('button', { name: 'Remover dos favoritos' })).toBeVisible();
 
-  // pin for reuse, then fill a fresh form → same data, same record gets a 2nd use
   await hist.getByRole('button', { name: 'Reusar este perfil' }).click();
   await expect(hist.getByText(/Fixado/)).toBeVisible();
   const again = await context.newPage();
@@ -40,17 +37,15 @@ test('histórico: busca pelo CPF, reuso, export/import', async ({
   expect(second.recordId).toBe(first.recordId);
   expect(await again.locator('#cpf').inputValue()).toBe(cpf);
   expect(await again.locator('#nome').inputValue()).toBe(await form.locator('#nome').inputValue());
-  await expect(hist.getByText(/Fixado/)).toHaveCount(0); // one-shot pin
+  await expect(hist.getByText(/Fixado/)).toHaveCount(0);
   await expect(hist.getByTestId('record')).toHaveCount(1);
   await expect(hist.getByText(/Usado em/)).toContainText(/localhost.*localhost/);
 
-  // a third fill without pin generates a new profile
   const third = await context.newPage();
   await third.goto('/pf.html');
   expect((await fill(third)).recordId).not.toBe(first.recordId);
   await expect(hist.getByTestId('record')).toHaveCount(2);
 
-  // export → clear → import
   const [download] = await Promise.all([
     hist.waitForEvent('download'),
     hist.getByRole('button', { name: 'Exportar JSON' }).click(),

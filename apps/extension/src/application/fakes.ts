@@ -4,8 +4,6 @@ import { DEFAULT_SETTINGS, type Settings } from '../domain/settings';
 import type { HistoryRecord } from '../domain/profile';
 import type { Deps, FillReport, HistoryRepository, PageGateway, ScanResult, Store } from './ports';
 
-// In-memory adapters for use-case tests: same ports, no browser.
-
 export function memoryHistory(initial: HistoryRecord[] = []): HistoryRepository {
   let list = [...initial];
   return {
@@ -23,7 +21,6 @@ export function memoryStore<T>(value: T): Store<T> {
   return { get: async () => value, set: async (v) => void (value = v) };
 }
 
-/** A page with the given field types; fills report one field per perfil key it has a type for. */
 export function fakePage(
   types: FieldType[],
   { hostname = 'app.test', focused = null as FieldType | null, selector = '#campo' } = {},

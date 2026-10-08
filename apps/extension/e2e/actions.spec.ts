@@ -19,12 +19,10 @@ test('menu "Marcar este campo como" saves a per-domain override', async ({
   await bg(page, 'onMenuClick', { menuItemId: 'mark:cpf' }, '$TAB');
   expect(cpf.validate(await page.locator('[name=campo8]').inputValue())).toBe(true);
 
-  // after reload, a whole-form fill treats campo8 as CPF
   await page.reload();
   await bg(page, 'fillTab', '$TAB_ID');
   expect(cpf.validate(await page.locator('[name=campo8]').inputValue())).toBe(true);
 
-  // listed (and removable) in the options "Campos corrigidos" tab
   const extId = new URL(sw.url()).host;
   const opts = await context.newPage();
   await opts.goto(`chrome-extension://${extId}/options.html#overrides`);
@@ -52,7 +50,6 @@ test('shortcut "fill-field" fills only the focused field; "Gerar CNPJ aqui" forc
   await bg(page, 'onMenuClick', { menuItemId: 'gen:cnpj' }, '$TAB');
   expect(cnpj.validate(await page.locator('#rg').inputValue())).toBe(true);
 
-  // shortcut "fill-form" = whole form
   await bg(page, 'onCommand', 'fill-form', '$TAB');
   expect(await page.locator('#nome').inputValue()).not.toBe('');
 });
@@ -85,8 +82,8 @@ test('options: preferences are saved and used (UF, unmasked, passwords)', async 
   await page.goto('/pf.html');
   await fill(page);
   expect(await page.locator('#uf').inputValue()).toBe('PR');
-  expect(await page.locator('#cep').inputValue()).toMatch(/^8\d{7}$/); // PR range, no mask
-  expect(await page.locator('#cpf').inputValue()).toMatch(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/); // maxlength=14 still wins
+  expect(await page.locator('#cep').inputValue()).toMatch(/^8\d{7}$/);
+  expect(await page.locator('#cpf').inputValue()).toMatch(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/);
   expect(await page.locator('#senha').inputValue()).not.toBe('');
 });
 
@@ -107,7 +104,6 @@ test('popup → background message path ("Preencher página")', async ({ context
   );
   expect(res).toMatchObject({ ok: true });
   expect(await page.locator('#nome').inputValue()).not.toBe('');
-  // the popup lists it under "Últimos perfis"
   await popup.reload();
   await expect(popup.getByRole('button', { name: 'Reusar' })).toHaveCount(1);
 });

@@ -3,10 +3,6 @@ import { defaultRng, digits, int, pick, type Rng } from '../rng';
 import { mask, pad, range } from '../mask';
 import { UFS, type UF } from '../uf';
 
-// Inscrição Estadual — one algorithm per UF (SINTEGRA "Conferência de Inscrições Estaduais").
-// Cross-checked against real IEs from gammasoft/ie (MIT) in test/fixtures/ie.json.
-
-/** Σ digit × weight with weights applied right-to-left, cycling; returns sum mod `div`. */
 function modR(s: string, weights: readonly number[], div = 11): number {
   let sum = 0;
   for (let i = s.length - 1, k = 0; i >= 0; i--, k++)
@@ -15,10 +11,8 @@ function modR(s: string, weights: readonly number[], div = 11): number {
 }
 
 const W = range(2, 9);
-/** The most common rule: 11 − remainder, remainders 0 and 1 → 0. */
 const std = (r: number) => (r < 2 ? 0 : 11 - r);
 const dvStd = (base: string, w: readonly number[] = W) => base + std(modR(base, w));
-/** 11 − remainder, results ≥ 10 → 0. */
 const dv10 = (base: string, w: readonly number[] = W) => {
   const d = 11 - modR(base, w);
   return base + (d >= 10 ? 0 : d);
@@ -30,7 +24,6 @@ interface Spec {
   valid(v: string): boolean;
 }
 
-/** UF whose check digits are appended to a body: valid = recompute from the body. */
 function appended(
   mask: string,
   body: (rng: Rng) => string,
@@ -54,7 +47,6 @@ function appended(
 const prefixed = (prefix: string, n: number) => (rng: Rng) => prefix + digits(rng, n);
 const startsWith = (prefix: string, fn: (b: string) => string | null) => (b: string) =>
   b.startsWith(prefix) ? fn(b) : null;
-/** 8 digits + standard DV. `strict`: the prefix is mandatory (not only how we generate). */
 const trivial = (prefix: string, mask: string, strict = true) =>
   appended(
     mask,
@@ -63,7 +55,7 @@ const trivial = (prefix: string, mask: string, strict = true) =>
   );
 
 function ba(body: string): string {
-  const n = body.length; // 6 (8-digit IE) or 7 (9-digit IE)
+  const n = body.length;
   const mod10 = '0123458'.includes(body[n === 7 ? 1 : 0]!);
   const calc = (s: string, w: number[]) => {
     const r = modR(s, w, mod10 ? 10 : 11);
@@ -218,7 +210,6 @@ const SPECS: Record<UF, Spec> = {
 
 const clean = (value: string) => value.toUpperCase().replace(/[.\-/\s]/g, '');
 
-/** UFs for which `value` is a valid IE. */
 export function ieUFs(value: string): UF[] {
   const v = clean(value);
   if (!/^P?\d+$/.test(v)) return [];

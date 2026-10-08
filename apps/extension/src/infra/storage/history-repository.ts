@@ -3,8 +3,6 @@ import type { HistoryRecord } from '../../domain/profile';
 
 const KEY = 'history';
 
-// ponytail: whole history in one storage.local key (10 MB quota ≈ 10k records); read-modify-write
-// is not atomic across contexts. Move to IndexedDB behind this same port if volume demands it.
 export class LocalHistoryRepository implements HistoryRepository {
   async all(): Promise<HistoryRecord[]> {
     const { [KEY]: list } = await browser.storage.local.get(KEY);

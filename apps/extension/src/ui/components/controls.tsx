@@ -30,7 +30,6 @@ export function Button({
   );
 }
 
-/** Square icon-only button; `label` is its accessible name and tooltip. */
 export function IconButton({
   label,
   className = '',
@@ -60,7 +59,6 @@ function useCopy(value: string) {
   return { state, copy };
 }
 
-/** Copy button with short "Copiado!" feedback; `text` is the visible label (default "Copiar"). */
 export function CopyButton({
   value,
   text = t('popup.copy'),
@@ -82,7 +80,6 @@ export function CopyButton({
   );
 }
 
-/** Icon-only copy for list rows: "Copiar CPF". */
 export function CopyIconButton({ value, label }: { value: string; label: string }) {
   const { state, copy } = useCopy(value);
   return (
@@ -96,7 +93,6 @@ export function CopyIconButton({ value, label }: { value: string; label: string 
   );
 }
 
-/** "Ctrl+Shift+F" as keycaps. */
 export function Kbd({ keys, className = '' }: { keys: string; className?: string }) {
   return (
     <span className={`inline-flex items-center gap-0.5 ${className}`}>

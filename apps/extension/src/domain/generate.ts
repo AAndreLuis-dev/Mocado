@@ -15,10 +15,9 @@ export const perfilOptions = (s: Settings): PerfilOptions => ({
   idadeMin: s.idadeMin,
   idadeMax: s.idadeMax,
   cnpjTipo: s.cnpjTipo,
-  masked: true, // the content script strips masks per field
+  masked: true,
 });
 
-/** Company fields on the page → empresa (it includes the legal representative); else pessoa. */
 export function generateFor(
   types: readonly FieldType[],
   settings: Settings,
@@ -29,6 +28,5 @@ export function generateFor(
     : { tipo: 'pessoa', perfil: pessoa(opts) };
 }
 
-/** One value for a single field ("Gerar CPF aqui"). */
 export const generateValue = (type: FieldType, settings: Settings) =>
   valorAvulso(type, perfilOptions(settings));

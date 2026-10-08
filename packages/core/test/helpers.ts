@@ -1,7 +1,6 @@
 import { expect } from 'vitest';
 import { mulberry32, type Generator, type GenOptions } from '../src';
 
-/** generate → validate for many seeds; also checks determinism and format round-trip. */
 export function roundTrip<O extends object>(
   gen: Generator<O>,
   opts: O = {} as O,
@@ -24,7 +23,6 @@ export function roundTrip<O extends object>(
   return out;
 }
 
-/** Changing the last check digit must invalidate the value. */
 export function mutateLastDigit(value: string): string {
   const i = value.search(/\d(?=\D*$)/);
   const d = Number(value[i]);

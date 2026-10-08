@@ -13,10 +13,6 @@ const fromHash = (fallback: Tab): Tab => {
   return (TABS as readonly string[]).includes(h) ? (h as Tab) : fallback;
 };
 
-/**
- * History, Options and field corrections share one app (two entrypoints pick the initial tab).
- * Laid out as a sheet in a file folder: the tabs are the folder's index tabs.
- */
 export function ManageApp({ initial }: { initial: Tab }) {
   const [tab, setTab] = useState<Tab>(() => fromHash(initial));
   useEffect(() => {

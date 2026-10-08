@@ -11,7 +11,6 @@ export default defineConfig({
   zip: {
     artifactTemplate: 'mocado-{{browser}}.zip',
     sourcesTemplate: 'mocado-sources.zip',
-    // AMO needs the whole monorepo to rebuild (core is a workspace package).
     sourcesRoot: resolve(import.meta.dirname, '../..'),
     excludeSources: [
       '**/node_modules/**',
@@ -39,14 +38,12 @@ export default defineConfig({
         description: '__MSG_cmdFillField__',
       },
     },
-    // e2e only: Playwright cannot press extension shortcuts, so tests inject via host permission.
     ...(e2e ? { host_permissions: ['http://localhost/*'] } : {}),
     ...(browser === 'firefox' && {
       browser_specific_settings: {
         gecko: {
           id: 'mocado@mocado.dev',
           strict_min_version: '140.0',
-          // Nothing leaves the browser: declare no data collection (AMO requirement).
           data_collection_permissions: { required: ['none'] },
         },
       },

@@ -1,4 +1,3 @@
-// Fails the build if the injected script (runs inside every page we fill) grows past its budget.
 import { statSync } from 'node:fs';
 
 const BUDGET = 25_000;

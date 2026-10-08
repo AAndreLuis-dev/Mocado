@@ -44,7 +44,7 @@ describe('cnpj', () => {
     expect(cnpj.validate('11222333000181')).toBe(true);
     expect(cnpj.validate('11.222.333/0001-82')).toBe(false);
     expect(cnpj.validate('00.000.000/0000-00')).toBe(false);
-    expect(cnpj.validate('12.ABC.345/01DE-3A')).toBe(false); // DVs must be numeric
+    expect(cnpj.validate('12.ABC.345/01DE-3A')).toBe(false);
   });
 
   test.each(['numerico', 'alfanumerico', 'aleatorio'] as const)('10k %s', (tipo) => {

@@ -11,7 +11,6 @@ function withDv(base10: string): string {
 const format = (value: string, { masked }: { masked: boolean }) =>
   maskIf(onlyDigits(value), '###.#####.##-#', masked);
 
-/** PIS/PASEP/NIT. */
 export const pis: Generator = {
   generate({ rng = defaultRng, masked = true } = {}) {
     let v: string;

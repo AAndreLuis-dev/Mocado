@@ -1,5 +1,3 @@
-// Per-viewer popup conveniences (last generator, mask toggle): never required to work.
-
 export const load = (key: string, fallback: string) => {
   try {
     return localStorage.getItem(key) ?? fallback;
@@ -8,10 +6,11 @@ export const load = (key: string, fallback: string) => {
   }
 };
 
-export const save = (key: string, value: string) => {
+export const save = (key: string, value: string): boolean => {
   try {
     localStorage.setItem(key, value);
+    return true;
   } catch {
-    /* private mode or blocked storage: fine */
+    return false;
   }
 };

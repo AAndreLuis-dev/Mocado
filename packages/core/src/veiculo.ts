@@ -16,7 +16,6 @@ const format = (value: string, { masked }: { masked: boolean }) => {
   return masked && /^[A-Z]{3}\d{4}$/.test(v) ? `${v.slice(0, 3)}-${v.slice(3)}` : v;
 };
 
-/** Old (AAA-9999) or Mercosul (AAA9A99) plate. Mercosul plates have no hyphen. */
 export const placa: Generator<PlacaOptions> = {
   generate({ tipo = 'mercosul', rng = defaultRng, masked = true } = {}) {
     const t = tipo === 'aleatorio' ? pick(rng, ['antiga', 'mercosul'] as const) : tipo;

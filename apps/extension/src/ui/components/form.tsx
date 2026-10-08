@@ -84,7 +84,6 @@ export function Box({
   );
 }
 
-/** Text written with the pen: the user's values. */
 export const pen = 'font-semibold text-caneta';
 
 export function PenInput({ className = '', ...props }: InputHTMLAttributes<HTMLInputElement>) {
@@ -118,7 +117,6 @@ export function PenSelect({
   );
 }
 
-/** Ruled lines like a multi-line form field. */
 export function PenTextarea({
   className = '',
   ...props
@@ -131,10 +129,8 @@ export function PenTextarea({
   );
 }
 
-/** A slightly uneven pen stroke, so marks look written rather than rendered. */
 const PEN_X = 'M4 4.6 13.9 13.5M13.6 4.1 4.5 13.8';
 
-/** Square form checkbox marked with a pen X. Keeps native checkbox semantics. */
 export function PenCheck({
   label,
   hint,
@@ -171,7 +167,6 @@ export function PenCheck({
   );
 }
 
-/** Round form option filled with a pen dot. */
 export function PenRadio({
   label,
   className = '',
@@ -197,7 +192,6 @@ export function PenRadio({
   );
 }
 
-/** A filled-in value with a copy button (profile details). */
 export function ValueBox({
   label,
   value,
@@ -207,7 +201,6 @@ export function ValueBox({
   label: string;
   value: string;
   span?: keyof typeof SPAN;
-  /** Usually a copy button. */
   action?: ReactNode;
 }) {
   return (

@@ -2,7 +2,6 @@ import type { FieldType } from '@mocado/core';
 import { semAcento } from '../../domain/text';
 import { AUTOCOMPLETE, IGNORE_WORDS, SYNONYMS, WEAK_WORDS } from './synonyms';
 
-/** Everything the classifier looks at, already extracted from the DOM (keeps this pure/testable). */
 export interface Signals {
   tag: 'input' | 'select' | 'textarea';
   type?: string;
@@ -21,11 +20,9 @@ export interface Signals {
 export interface Classification {
   type: FieldType;
   score: number;
-  /** Expected format from maxlength/pattern/placeholder; undefined = no hint (use default). */
   masked?: boolean;
 }
 
-/** "dtNasc_cliente" → "dt nasc cliente"; "E-mail" → "e mail"; accents removed. */
 export function normalize(s = ''): string {
   return semAcento(s)
     .replace(/([a-z])([A-Z])/g, '$1 $2')
@@ -49,7 +46,6 @@ const MIN_SCORE = 12;
 
 const ENTRIES = Object.entries(SYNONYMS) as [FieldType, string[]][];
 
-/** Best phrase match of each type inside one normalized text. */
 function matches(text: string): Map<FieldType, number> {
   const padded = ` ${text} `;
   const out = new Map<FieldType, number>();
@@ -66,7 +62,6 @@ function matches(text: string): Map<FieldType, number> {
   return out;
 }
 
-/** Per-type sample values [masked, unmasked] to test `pattern` attributes against. */
 const SAMPLES: Partial<Record<FieldType, [string, string]>> = {
   cpf: ['123.456.789-09', '12345678909'],
   cnpj: ['11.222.333/0001-81', '11222333000181'],
@@ -98,17 +93,21 @@ const LENGTHS: Partial<Record<FieldType, [unmasked: number[], masked: number[]]>
   certidao: [[32], [40]],
 };
 
+function compilePattern(pattern: string): RegExp | null {
+  try {
+    return new RegExp(`^(?:${pattern})$`);
+  } catch {
+    return null;
+  }
+}
+
 export function expectedMask(type: FieldType, s: Signals): boolean | undefined {
   if (s.type === 'number') return false;
   const sample = SAMPLES[type];
-  if (s.pattern && sample) {
-    try {
-      const re = new RegExp(`^(?:${s.pattern})$`);
-      const [m, u] = sample.map((v) => re.test(v));
-      if (m !== u) return !!m;
-    } catch {
-      /* invalid pattern: ignore */
-    }
+  const re = s.pattern && sample ? compilePattern(s.pattern) : null;
+  if (re && sample) {
+    const [m, u] = sample.map((v) => re.test(v));
+    if (m !== u) return !!m;
   }
   const lengths = LENGTHS[type];
   if (lengths && s.maxLength && s.maxLength > 0) {
@@ -162,7 +161,6 @@ export function classify(s: Signals): Classification | null {
   for (const [t, n] of scores) if (n > score) [best, score] = [t, n];
   if (!best || score < MIN_SCORE) return null;
 
-  // A date input can only hold dates.
   if (s.type === 'date' && !['nascimento', 'dataAbertura'].includes(best)) best = 'nascimento';
   return { type: best, score, masked: expectedMask(best, s) };
 }

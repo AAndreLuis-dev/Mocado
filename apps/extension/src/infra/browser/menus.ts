@@ -3,14 +3,37 @@ import { t, fieldLabel } from './i18n';
 import { fillField, fillForm } from '../container';
 import { activeTabId, openHistory } from './navigation';
 
-/** Types offered in "Gerar aqui" and "Marcar este campo como" (most used first). */
 export const MENU_TYPES: FieldType[] = [
-  'cpf', 'cnpj', 'nome', 'email', 'celular', 'telefone', 'cep', 'nascimento', 'rg', 'cnh', 'pis',
-  'titulo', 'ie', 'razaoSocial', 'nomeFantasia', 'logradouro', 'numero', 'bairro', 'cidade', 'uf',
-  'placa', 'renavam', 'cartaoNumero', 'cartaoValidade', 'cartaoCvv', 'certidao', 'senha', 'texto',
-]; // prettier-ignore
+  'cpf',
+  'cnpj',
+  'nome',
+  'email',
+  'celular',
+  'telefone',
+  'cep',
+  'nascimento',
+  'rg',
+  'cnh',
+  'pis',
+  'titulo',
+  'ie',
+  'razaoSocial',
+  'nomeFantasia',
+  'logradouro',
+  'numero',
+  'bairro',
+  'cidade',
+  'uf',
+  'placa',
+  'renavam',
+  'cartaoNumero',
+  'cartaoValidade',
+  'cartaoCvv',
+  'certidao',
+  'senha',
+  'texto',
+];
 
-/** Idempotent: safe on install and on every startup. */
 export function createMenus() {
   browser.contextMenus.removeAll(() => {
     const add = (props: Parameters<typeof browser.contextMenus.create>[0]) =>

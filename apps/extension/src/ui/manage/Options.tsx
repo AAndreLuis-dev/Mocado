@@ -54,9 +54,8 @@ export function Options() {
     return () => clearTimeout(id);
   }, [saved, saves]);
 
-  /** Auto-save every change; each save stamps the paper again. */
   async function set<K extends keyof Settings>(key: K, value: Settings[K]) {
-    setS((cur) => withSetting(cur, key, value)); // controlled inputs must update synchronously
+    setS((cur) => withSetting(cur, key, value));
     setS(await preferences.setSetting(key, value));
     setSaves((n) => n + 1);
     setSaved(true);

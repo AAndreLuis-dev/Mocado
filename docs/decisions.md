@@ -97,3 +97,8 @@ Formato: data, decisão e porquê. A mais recente fica no fim.
 - **Navegação** por abas de pasta presas à folha, sem barra lateral. O título da aba não se repete na folha (fica só para leitor de tela).
 - **Histórico:** cada perfil é a ficha de cadastro preenchida. Os valores principais e os detalhes usam as mesmas caixas, e textos longos (nomes, e-mail, logradouro) ocupam caixa dupla.
 - O popup mantém os componentes de `controls.tsx` (switch, select com borda); o formulário vale para as páginas inteiras.
+
+## 2026-10-08: Código sem comentários
+
+- **Nenhum comentário no código** (TS, JS, CSS, Python, configs): a intenção fica nos nomes e em funções pequenas, e o porquê vai para este arquivo ou para a mensagem do commit. As diretivas inline também saíram: o `prettier-ignore` (as listas longas agora seguem o Prettier) e o `eslint-disable` do fixture do Playwright, que virou regra no `eslint.config.js`.
+- O regex de acentos usa escapes (`\u0300-\u036f`) em vez de caracteres combinantes invisíveis, para ser legível sem explicação.

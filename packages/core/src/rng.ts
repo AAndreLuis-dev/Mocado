@@ -1,9 +1,7 @@
-/** Uniform number in [0, 1). Inject a seeded one for deterministic tests. */
 export type Rng = () => number;
 
 export const defaultRng: Rng = Math.random;
 
-/** Small, fast seeded PRNG (mulberry32). Not cryptographic — test data only. */
 export function mulberry32(seed: number): Rng {
   let a = seed >>> 0;
   return () => {
@@ -15,7 +13,6 @@ export function mulberry32(seed: number): Rng {
   };
 }
 
-/** Integer in [min, max] (inclusive). */
 export const int = (rng: Rng, min: number, max: number): number =>
   min + Math.floor(rng() * (max - min + 1));
 

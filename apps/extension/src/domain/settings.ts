@@ -7,18 +7,14 @@ export const CNPJ_TIPOS: readonly CnpjTipo[] = ['numerico', 'alfanumerico', 'ale
 export const IDADE_MAX = 120;
 
 export interface Settings {
-  /** Default mask when the field gives no hint (maxlength/pattern/placeholder). */
   masked: boolean;
   cnpjTipo: CnpjTipo;
-  /** Preferred UF; '' = random. */
   uf: UF | '';
   idadeMin: number;
   idadeMax: number;
-  /** Hostnames (suffix match) where Mocado never acts. */
   blockedDomains: string[];
   theme: Theme;
   fillPasswords: boolean;
-  /** Keep filling fields that appear after the first fill (SPAs, wizards, modals). */
   observe: boolean;
 }
 
@@ -42,10 +38,6 @@ const age = (v: unknown, fallback: number) =>
     ? Math.max(0, Math.min(IDADE_MAX, Math.round(v)))
     : fallback;
 
-/**
- * Any stored/partial value → valid Settings: unknown or invalid keys get their default (so new
- * keys added in updates work with old storage) and the age range is always min ≤ max.
- */
 export function normalizeSettings(raw: unknown): Settings {
   const r = (raw && typeof raw === 'object' ? raw : {}) as Partial<Record<keyof Settings, unknown>>;
   const d = DEFAULT_SETTINGS;
@@ -65,7 +57,6 @@ export function normalizeSettings(raw: unknown): Settings {
   };
 }
 
-/** Changes one setting; moving one end of the age range past the other drags the other along. */
 export function withSetting<K extends keyof Settings>(
   s: Settings,
   key: K,
@@ -77,7 +68,6 @@ export function withSetting<K extends keyof Settings>(
   return normalizeSettings(next);
 }
 
-/** Textarea content → list of domains (one per line or space separated). */
 export const parseDomains = (text: string) =>
   text
     .split(/\s+/)

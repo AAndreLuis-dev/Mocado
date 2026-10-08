@@ -12,7 +12,7 @@ test('1. HTML puro (PF)', async ({ context, fill, pageErrors }) => {
 
   expect(await val(page, '#nome')).toMatch(/^\S+ \S+ \S+$/);
   const c = await val(page, '#cpf');
-  expect(c).toMatch(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/); // maxlength=14 → masked
+  expect(c).toMatch(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/);
   expect(cpf.validate(c)).toBe(true);
   expect(rg.validate(await val(page, '#rg'))).toBe(true);
   expect(await val(page, '#nasc')).toMatch(/^\d{4}-\d{2}-\d{2}$/);
@@ -21,9 +21,9 @@ test('1. HTML puro (PF)', async ({ context, fill, pageErrors }) => {
   expect(telefone.validate(await val(page, '#cel'), { tipo: 'celular' })).toBe(true);
   const uf = (await val(page, '#uf')) as UF;
   expect(uf).toMatch(/^[A-Z]{2}$/);
-  expect(cepUF(await val(page, '#cep'))).toBe(uf); // address coherent with the selected UF
+  expect(cepUF(await val(page, '#cep'))).toBe(uf);
   for (const id of ['#log', '#num', '#bairro', '#cidade']) expect(await val(page, id)).not.toBe('');
-  expect(await val(page, '#senha')).toBe(''); // passwords only with the explicit option
+  expect(await val(page, '#senha')).toBe('');
   expect(await page.locator('input[name=termos]').isChecked()).toBe(true);
   expect(pageErrors).toEqual([]);
 });
@@ -45,7 +45,7 @@ test('2. React controlado (PJ): state reflects the values', async ({
   >;
   for (const [k, v] of Object.entries(state)) {
     expect(v, k).not.toBe('');
-    expect(await page.locator(`[name=${k}]`).inputValue()).toBe(v); // DOM and React state agree
+    expect(await page.locator(`[name=${k}]`).inputValue()).toBe(v);
   }
   expect(cnpj.validate(state.cnpj!)).toBe(true);
   expect(cpf.validate(state.cpfResponsavel!)).toBe(true);
@@ -53,7 +53,6 @@ test('2. React controlado (PJ): state reflects the values', async ({
   expect(cepUF(state.cep!)).toBe(state.uf);
   expect(state.dataAbertura).toMatch(/^\d{4}-\d{2}-\d{2}$/);
 
-  // React keeps the values after a re-render (it really owns them)
   await page.locator('[name=numero]').focus();
   await page.keyboard.type('0');
   const after = JSON.parse((await page.getByTestId('state').textContent())!) as Record<
@@ -78,7 +77,7 @@ test('3. Máscaras (IMask)', async ({ context, fill, pageErrors }) => {
   expect(await val(page, '[name=cep]')).toMatch(/^\d{5}-\d{3}$/);
   expect(await val(page, '[name=celular]')).toMatch(/^\(\d{2}\) 9\d{4}-\d{4}$/);
   const raw = await val(page, '[name=cpf_numeros]');
-  expect(raw).toMatch(/^\d{11}$/); // maxlength=11 → digits only
+  expect(raw).toMatch(/^\d{11}$/);
   expect(cpf.validate(raw)).toBe(true);
   expect(pageErrors).toEqual([]);
 });
@@ -90,12 +89,11 @@ test('4. SPA/modal + shadow DOM + iframe', async ({ context, fill, pageErrors })
   expect(res.ok).toBe(true);
 
   expect(await val(page, '[name=atendente_nome]')).not.toBe('');
-  expect(await page.locator('mocado-email').locator('input').inputValue()).toMatch(/@/); // open shadow root
+  expect(await page.locator('mocado-email').locator('input').inputValue()).toMatch(/@/);
   const frameCnpj = await page.frameLocator('#frame').locator('[name=doc_cnpj]').inputValue();
-  expect(cnpj.validate(frameCnpj)).toBe(true); // same-origin iframe
+  expect(cnpj.validate(frameCnpj)).toBe(true);
 
   await page.click('#novo');
-  // the observer fills the late form with the same profile
   await expect(page.locator('[name=cliente_cpf]')).not.toHaveValue('', { timeout: 5000 });
   expect(cpf.validate(await val(page, '[name=cliente_cpf]'))).toBe(true);
   expect(await val(page, '[name=cliente_nome]')).toBe(await val(page, '[name=atendente_nome]'));
@@ -119,6 +117,6 @@ test('5. Nomes ruins: label/placeholder/aria/texto próximo', async ({
   expect(cep.validate(await val(page, '[name=campo5]'))).toBe(true);
   expect(await val(page, '[name=campo6]')).toMatch(/@example\./);
   expect(telefone.validate(await val(page, '[name=campo7]'), { tipo: 'celular' })).toBe(true);
-  expect(await val(page, '[name=campo8]')).toBe(''); // no signal at all → untouched
+  expect(await val(page, '[name=campo8]')).toBe('');
   expect(pageErrors).toEqual([]);
 });

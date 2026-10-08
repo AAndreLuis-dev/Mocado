@@ -2,7 +2,6 @@ import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { test } from './fixtures';
 
-// Frames for docs/demo.gif — run with: MOCADO_DEMO=1 pnpm --filter extension demo
 test.skip(!process.env.MOCADO_DEMO, 'demo frames only on demand');
 
 test('demo frames', async ({ context, sw, fill }) => {
@@ -46,7 +45,6 @@ test('demo frames', async ({ context, sw, fill }) => {
   await ui.goto(`chrome-extension://${extId}/popup.html`);
   await shot(ui, 'Popup: preencher, gerar avulso, reusar perfis');
 
-  // Store screenshots and visual review (not in the GIF): popup, options and history in both themes.
   mkdirSync(`${out}/ui`, { recursive: true });
   for (const theme of ['light', 'dark'] as const) {
     await sw.evaluate(
@@ -62,7 +60,7 @@ test('demo frames', async ({ context, sw, fill }) => {
     await ui.goto(`chrome-extension://${extId}/popup.html`);
     await review('popup');
     await ui.getByLabel('Gerador').selectOption('pessoa');
-    await ui.waitForTimeout(300); // let the stamp land
+    await ui.waitForTimeout(300);
     await review('popup-pessoa');
     await ui.setViewportSize({ width: 1280, height: 800 });
     for (const tab of ['history', 'options', 'overrides']) {

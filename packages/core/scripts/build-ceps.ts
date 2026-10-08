@@ -1,8 +1,3 @@
-/**
- * Dev-only: builds src/data/ceps.json from ViaCEP (a few real addresses per city).
- * The extension NEVER calls the network; this runs once by hand and the JSON is committed.
- *   pnpm --filter @mocado/core build-ceps
- */
 import { writeFileSync } from 'node:fs';
 
 const CIDADES: Record<string, string[]> = {
@@ -50,7 +45,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const out: { cep: string; logradouro: string; bairro: string; cidade: string; uf: string }[] = [];
 for (const [uf, cidades] of Object.entries(CIDADES)) {
   for (const cidade of cidades) {
-    const picked = new Map<string, ViaCep>(); // one per bairro
+    const picked = new Map<string, ViaCep>();
     for (const termo of TERMOS) {
       if (picked.size >= POR_CIDADE) break;
       const url = `https://viacep.com.br/ws/${uf}/${encodeURIComponent(cidade)}/${termo}/json/`;
@@ -58,7 +53,6 @@ for (const [uf, cidades] of Object.entries(CIDADES)) {
       const list = res.ok ? ((await res.json()) as ViaCep[]) : [];
       for (const e of Array.isArray(list) ? list : []) {
         if (picked.size >= POR_CIDADE) break;
-        // suffixes 900+ are big users / PO boxes, not street CEPs
         const special = Number(e.cep.slice(-3)) >= 900;
         if (e.logradouro && e.bairro && !special && !picked.has(e.bairro)) picked.set(e.bairro, e);
       }

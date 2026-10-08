@@ -4,7 +4,6 @@ import { classify, expectedMask, normalize, type Signals } from './classify';
 
 const i = (s: Partial<Signals>): Signals => ({ tag: 'input', type: 'text', ...s });
 
-// [description, signals, expected type | null]
 const CASES: [string, Signals, FieldType | null][] = [
   ['autocomplete email', i({ autocomplete: 'email', name: 'x' }), 'email'],
   ['autocomplete given-name', i({ autocomplete: 'given-name' }), 'primeiroNome'],

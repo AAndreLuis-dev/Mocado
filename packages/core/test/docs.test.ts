@@ -18,7 +18,6 @@ import IE_FIXTURES from './ie-fixtures.json' with { type: 'json' };
 
 describe('rg (SSP-SP)', () => {
   test('known DV rules', () => {
-    // 2×9+4×8+6×7+7×6+8×5+1×4+3×3+1×2 = 189 → 189 mod 11 = 2
     expect(rg.validate('24.678.131-2')).toBe(true);
     expect(rg.validate('24.678.131-3')).toBe(false);
     expect(rg.validate('11.111.111-1')).toBe(false);
@@ -48,7 +47,7 @@ describe('pis', () => {
 describe('titulo', () => {
   test('known value', () => {
     expect(titulo.validate('0043 5687 0906')).toBe(true);
-    expect(titulo.validate('004356870906', { uf: 'PR' })).toBe(false); // 09 = SC
+    expect(titulo.validate('004356870906', { uf: 'PR' })).toBe(false);
     expect(tituloUF('004356870906')).toBe('SC');
   });
   test('5k round-trip per UF keeps UF', () => {
@@ -75,7 +74,7 @@ describe('certidao', () => {
 });
 
 describe('inscricao estadual', () => {
-  const supported = (uf: string, v: string) => !(uf === 'RO' && v.replace(/\D/g, '').length === 9); // pre-2000 RO format
+  const supported = (uf: string, v: string) => !(uf === 'RO' && v.replace(/\D/g, '').length === 9);
 
   test.each(Object.entries(IE_FIXTURES))('%s: real IEs validate', (uf, values) => {
     for (const v of values.filter((x) => supported(uf, x))) {

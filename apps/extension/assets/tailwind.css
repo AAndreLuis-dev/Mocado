@@ -2,13 +2,8 @@
 @import '@fontsource-variable/atkinson-hyperlegible-next/wght.css';
 @import '@fontsource-variable/atkinson-hyperlegible-mono/wght.css';
 
-/* Theme is chosen in Options (system/light/dark): `.dark` on <html> instead of the media query. */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/*
- * "Ficha + carimbo": a registration form on cool paper, filled in ballpoint blue, stamped in violet.
- * Atkinson Hyperlegible (Next + Mono): 0/O and 1/l/I never get confused in generated documents.
- */
 :root {
   --papel: #f3f5f7;
   --ficha: #ffffff;
@@ -80,7 +75,6 @@
 }
 
 @layer components {
-  /* Rubber stamp: double border, ink that doesn't quite cover, slight tilt. */
   .carimbo {
     display: inline-block;
     padding: 0.1rem 0.45rem;

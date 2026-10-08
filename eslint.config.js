@@ -5,7 +5,6 @@ import globals from 'globals';
 
 const EXT = 'apps/extension/src';
 
-/** Forbids imports of outer layers and browser globals inside an inner layer. */
 function layer(name, forbidden, { typeOnly = [] } = {}) {
   const dir = (l) => (l.startsWith('@') ? l : `**/${l}/**`);
   return [
@@ -64,10 +63,13 @@ export default tseslint.config(
       ],
     },
   },
-  // Clean Architecture: dependencies point inward (ui/infra → application → domain → core).
   ...layer('domain', ['application', 'infra', 'ui', 'content']),
   ...layer('application', ['infra', 'ui', 'content']),
   ...layer('content', ['infra', 'ui'], { typeOnly: ['application', '@mocado/core'] }),
+  {
+    files: ['apps/extension/e2e/**/*.ts'],
+    rules: { 'no-empty-pattern': 'off' },
+  },
   {
     files: ['**/*.tsx'],
     plugins: { 'react-hooks': reactHooks },

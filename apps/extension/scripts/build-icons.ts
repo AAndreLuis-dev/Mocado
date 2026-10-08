@@ -1,7 +1,3 @@
-/**
- * Dev-only: renders assets/icon.svg to public/icon/{16,32,48,96,128}.png with Playwright's Chromium.
- *   pnpm --filter extension icons
- */
 import { chromium } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';

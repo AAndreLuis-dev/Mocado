@@ -2,28 +2,59 @@ import type { FieldType } from '@mocado/core';
 import type { FieldEl } from '../detect/collect';
 import { normalize } from '../detect/classify';
 
-// prettier-ignore
 const UF_NAMES: Record<string, string> = {
-  AC: 'Acre', AL: 'Alagoas', AP: 'Amapá', AM: 'Amazonas', BA: 'Bahia', CE: 'Ceará', DF: 'Distrito Federal',
-  ES: 'Espírito Santo', GO: 'Goiás', MA: 'Maranhão', MT: 'Mato Grosso', MS: 'Mato Grosso do Sul',
-  MG: 'Minas Gerais', PA: 'Pará', PB: 'Paraíba', PR: 'Paraná', PE: 'Pernambuco', PI: 'Piauí',
-  RJ: 'Rio de Janeiro', RN: 'Rio Grande do Norte', RS: 'Rio Grande do Sul', RO: 'Rondônia', RR: 'Roraima',
-  SC: 'Santa Catarina', SP: 'São Paulo', SE: 'Sergipe', TO: 'Tocantins',
+  AC: 'Acre',
+  AL: 'Alagoas',
+  AP: 'Amapá',
+  AM: 'Amazonas',
+  BA: 'Bahia',
+  CE: 'Ceará',
+  DF: 'Distrito Federal',
+  ES: 'Espírito Santo',
+  GO: 'Goiás',
+  MA: 'Maranhão',
+  MT: 'Mato Grosso',
+  MS: 'Mato Grosso do Sul',
+  MG: 'Minas Gerais',
+  PA: 'Pará',
+  PB: 'Paraíba',
+  PR: 'Paraná',
+  PE: 'Pernambuco',
+  PI: 'Piauí',
+  RJ: 'Rio de Janeiro',
+  RN: 'Rio Grande do Norte',
+  RS: 'Rio Grande do Sul',
+  RO: 'Rondônia',
+  RR: 'Roraima',
+  SC: 'Santa Catarina',
+  SP: 'São Paulo',
+  SE: 'Sergipe',
+  TO: 'Tocantins',
 };
 
-/** Free-text types: never stripped to alphanumerics (masks don't apply). */
 const TEXTUAL = new Set<FieldType>([
-  'nome', 'primeiroNome', 'sobrenome', 'mae', 'pai', 'logradouro', 'complemento', 'bairro',
-  'cidade', 'razaoSocial', 'nomeFantasia', 'cartaoNome', 'email', 'senha', 'texto',
-  'veiculoMarca', 'veiculoModelo', 'sexo',
-]); // prettier-ignore
+  'nome',
+  'primeiroNome',
+  'sobrenome',
+  'mae',
+  'pai',
+  'logradouro',
+  'complemento',
+  'bairro',
+  'cidade',
+  'razaoSocial',
+  'nomeFantasia',
+  'cartaoNome',
+  'email',
+  'senha',
+  'texto',
+  'veiculoMarca',
+  'veiculoModelo',
+  'sexo',
+]);
 
 const alnum = (s: string) => s.toUpperCase().replace(/[^0-9A-Z]/g, '');
 
-/**
- * Prototype setter of the element's own realm (iframes have their own HTMLInputElement):
- * bypasses React's/Vue's instance-level value tracking, so the framework sees the change.
- */
 function setNativeValue(el: FieldEl, value: string) {
   const win = el.ownerDocument.defaultView ?? window;
   const proto =
@@ -47,7 +78,6 @@ function fire(el: Element, type: string, init: EventInit = {}) {
   el.dispatchEvent(new Ctor(type, { bubbles: true, cancelable: true, composed: true, ...init }));
 }
 
-/** Last resort for mask libraries that only react to typing. */
 function typeChars(el: FieldEl, value: string) {
   setNativeValue(el, '');
   fire(el, 'input', { inputType: 'deleteContentBackward' } as InputEventInit);
@@ -61,7 +91,6 @@ function typeChars(el: FieldEl, value: string) {
   }
 }
 
-/** Adapts a generated value to what the field accepts (mask, date input, maxlength). */
 export function adapt(
   value: string,
   type: FieldType,
@@ -88,7 +117,6 @@ export function adapt(
   return v;
 }
 
-/** Picks the <option> matching `value` (value/text, UF names, partial text), else a random non-empty one. */
 export function chooseOption(
   select: HTMLSelectElement,
   value: string,
@@ -106,7 +134,6 @@ export function chooseOption(
   );
 }
 
-/** Fills one field the way a user would, so React/Vue/Angular and mask libraries notice. */
 export function fillElement(el: FieldEl, value: string): boolean {
   try {
     el.focus({ preventScroll: true });
@@ -119,7 +146,6 @@ export function fillElement(el: FieldEl, value: string): boolean {
     } else {
       setNativeValue(el, value);
       fire(el, 'input', { inputType: 'insertFromPaste', data: value } as InputEventInit);
-      // Mask libs that rejected the bulk value (digits differ) get it typed char by char.
       if (alnum(el.value) !== alnum(value)) typeChars(el, alnum(value));
     }
     fire(el, 'change');
@@ -128,19 +154,12 @@ export function fillElement(el: FieldEl, value: string): boolean {
     fire(el, 'focusout');
     return true;
   } catch {
-    return false; // never break the page
+    return false;
   }
 }
 
-export function checkRadio(radio: HTMLInputElement) {
-  try {
-    radio.click(); // native click updates checked + fires input/change like a user
-  } catch {
-    /* ignore */
-  }
-}
+export const checkRadio = (radio: HTMLInputElement) => radio.click();
 
-/** Radio matching the value by value/label text (e.g. "Feminino" ↔ "F"), else the first. */
 export function chooseRadio(
   radios: HTMLInputElement[],
   value: string | undefined,

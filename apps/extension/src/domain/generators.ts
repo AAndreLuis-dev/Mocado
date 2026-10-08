@@ -36,7 +36,6 @@ import {
   type UF,
 } from '@mocado/core';
 
-/** Option values; '' means "any". Labels come from i18n `opt.<value>` (UFs/banks/brands shown raw). */
 export type Choices = Record<string, readonly string[]>;
 export type Result = string | Record<string, string>;
 
@@ -49,7 +48,6 @@ export interface GeneratorDef {
 const UF_OPT = ['', ...UFS] as const;
 const uf = (o: Record<string, string>) => (o.uf || undefined) as UF | undefined;
 
-// Stays in one place so the popup (and later the history page) render any generator generically.
 export const GENERATORS: GeneratorDef[] = [
   {
     id: 'pessoa',
