@@ -11,14 +11,9 @@ export type FillOutcome = FillResult & {
   report?: FillReport;
   tipo?: PerfilTipo;
   perfil?: Perfil;
-  /** History record created (or reused) by this fill. */
   recordId?: string;
 };
 
-/**
- * Whole-form fill. `reuseId` fills with a stored profile; otherwise a pinned profile (one-shot,
- * set from the history page) is used, else a new one is generated for the fields on the page.
- */
 export const makeFillForm =
   (d: Deps) =>
   async (tabId: number, reuseId?: string): Promise<FillOutcome> => {

@@ -4,7 +4,7 @@ export default defineConfig({
   testDir: 'e2e',
   timeout: 30_000,
   retries: process.env.CI ? 1 : 0,
-  workers: 1, // one persistent Chromium with the extension at a time
+  workers: 1,
   reporter: process.env.CI ? 'github' : 'list',
   use: { baseURL: 'http://localhost:5174', trace: 'retain-on-failure' },
   webServer: {

@@ -19,7 +19,6 @@ export const primeiroNome = ({ sexo: s, rng = defaultRng }: RngOpt & { sexo?: Se
 
 export const sobrenome = ({ rng = defaultRng }: RngOpt = {}) => pick(rng, SOBRENOMES);
 
-/** "Primeiro Sobrenome1 Sobrenome2" (two distinct surnames). */
 export function nomeCompleto({ sexo: s, rng = defaultRng }: RngOpt & { sexo?: Sexo } = {}): string {
   const first = primeiroNome({ sexo: s, rng });
   const a = sobrenome({ rng });
@@ -29,7 +28,6 @@ export function nomeCompleto({ sexo: s, rng = defaultRng }: RngOpt & { sexo?: Se
   return `${first} ${a} ${b}`;
 }
 
-/** Parents coherent with the child: mother keeps the 1st surname, father passes the last one. */
 export function pais(
   nome: string,
   { rng = defaultRng }: RngOpt = {},
@@ -47,7 +45,6 @@ const slug = (s: string) =>
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '');
 
-/** RFC 2606 reserved domains: generated addresses never reach a real inbox. */
 export const EMAIL_DOMINIOS = ['example.com', 'example.net', 'example.org'] as const;
 
 export function email(
@@ -65,8 +62,6 @@ export function email(
   ]);
   return `${user}@${dominio ?? pick(rng, EMAIL_DOMINIOS)}`;
 }
-
-// ---------- Telefone ----------
 
 export type TelefoneTipo = 'fixo' | 'celular';
 
@@ -104,13 +99,9 @@ export const dddUF = (value: string): UF | undefined => {
   return UFS.find((uf) => DDD[uf].includes(ddd));
 };
 
-// ---------- Datas ----------
-
-/** "DD/MM/AAAA" */
 export const dataBR = (d: Date) =>
   `${pad(d.getDate(), 2)}/${pad(d.getMonth() + 1, 2)}/${d.getFullYear()}`;
 
-/** "DD/MM/AAAA" → "AAAA-MM-DD" (for <input type="date">). */
 export const dataISO = (br: string) => br.split('/').reverse().join('-');
 
 export function idade(br: string, now = new Date()): number {
@@ -119,7 +110,6 @@ export function idade(br: string, now = new Date()): number {
   return now.getMonth() + 1 < m || (now.getMonth() + 1 === m && now.getDate() < d) ? age - 1 : age;
 }
 
-/** Birth date ("DD/MM/AAAA") for an age in [idadeMin, idadeMax]. */
 export function nascimento({
   idadeMin = 18,
   idadeMax = 60,
@@ -128,7 +118,6 @@ export function nascimento({
 }: RngOpt & { idadeMin?: number; idadeMax?: number; now?: Date } = {}): string {
   const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
   const day = 86_400_000;
-  // youngest: born today − idadeMin years; oldest: born (idadeMax + 1) years ago + 1 day
   const latest = Date.UTC(now.getFullYear() - idadeMin, now.getMonth(), now.getDate());
   const earliest = Date.UTC(now.getFullYear() - idadeMax - 1, now.getMonth(), now.getDate()) + day;
   const t =
@@ -137,8 +126,6 @@ export function nascimento({
   const d = new Date(t);
   return dataBR(new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
 }
-
-// ---------- Senha ----------
 
 export interface SenhaOptions {
   tamanho?: number;
@@ -155,7 +142,6 @@ const CLASSES = {
   simbolos: '!@#$%&*?-_+=',
 };
 
-/** Password with at least one char of each enabled class. */
 export function senha({
   tamanho = 12,
   maiusculas = true,

@@ -26,7 +26,6 @@ export const numero = ({
   rng = defaultRng,
 }: { min?: number; max?: number; rng?: Rng } = {}) => int(rng, min, max);
 
-/** RFC 4122 v4 UUID built from the RNG (deterministic with a seeded RNG). */
 export function uuid({ rng = defaultRng }: { rng?: Rng } = {}): string {
   const h = Array.from({ length: 32 }, () => int(rng, 0, 15).toString(16));
   h[12] = '4';

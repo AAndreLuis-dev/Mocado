@@ -9,7 +9,6 @@ export function applyTheme(theme: Theme) {
   document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
 }
 
-/** Applies the saved theme now and whenever it changes (Options open in another tab). */
 export function initTheme() {
   const sync = () => preferences.settings().then((s) => applyTheme(s.theme));
   void sync();

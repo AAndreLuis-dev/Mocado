@@ -26,7 +26,6 @@ const isUse = (u: unknown): u is Use =>
   typeof (u as Use).url === 'string' &&
   typeof (u as Use).at === 'number';
 
-/** Shape check for imported data (never trust a file): unknown keys and wrong types are dropped. */
 export function sanitize(x: unknown): HistoryRecord | null {
   if (!x || typeof x !== 'object') return null;
   const r = x as Record<string, unknown>;
@@ -47,14 +46,12 @@ export function sanitize(x: unknown): HistoryRecord | null {
   };
 }
 
-/** Valid records of an export file (or a bare array); throws `invalid-file` for anything else. */
 export function parseImport(data: unknown): HistoryRecord[] {
   const raw = Array.isArray(data) ? data : (data as Partial<HistoryExport> | null)?.records;
   if (!Array.isArray(raw)) throw new Error('invalid-file');
   return raw.map(sanitize).filter((r): r is HistoryRecord => r !== null);
 }
 
-/** Incoming records win over existing ones with the same id. */
 export function mergeRecords(
   existing: readonly HistoryRecord[],
   incoming: readonly HistoryRecord[],

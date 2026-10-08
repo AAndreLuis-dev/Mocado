@@ -4,11 +4,6 @@ import { checkRadio, chooseOption, chooseRadio, fillElement } from './fill';
 
 const SEXO = /\b(sexo|genero|gender|sex)\b/;
 
-/**
- * Choices a form usually requires but the classifier doesn't type: radio groups (sexo by value,
- * others the first option), required checkboxes and empty selects. `done` holds elements already
- * filled (skipped, and updated with what this call fills). Returns how many were filled.
- */
 export function fillChoices(
   root: Document,
   perfil: Perfil,

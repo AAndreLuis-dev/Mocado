@@ -2,8 +2,6 @@ import { type Generator } from './types';
 import { defaultRng, digits, int, pick, type Rng } from './rng';
 import { mask, onlyDigits, pad, toNums, weighted } from './mask';
 
-// ---------- Cartão de crédito ----------
-
 export type Bandeira = 'visa' | 'mastercard' | 'amex' | 'elo' | 'hipercard' | 'diners';
 
 interface BandeiraSpec {
@@ -113,7 +111,7 @@ export const cartao: Generator<CartaoOptions> = {
 export interface CartaoCompleto {
   numero: string;
   bandeira: string;
-  validade: string; // MM/AA
+  validade: string;
   cvv: string;
 }
 
@@ -124,7 +122,7 @@ export function cartaoCompleto({
   now = new Date(),
 }: CartaoOptions & { rng?: Rng; masked?: boolean; now?: Date } = {}): CartaoCompleto {
   const b = bandeira ?? pick(rng, Object.keys(BANDEIRAS) as Bandeira[]);
-  const months = int(rng, 1, 96); // always in the future
+  const months = int(rng, 1, 96);
   const exp = new Date(now.getFullYear(), now.getMonth() + months, 1);
   return {
     numero: cartao.generate({ bandeira: b, rng, masked }),
@@ -133,8 +131,6 @@ export function cartaoCompleto({
     cvv: digits(rng, BANDEIRAS[b].cvv),
   };
 }
-
-// ---------- Conta bancária ----------
 
 export type Banco = 'bb' | 'bradesco' | 'itau' | 'caixa' | 'santander';
 
@@ -147,13 +143,12 @@ export const BANCOS: Record<Banco, { codigo: string; nome: string }> = {
 };
 
 export interface ContaBancaria {
-  banco: string; // código COMPE
+  banco: string;
   nomeBanco: string;
-  agencia: string; // "1234" or "1234-5"
-  conta: string; // "12345678-9"
+  agencia: string;
+  conta: string;
 }
 
-/** 11 − (Σ mod 11); 10 → `ten`, 11 → "0". */
 const dv11 = (body: string, weights: number[], ten: string) => {
   const d = 11 - (weighted(toNums(body), weights) % 11);
   return d === 11 ? '0' : d === 10 ? ten : String(d);
@@ -178,7 +173,6 @@ const santanderDv = (ag: string, conta: string) =>
       10,
   );
 
-// Bank rules, cross-checked with darkroomdevs/CheckDigitValidator (MIT) test data.
 const BANK_RULES: Record<
   Banco,
   { ag: (a: string) => string | null; conta: number; dv: (ag: string, c: string) => string }
@@ -194,7 +188,7 @@ const BANK_RULES: Record<
     dv: (_, c) => dv11(c, [2, 7, 6, 5, 4, 3, 2], 'P'),
   },
   itau: { ag: () => null, conta: 5, dv: itauDv },
-  caixa: { ag: () => null, conta: 11, dv: caixaDv }, // operação (3) + conta (8)
+  caixa: { ag: () => null, conta: 11, dv: caixaDv },
   santander: { ag: () => null, conta: 8, dv: santanderDv },
 };
 

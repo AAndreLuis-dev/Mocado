@@ -1,9 +1,5 @@
 import type { FieldType } from '@mocado/core';
 
-/**
- * Synonyms per field type, already normalized (lowercase, no accents, words split by spaces).
- * Matched as whole-word phrases; longer phrases win over shorter ones ("nome da mae" beats "nome").
- */
 export const SYNONYMS: Partial<Record<FieldType, string[]>> = {
   nome: [
     'nome',
@@ -226,7 +222,6 @@ export const SYNONYMS: Partial<Record<FieldType, string[]>> = {
   ],
 };
 
-/** HTML autocomplete tokens → field type (strongest signal). */
 export const AUTOCOMPLETE: Record<string, FieldType> = {
   name: 'nome',
   'given-name': 'primeiroNome',
@@ -252,7 +247,6 @@ export const AUTOCOMPLETE: Record<string, FieldType> = {
   'cc-csc': 'cartaoCvv',
 };
 
-/** Generic single words: still count, but lose to any specific phrase in the same field. */
 export const WEAK_WORDS = new Set([
   'documento',
   'doc',
@@ -283,7 +277,6 @@ export const WEAK_WORDS = new Set([
   'mail',
 ]);
 
-/** Fields that are never test-data targets. */
 export const IGNORE_WORDS = [
   'captcha',
   'recaptcha',

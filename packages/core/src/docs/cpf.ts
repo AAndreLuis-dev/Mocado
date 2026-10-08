@@ -16,7 +16,6 @@ const format = (value: string, { masked }: { masked: boolean }) =>
   maskIf(onlyDigits(value), '###.###.###-##', masked);
 
 export interface CpfOptions {
-  /** UF of issue: sets the 9th digit (fiscal region). */
   uf?: UF;
 }
 
@@ -37,5 +36,4 @@ export const cpf: Generator<CpfOptions> = {
   format,
 };
 
-/** Fiscal region digit (9th) of a CPF. */
 export const cpfRegion = (value: string): number => Number(onlyDigits(value)[8]);

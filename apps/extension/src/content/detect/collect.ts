@@ -20,7 +20,6 @@ const SKIP_TYPES = new Set([
   'radio',
 ]);
 
-/** Every element under `root`, descending into open shadow roots and same-origin iframes. */
 export function* deepElements(root: Document | ShadowRoot | Element): Generator<Element> {
   const walker = (root.ownerDocument ?? (root as Document)).createTreeWalker(
     root,
@@ -33,7 +32,7 @@ export function* deepElements(root: Document | ShadowRoot | Element): Generator<
     if (el.tagName === 'IFRAME' || el.tagName === 'FRAME') {
       let doc: Document | null;
       try {
-        doc = (el as HTMLIFrameElement).contentDocument; // null when cross-origin
+        doc = (el as HTMLIFrameElement).contentDocument;
       } catch {
         doc = null;
       }
@@ -57,10 +56,9 @@ function labelText(el: FieldEl): string {
   return parts.filter(Boolean).join(' ');
 }
 
-/** Text right before the field when there is no <label>: previous sibling, or previous table cell. */
 function nearbyText(el: FieldEl): string {
   const prev = el.previousElementSibling;
-  if (prev && isField(prev)) return ''; // text before a previous field belongs to that field
+  if (prev && isField(prev)) return '';
   const own = prev ? text(prev) : '';
   if (own) return own;
   const parent = el.parentElement;
@@ -93,7 +91,6 @@ export function signalsOf(el: FieldEl): Signals {
   };
 }
 
-/** Visible, enabled, editable — checkVisibility is missing in jsdom, so absent = visible. */
 export function isFillable(el: FieldEl): boolean {
   if ((el as HTMLInputElement).disabled || (el as HTMLInputElement).readOnly) return false;
   if (el.tagName === 'INPUT' && SKIP_TYPES.has((el as HTMLInputElement).type)) return false;
@@ -102,10 +99,6 @@ export function isFillable(el: FieldEl): boolean {
   return visible ? visible.call(el, { visibilityProperty: true, opacityProperty: false }) : true;
 }
 
-/**
- * Stable selector for per-domain overrides: #id (if it doesn't look generated), [name], else a
- * tag:nth-of-type path from the closest form (or body).
- */
 export function stableSelector(el: Element): string {
   const tag = el.tagName.toLowerCase();
   if (el.id && !/\d{3,}|[:]|^(ember|react|mui|rc|headlessui|radix|v-)/i.test(el.id))
@@ -130,7 +123,6 @@ export function stableSelector(el: Element): string {
 
 export interface CollectOptions {
   fillPasswords?: boolean;
-  /** stableSelector → type, set by the user for this domain. */
   overrides?: Record<string, FieldType>;
 }
 
@@ -153,7 +145,6 @@ export function collectFields(root: Document | Element, opts: CollectOptions = {
   return out;
 }
 
-/** Radio groups (by name) in the page, with a text describing the group. */
 export function radioGroups(
   root: Document | Element,
 ): { name: string; radios: HTMLInputElement[]; hint: string }[] {

@@ -7,7 +7,6 @@ import { scriptingPageGateway } from './browser/page-gateway';
 import { LocalHistoryRepository } from './storage/history-repository';
 import { overridesStore, pinStore, settingsStore } from './storage/stores';
 
-/** Composition root: the only place that picks real adapters for the ports. */
 const deps: Deps = {
   page: scriptingPageGateway,
   history: new LocalHistoryRepository(),

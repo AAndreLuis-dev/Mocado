@@ -1,9 +1,5 @@
 import { isField, type FieldEl } from '../detect/collect';
 
-/**
- * Tracks the field the user is acting on: the focused one (through open shadow roots and
- * same-origin iframes), else the last right-clicked one ("Gerar X aqui" on an unfocused field).
- */
 export function createFocusTracker(doc: Document) {
   let lastContextTarget: Element | null = null;
   doc.addEventListener(

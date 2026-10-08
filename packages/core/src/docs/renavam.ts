@@ -20,5 +20,5 @@ export const renavam: Generator = {
       v.length === 11 && !allSame(v) && !/[^\d\s.-]/.test(value) && withDv(v.slice(0, 10)) === v
     );
   },
-  format: (value) => onlyDigits(value), // RENAVAM has no mask
+  format: (value) => onlyDigits(value),
 };

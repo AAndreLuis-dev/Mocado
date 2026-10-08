@@ -9,7 +9,6 @@ import { createFocusTracker } from './fill/focus';
 
 const EMPTY: FillReport = { filled: 0, fields: [] };
 
-/** The content-script side: detects and fills fields in `doc` (DOM only, no storage, no core). */
 export function createPageApi(doc: Document = document): MocadoApi {
   const hostname = doc.location?.hostname ?? '';
   const filled = new WeakSet<Element>();
@@ -20,7 +19,6 @@ export function createPageApi(doc: Document = document): MocadoApi {
   const detect = (ctx: PageContext): Detected[] =>
     collectFields(doc, { fillPasswords: ctx.fillPasswords, overrides: ctx.overrides[hostname] });
 
-  /** `onlyNew`: skip fields already filled by us or by the user (used for late-appearing fields). */
   function fillDetected(list: Detected[], perfil: Perfil, ctx: PageContext, onlyNew: boolean) {
     const report: FillReport = { filled: 0, fields: [] };
     for (const d of list) {
@@ -44,7 +42,6 @@ export function createPageApi(doc: Document = document): MocadoApi {
     return report;
   }
 
-  /** SPAs, wizards and modals: keep filling fields that appear after the first fill. */
   function observe() {
     if (observer) return;
     let timer: ReturnType<typeof setTimeout> | undefined;

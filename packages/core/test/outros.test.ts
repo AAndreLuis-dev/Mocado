@@ -74,7 +74,7 @@ describe('cartao', () => {
 
 describe('conta bancaria', () => {
   test('real data (darkroomdevs/CheckDigitValidator, MIT)', () => {
-    expect(validarContaBancaria('bb', '1584-9', '1166615-3')).toBe(false); // conta tem 8 dígitos no BB
+    expect(validarContaBancaria('bb', '1584-9', '1166615-3')).toBe(false);
     expect(validarContaBancaria('bb', '1584-9', '01166615-3')).toBe(true);
     expect(validarContaBancaria('bb', '2902-5', '01248654-X')).toBe(true);
     expect(validarContaBancaria('bradesco', '2113-0', '0301357-P')).toBe(true);
@@ -119,7 +119,7 @@ describe('pessoal', () => {
     }
   });
   test('telefone invalid', () => {
-    expect(telefone.validate('(10) 99999-9999')).toBe(false); // DDD 10 does not exist
+    expect(telefone.validate('(10) 99999-9999')).toBe(false);
     expect(telefone.validate('(11) 99999-9999')).toBe(true);
     expect(telefone.validate('(11) 1999-9999')).toBe(false);
   });

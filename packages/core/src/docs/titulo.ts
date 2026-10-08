@@ -3,7 +3,6 @@ import { defaultRng, digits, pick } from '../rng';
 import { maskIf, onlyDigits, pad, toNums, weighted } from '../mask';
 import { TITULO_UF, UFS, type UF } from '../uf';
 
-// TSE: 8-digit sequence + 2-digit UF code + 2 DVs (mod 11, 10 → 0; SP/MG: remainder 0 → 1).
 function withDv(seq8: string, ufCode: string): string {
   const special = ufCode === '01' || ufCode === '02';
   const fix = (r: number) => (r === 10 ? 0 : r === 0 && special ? 1 : r);
@@ -38,7 +37,6 @@ export const titulo: Generator<TituloOptions> = {
   format,
 };
 
-/** UF encoded in a título (undefined for 28 = exterior). */
 export function tituloUF(value: string): UF | undefined {
   const code = Number(onlyDigits(value).slice(8, 10));
   return UFS.find((uf) => TITULO_UF[uf] === code);

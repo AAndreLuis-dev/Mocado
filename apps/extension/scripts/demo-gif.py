@@ -1,4 +1,3 @@
-"""Builds docs/demo.gif from the frames written by e2e/demo.spec.ts (dev-only, needs Pillow)."""
 import sys
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
@@ -17,7 +16,7 @@ for png in sorted(frames_dir.glob("*.png")):
     caption = png.stem.split("__", 1)[1]
     img = Image.open(png).convert("RGB")
     size = size or img.size
-    if img.size != size:  # e.g. the popup: centered on the page background
+    if img.size != size:
         page = Image.new("RGB", size, "#f3f5f7")
         page.paste(img, ((size[0] - img.width) // 2, (size[1] - img.height) // 2))
         img = page

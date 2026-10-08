@@ -3,7 +3,6 @@ import { newRecord, type PerfilTipo } from '../domain/profile';
 import type { Settings } from '../domain/settings';
 import type { Deps, PageContext, ScanResult } from './ports';
 
-/** Current settings plus the slice of them the page needs. */
 export async function loadPageContext(
   d: Pick<Deps, 'settings' | 'overrides'>,
 ): Promise<{ settings: Settings; ctx: PageContext }> {
@@ -12,7 +11,6 @@ export async function loadPageContext(
   return { settings, ctx: { masked, fillPasswords, observe, overrides } };
 }
 
-/** Every successful fill lands in the history: a new record, or a new "use" of a reused one. */
 export async function recordUse(
   d: Pick<Deps, 'history' | 'now'>,
   scan: ScanResult,

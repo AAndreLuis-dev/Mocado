@@ -4,10 +4,8 @@ import { maskIf, onlyDigits, pad, toNums } from '../mask';
 
 export type CertidaoTipo = 'nascimento' | 'casamento' | 'obito';
 
-/** 15th digit of the matrícula: book type (CNJ Provimento 3/2009). */
 const LIVRO: Record<CertidaoTipo, number> = { nascimento: 1, casamento: 2, obito: 4 };
 
-// DV1 over 30 digits with weights (i + 2) mod 11; DV2 over 31 digits with (i + 1) mod 11. 10 → 1.
 function dv(nums: number[], offset: number): number {
   const r = nums.reduce((acc, n, i) => acc + n * ((i + offset) % 11), 0) % 11;
   return r === 10 ? 1 : r;
@@ -24,24 +22,22 @@ const format = (value: string, { masked }: { masked: boolean }) =>
 
 export interface CertidaoOptions {
   tipo?: CertidaoTipo;
-  /** Reference date for the registration year. Default: now. */
   now?: Date;
 }
 
-/** Matrícula única (32 digits) of birth, marriage or death certificates. */
 export const certidao: Generator<CertidaoOptions> = {
   generate({ tipo, rng = defaultRng, masked = true, now = new Date() } = {}) {
     const t = tipo ?? pick(rng, ['nascimento', 'casamento', 'obito'] as const);
     const base =
       String(int(rng, 1, 9)) +
-      digits(rng, 5) + // serventia (CNS)
-      '01' + // acervo próprio
-      '55' + // serviço: RCPN
-      int(rng, now.getFullYear() - 40, now.getFullYear()) + // ano do registro
+      digits(rng, 5) +
+      '01' +
+      '55' +
+      int(rng, now.getFullYear() - 40, now.getFullYear()) +
       LIVRO[t] +
-      pad(int(rng, 1, 999), 5) + // livro
-      pad(int(rng, 1, 300), 3) + // folha
-      pad(int(rng, 1, 99999), 7); // termo
+      pad(int(rng, 1, 999), 5) +
+      pad(int(rng, 1, 300), 3) +
+      pad(int(rng, 1, 99999), 7);
     return format(withDv(base), { masked });
   },
   validate(value, { tipo } = {}) {

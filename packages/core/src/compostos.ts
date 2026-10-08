@@ -29,23 +29,50 @@ import { semAcento } from './mask';
 import { lorem } from './extras';
 import EMPRESAS from './data/empresas.json' with { type: 'json' };
 
-/** Every field the extension can detect and fill. */
 export const FIELD_TYPES = [
-  // pessoa
-  'nome', 'primeiroNome', 'sobrenome', 'sexo', 'nascimento', 'idade', 'mae', 'pai',
-  'cpf', 'rg', 'cnh', 'pis', 'titulo', 'certidao',
-  'email', 'telefone', 'celular', 'senha',
-  // endereço
-  'cep', 'logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'uf',
-  // empresa
-  'cnpj', 'razaoSocial', 'nomeFantasia', 'ie', 'dataAbertura',
-  // financeiro
-  'cartaoNumero', 'cartaoNome', 'cartaoValidade', 'cartaoCvv', 'banco', 'agencia', 'conta',
-  // veículo
-  'placa', 'renavam', 'veiculoMarca', 'veiculoModelo',
-  // extras
+  'nome',
+  'primeiroNome',
+  'sobrenome',
+  'sexo',
+  'nascimento',
+  'idade',
+  'mae',
+  'pai',
+  'cpf',
+  'rg',
+  'cnh',
+  'pis',
+  'titulo',
+  'certidao',
+  'email',
+  'telefone',
+  'celular',
+  'senha',
+  'cep',
+  'logradouro',
+  'numero',
+  'complemento',
+  'bairro',
+  'cidade',
+  'uf',
+  'cnpj',
+  'razaoSocial',
+  'nomeFantasia',
+  'ie',
+  'dataAbertura',
+  'cartaoNumero',
+  'cartaoNome',
+  'cartaoValidade',
+  'cartaoCvv',
+  'banco',
+  'agencia',
+  'conta',
+  'placa',
+  'renavam',
+  'veiculoMarca',
+  'veiculoModelo',
   'texto',
-] as const; // prettier-ignore
+] as const;
 
 export type FieldType = (typeof FIELD_TYPES)[number];
 export type Perfil = Partial<Record<FieldType, string>>;
@@ -69,7 +96,6 @@ export interface PerfilOptions {
   now?: Date;
 }
 
-/** A coherent person: one UF drives CPF region, título, DDD and address; e-mail from the name. */
 export function pessoa(opts: PerfilOptions = {}): Perfil {
   const { rng = defaultRng, masked = true, now = new Date() } = opts;
   const uf = opts.uf ?? pick(rng, UFS);
@@ -121,7 +147,6 @@ export function pessoa(opts: PerfilOptions = {}): Perfil {
   };
 }
 
-/** A company plus its legal representative (same UF): IE from the address UF. */
 export function empresa(opts: PerfilOptions = {}): Perfil {
   const { rng = defaultRng, masked = true, now = new Date() } = opts;
   const uf = opts.uf ?? pick(rng, UFS);
@@ -144,7 +169,6 @@ export function empresa(opts: PerfilOptions = {}): Perfil {
   };
 }
 
-/** One value for a single field ("Gerar CPF aqui"). */
 export function valorAvulso(type: FieldType, opts: PerfilOptions = {}): string {
   const perfil = EMPRESA_FIELDS.includes(type) ? empresa(opts) : pessoa(opts);
   return perfil[type] ?? '';

@@ -6,9 +6,7 @@ import type { FillOutcome } from './fill-form';
 import type { Deps, ScanResult } from './ports';
 import { loadPageContext, recordUse } from './shared';
 
-/** Single-field fills: the focused field with its detected type, or with a type the user picked. */
 export function makeFillField(d: Deps) {
-  /** Fills only the focused field and records it as an "avulso" history entry. */
   async function fillSingle(
     tabId: number,
     pickType: (scan: ScanResult) => FieldType | null,
@@ -31,11 +29,8 @@ export function makeFillField(d: Deps) {
   }
 
   return {
-    /** Only the focused field, with a value of its detected type. */
     focused: (tabId: number) => fillSingle(tabId, (scan) => scan.focused),
-    /** "Gerar <tipo> aqui": a value of a chosen type into the focused/right-clicked field. */
     ofType: (tabId: number, type: FieldType) => fillSingle(tabId, () => type),
-    /** "Marcar este campo como <tipo>": remember the correction, then show it right away. */
     async markAs(tabId: number, type: FieldType): Promise<FillOutcome> {
       const target = await d.page.focusedSelector(tabId);
       if (!target) return { ok: false, error: 'no-field' };

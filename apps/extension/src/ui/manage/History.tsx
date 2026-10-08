@@ -25,7 +25,6 @@ import {
 const when = (at: number) =>
   new Date(at).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' });
 
-/** One profile as the registration form it was filled with. */
 function Record({
   r,
   pinned,
@@ -164,7 +163,6 @@ export function History() {
     };
   }, [query, domain, favoritesOnly, version]);
 
-  // Fills happen in other tabs: refresh when the history changes.
   useEffect(() => watchStorage(['history', 'pinned'], refresh), []);
 
   async function exportJson() {

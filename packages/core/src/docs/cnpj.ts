@@ -2,7 +2,6 @@ import { type Generator } from '../types';
 import { alnum, defaultRng, digits, pick } from '../rng';
 import { allSame, maskIf, mod11, strip, toNums } from '../mask';
 
-// Same weights for numeric and alphanumeric CNPJ (IN RFB 2.229/2024); chars map to ASCII − 48.
 const W1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
 const W2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
 
@@ -26,7 +25,7 @@ function base(rng: () => number, tipo: CnpjTipo): string {
   if (kind === 'numerico') return digits(rng, 8) + '0001';
   let root: string;
   do root = alnum(rng, 8);
-  while (!/[A-Z]/.test(root)); // guarantee it is visibly alphanumeric
+  while (!/[A-Z]/.test(root));
   return root + '0001';
 }
 

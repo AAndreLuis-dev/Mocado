@@ -10,7 +10,6 @@ describe('fillElement', () => {
     document.body.innerHTML = `<input name="cpf">`;
     const input = document.querySelector('input')!;
     const instanceSetter = vi.fn();
-    // React keeps a per-instance value tracker; assigning el.value hits it and React ignores the change.
     Object.defineProperty(input, 'value', {
       configurable: true,
       get: () =>
@@ -39,7 +38,6 @@ describe('fillElement', () => {
   test('falls back to typing when a mask rejects the bulk value', () => {
     document.body.innerHTML = `<input>`;
     const input = document.querySelector('input')!;
-    // fake mask: accepts only one char per input event (like keystroke-driven masks)
     let last = '';
     input.addEventListener('input', (e) => {
       const ie = e as InputEvent;

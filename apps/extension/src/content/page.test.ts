@@ -119,7 +119,7 @@ test('fillChoices skips what is already done or chosen', () => {
     <input type="radio" name="r2" value="a"><input type="radio" name="r2" value="b">
     <input type="checkbox" name="opt">`;
   const done = new WeakSet<Element>();
-  expect(fillChoices(document, {}, new Set(), done)).toBe(1); // only r2; optional checkbox stays
+  expect(fillChoices(document, {}, new Set(), done)).toBe(1);
   expect(fillChoices(document, {}, new Set(), done)).toBe(0);
   expect(document.querySelector<HTMLInputElement>('[name=opt]')!.checked).toBe(false);
 });

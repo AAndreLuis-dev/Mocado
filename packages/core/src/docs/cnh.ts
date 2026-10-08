@@ -2,7 +2,6 @@ import { type Generator } from '../types';
 import { defaultRng, digits } from '../rng';
 import { allSame, onlyDigits, toNums, weighted } from '../mask';
 
-// DENATRAN: DV1 = Σ(d × 9..1) mod 11 (≥10 → 0, with a 2-point discount on DV2); DV2 = Σ(d × 1..9) mod 11.
 function withDv(base9: string): string | null {
   const n = toNums(base9);
   let d1 = weighted(n, [9, 8, 7, 6, 5, 4, 3, 2, 1]) % 11;
@@ -16,7 +15,7 @@ function withDv(base9: string): string | null {
   return d2 < 0 ? null : `${base9}${d1}${d2}`;
 }
 
-const format = (value: string) => onlyDigits(value); // CNH has no official mask
+const format = (value: string) => onlyDigits(value);
 
 export const cnh: Generator = {
   generate({ rng = defaultRng } = {}) {

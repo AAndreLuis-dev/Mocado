@@ -1,4 +1,3 @@
-// Form rendered only after a click (like a modal in a SPA).
 document.getElementById('novo')!.addEventListener('click', () => {
   setTimeout(() => {
     document.getElementById('slot')!.innerHTML = `
