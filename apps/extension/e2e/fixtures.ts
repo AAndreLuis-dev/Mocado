@@ -7,7 +7,7 @@ import {
   type Worker,
 } from '@playwright/test';
 import { resolve } from 'node:path';
-import type { FillOutcome } from '../src/background/actions';
+import type { FillOutcome } from '../src/application/fill-form';
 
 const EXT = resolve(import.meta.dirname, '../.output/e2e/chrome-mv3');
 
