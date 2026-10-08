@@ -25,6 +25,7 @@ import {
   type Sexo,
 } from './pessoal';
 import { endereco } from './endereco';
+import { semAcento } from './mask';
 import { lorem } from './extras';
 import EMPRESAS from './data/empresas.json' with { type: 'json' };
 
@@ -106,7 +107,7 @@ export function pessoa(opts: PerfilOptions = {}): Perfil {
     cidade: end.cidade,
     uf: end.uf,
     cartaoNumero: card.numero,
-    cartaoNome: nome.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase(),
+    cartaoNome: semAcento(nome).toUpperCase(),
     cartaoValidade: card.validade,
     cartaoCvv: card.cvv,
     banco: conta.banco,
@@ -127,9 +128,7 @@ export function empresa(opts: PerfilOptions = {}): Perfil {
   const responsavel = pessoa({ ...opts, uf, rng, masked, now });
   const fantasia = pick(rng, EMPRESAS.nomes);
   const razao = `${fantasia} ${pick(rng, EMPRESAS.ramos)} ${pick(rng, EMPRESAS.sufixos)}`;
-  const domain = `${fantasia
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
+  const domain = `${semAcento(fantasia)
     .toLowerCase()
     .replace(/[^a-z]/g, '')}.example.com`;
   const abertura = new Date(now.getFullYear() - int(rng, 1, 30), int(rng, 0, 11), int(rng, 1, 28));

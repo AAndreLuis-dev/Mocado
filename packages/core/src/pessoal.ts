@@ -1,6 +1,6 @@
 import { type Generator } from './types';
 import { defaultRng, digits, int, pick, type Rng } from './rng';
-import { maskIf, onlyDigits, pad } from './mask';
+import { maskIf, onlyDigits, pad, semAcento } from './mask';
 import { DDD, UFS, type UF } from './uf';
 import NOMES from './data/nomes.json' with { type: 'json' };
 import SOBRENOMES from './data/sobrenomes.json' with { type: 'json' };
@@ -43,9 +43,7 @@ export function pais(
 }
 
 const slug = (s: string) =>
-  s
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
+  semAcento(s)
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '');
 

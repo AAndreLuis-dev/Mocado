@@ -13,6 +13,7 @@ import {
   endereco,
   idade,
   lorem,
+  semAcento,
   luhnValid,
   mulberry32,
   nascimento,
@@ -181,4 +182,8 @@ describe('extras', () => {
       expect(n >= 5 && n <= 7).toBe(true);
     }
   });
+});
+
+test('semAcento', () => {
+  expect(semAcento('São João, Itaú, Pará, ç')).toBe('Sao Joao, Itau, Para, c');
 });
