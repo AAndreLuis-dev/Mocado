@@ -3,12 +3,12 @@ extDescription: Generates and fills Brazilian test data (CPF, CNPJ, address…) 
 disclaimer: Fictitious, mathematically valid data, for software testing only.
 
 popup:
-  fillPage: Fill page
+  fillPage: Fill this page
   fillError: Could not fill this page.
   blocked: This site is on your blocked domains list (Options).
   noFields: No recognized fields on this page.
   masked: Masked
-  generate: Generate
+  generate: Generate another
   copy: Copy
   copied: Copied!
   copyFailed: Failed
@@ -20,6 +20,7 @@ popup:
   reuse: Reuse
   pinned: 'Next fill will use: $1'
   unpin: Unpin
+  fictitious: Fictitious
 
 gen:
   cpf: CPF
@@ -131,7 +132,7 @@ history:
   favorite: Favorite
   unfavorite: Remove from favorites
   reuse: Reuse this profile
-  pinnedHint: Pinned. The next fill (shortcut, popup or menu) will use this profile.
+  pinnedHint: The next fill (shortcut, popup or menu) will use this profile.
   delete: Delete
   confirmDelete: Confirm delete
   export: Export JSON
@@ -149,6 +150,7 @@ history:
   pessoa: Person
   empresa: Company
   avulso: Single field
+  pinnedStamp: Pinned
 
 cmdFillForm: Fill the whole form
 cmdFillField: Fill only the focused field
@@ -163,6 +165,9 @@ tabs:
   history: History
   options: Options
   overrides: Corrected fields
+  historyHint: Everything Mocado filled. Search any value, label, favorite and reuse a profile.
+  optionsHint: How data is generated and where Mocado acts. Changes are saved right away.
+  overridesHint: Use the “Mark this field as” context menu to fix a detected type. Corrections apply per domain.
 
 options:
   saved: Saved.
@@ -185,9 +190,11 @@ options:
   shortcutsHint: 'Change them at chrome://extensions/shortcuts (Chrome/Edge/Brave/Opera) or about:addons → gear → Manage Extension Shortcuts (Firefox).'
   shortcutUnset: (not set)
   privacy: No data leaves the browser. No network, no telemetry.
+  sectionData: Generated data
+  sectionWhere: Where Mocado acts
+  sectionLook: Appearance
 
 overrides:
-  hint: Use the context menu “Mark this field as” to correct a detected type. Corrections apply per domain.
   empty: No saved corrections.
   remove: Remove
   removeDomain: Remove all for this domain

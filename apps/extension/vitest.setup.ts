@@ -13,6 +13,12 @@ fakeBrowser.i18n.getMessage = ((name: string, subs?: string | string[]) => {
   return msg;
 }) as typeof fakeBrowser.i18n.getMessage;
 
+// Nor commands: the manifest's default shortcuts.
+fakeBrowser.commands.getAll = (async () => [
+  { name: 'fill-form', shortcut: 'Ctrl+Shift+F', description: 'Preencher o formulário inteiro' },
+  { name: 'fill-field', shortcut: 'Alt+Shift+F', description: 'Preencher só o campo focado' },
+]) as typeof fakeBrowser.commands.getAll;
+
 // Testing Library only auto-cleans with vitest globals; do it explicitly.
 const { afterEach } = await import('vitest');
 const { cleanup } = await import('@testing-library/react');

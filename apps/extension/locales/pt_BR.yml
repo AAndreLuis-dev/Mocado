@@ -3,12 +3,12 @@ extDescription: Gera e preenche dados de teste brasileiros (CPF, CNPJ, endereço
 disclaimer: Dados fictícios, matematicamente válidos, apenas para testes de software.
 
 popup:
-  fillPage: Preencher página
+  fillPage: Preencher esta página
   fillError: Não foi possível preencher esta página.
   blocked: Esta página está na lista de domínios bloqueados (Opções).
   noFields: Nenhum campo reconhecido nesta página.
   masked: Com máscara
-  generate: Gerar
+  generate: Gerar outro
   copy: Copiar
   copied: Copiado!
   copyFailed: Falhou
@@ -20,6 +20,7 @@ popup:
   reuse: Reusar
   pinned: 'Próximo preenchimento usará: $1'
   unpin: Desafixar
+  fictitious: Fictício
 
 gen:
   cpf: CPF
@@ -131,7 +132,7 @@ history:
   favorite: Favoritar
   unfavorite: Remover dos favoritos
   reuse: Reusar este perfil
-  pinnedHint: Fixado. O próximo preenchimento (atalho, popup ou menu) usará este perfil.
+  pinnedHint: O próximo preenchimento (atalho, popup ou menu) usará este perfil.
   delete: Excluir
   confirmDelete: Confirmar exclusão
   export: Exportar JSON
@@ -149,6 +150,7 @@ history:
   pessoa: Pessoa
   empresa: Empresa
   avulso: Avulso
+  pinnedStamp: Fixado
 
 cmdFillForm: Preencher o formulário inteiro
 cmdFillField: Preencher só o campo focado
@@ -163,6 +165,9 @@ tabs:
   history: Histórico
   options: Opções
   overrides: Campos corrigidos
+  historyHint: Tudo o que o Mocado preencheu. Busque por qualquer valor, rotule, favorite e reuse um perfil.
+  optionsHint: Como os dados são gerados e onde o Mocado atua. Tudo é salvo na hora.
+  overridesHint: Use o menu de contexto “Marcar este campo como” para corrigir o tipo detectado. As correções valem por domínio.
 
 options:
   saved: Salvo.
@@ -185,9 +190,11 @@ options:
   shortcutsHint: 'Altere em chrome://extensions/shortcuts (Chrome/Edge/Brave/Opera) ou em about:addons → engrenagem → Gerenciar atalhos (Firefox).'
   shortcutUnset: (sem atalho)
   privacy: Nenhum dado sai do navegador. Sem rede, sem telemetria.
+  sectionData: Dados gerados
+  sectionWhere: Onde o Mocado atua
+  sectionLook: Aparência
 
 overrides:
-  hint: Use o menu de contexto “Marcar este campo como” para corrigir o tipo detectado. As correções valem por domínio.
   empty: Nenhuma correção salva.
   remove: Remover
   removeDomain: Remover todas deste domínio

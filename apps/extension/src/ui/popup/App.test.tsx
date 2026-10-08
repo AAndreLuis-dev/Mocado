@@ -25,10 +25,10 @@ describe('popup', () => {
   test('mask toggle and regenerate', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('checkbox'));
+    await user.click(screen.getByRole('switch'));
     const first = screen.getByTestId('result').textContent!;
     expect(first).toMatch(/^\d{11}$/);
-    await user.click(screen.getByRole('button', { name: /^gerar$/i }));
+    await user.click(screen.getByRole('button', { name: /gerar outro/i }));
     expect(screen.getByTestId('result').textContent).not.toBe(first);
   });
 

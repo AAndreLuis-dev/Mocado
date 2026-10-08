@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { mergeRecords, parseImport, sanitize, toExport } from './history-import';
 import { search } from './history-query';
-import { displayName, domains, generatedName } from './profile';
+import { displayName, domains, generatedName, keyValues, orderedValues } from './profile';
 import { rec } from './test-data';
 
 describe('search', () => {
@@ -97,4 +97,15 @@ describe('import/export', () => {
       'new',
     ]);
   });
+});
+
+test('values in form order; key values pick document, e-mail and city/UF', () => {
+  const values = { uf: 'PR', cidade: 'Curitiba', email: 'a@b.c', nome: 'Ana', cpf: '1' };
+  expect(orderedValues(values).map(([k]) => k)).toEqual(['nome', 'cpf', 'email', 'cidade', 'uf']);
+  expect(keyValues(values)).toEqual([
+    ['cpf', '1'],
+    ['email', 'a@b.c'],
+    ['cidade', 'Curitiba/PR'],
+  ]);
+  expect(keyValues({ placa: 'ABC1D23' })).toEqual([['placa', 'ABC1D23']]);
 });
