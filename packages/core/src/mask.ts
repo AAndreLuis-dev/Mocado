@@ -1,6 +1,10 @@
 /** Uppercased alphanumerics only: "12.abc/0-1" → "12ABC01". */
 export const strip = (value: string): string => value.toUpperCase().replace(/[^0-9A-Z]/g, '');
 
+/** "São João" → "Sao Joao" (drops combining diacritics). */
+export const semAcento = (value: string): string =>
+  value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
 export const onlyDigits = (value: string): string => value.replace(/\D/g, '');
 
 /** Applies a pattern where `#` is one character: mask('12345678909', '###.###.###-##'). */
