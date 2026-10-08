@@ -1,44 +1,24 @@
-import { useState } from 'react';
-import { defaultOptions, GENERATORS, type Result } from '../../domain/generators';
-import { fieldLabel, genLabel, optionLabel, t } from '../../infra/browser/i18n';
+import { History, Settings2, WandSparkles } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { t } from '../../infra/browser/i18n';
 import { sendToBackground } from '../../infra/browser/messages';
-import { activeTabId, openHistory, openOptions } from '../../infra/browser/navigation';
-import { Button, CopyButton, selectClass } from '../components';
+import { activeTabId, openHistory, openOptions, shortcuts } from '../../infra/browser/navigation';
+import { Button, Kbd, Switch } from '../components/controls';
+import { Logo } from '../components/ficha';
+import { Generator } from './Generator';
 import { Recent } from './Recent';
-
-const load = (key: string, fallback: string) => {
-  try {
-    return localStorage.getItem(key) ?? fallback;
-  } catch {
-    return fallback;
-  }
-};
-const save = (key: string, value: string) => {
-  try {
-    localStorage.setItem(key, value);
-  } catch {
-    /* per-viewer convenience only */
-  }
-};
+import { load, save } from './local';
 
 export function App() {
-  const [genId, setGenId] = useState(() => load('mocado.gen', 'cpf'));
-  const gen = GENERATORS.find((g) => g.id === genId) ?? GENERATORS[0]!;
-  const [opts, setOpts] = useState<Record<string, string>>(() => defaultOptions(gen));
   const [masked, setMasked] = useState(() => load('mocado.masked', '1') === '1');
-  const [result, setResult] = useState<Result>(() => gen.run(opts, masked));
   const [status, setStatus] = useState('');
+  const [fillKeys, setFillKeys] = useState('');
 
-  /** Any change to generator/options/mask regenerates immediately. */
-  function update(next: { genId?: string; opts?: Record<string, string>; masked?: boolean }) {
-    const g = GENERATORS.find((x) => x.id === (next.genId ?? genId)) ?? gen;
-    const o = next.opts ?? opts;
-    const m = next.masked ?? masked;
-    setGenId(g.id);
-    setOpts(o);
-    setMasked(m);
-    setResult(g.run(o, m));
-  }
+  useEffect(() => {
+    void shortcuts().then((cmds) =>
+      setFillKeys(cmds.find((c) => c.name === 'fill-form')?.shortcut ?? ''),
+    );
+  }, []);
 
   async function fillPage(reuseId?: string) {
     const tabId = await activeTabId();
@@ -50,140 +30,54 @@ export function App() {
     window.close();
   }
 
-  const entries =
-    typeof result === 'string' ? null : Object.entries(result).filter(([, v]) => v !== '');
-
   return (
-    <main className="flex w-[380px] flex-col gap-3 bg-white p-4 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
-      <header className="flex items-center justify-between">
-        <h1 className="text-lg font-bold tracking-tight">{t('extName')}</h1>
-        <label className="flex items-center gap-2 text-sm">
-          <input
-            type="checkbox"
-            checked={masked}
-            onChange={(e) => {
-              update({ masked: e.target.checked });
-              save('mocado.masked', e.target.checked ? '1' : '0');
-            }}
-          />
-          {t('popup.masked')}
-        </label>
+    <main className="flex w-[380px] flex-col bg-papel font-sans text-tinta">
+      <header className="flex items-center gap-2 px-4 pt-3.5">
+        <Logo size={22} />
+        <h1 className="text-[17px] font-bold tracking-tight">{t('extName')}</h1>
+        <Switch
+          className="ml-auto items-center text-[13px] text-grafite"
+          label={t('popup.masked')}
+          checked={masked}
+          onChange={(e) => {
+            setMasked(e.target.checked);
+            save('mocado.masked', e.target.checked ? '1' : '0');
+          }}
+        />
       </header>
 
-      <Button variant="primary" className="py-2" onClick={() => fillPage()}>
-        {t('popup.fillPage')}
-      </Button>
-      {status && (
-        <p role="status" className="text-sm text-amber-700 dark:text-amber-400">
-          {status}
-        </p>
-      )}
-
-      <section className="flex flex-col gap-2 border-t border-zinc-200 pt-3 dark:border-zinc-700">
-        <div className="flex flex-wrap items-center gap-2">
-          <select
-            aria-label={t('popup.generator')}
-            className={`${selectClass} flex-1`}
-            value={gen.id}
-            onChange={(e) => {
-              const next = GENERATORS.find((g) => g.id === e.target.value)!;
-              update({ genId: next.id, opts: defaultOptions(next) });
-              save('mocado.gen', next.id);
-            }}
-          >
-            {GENERATORS.map((g) => (
-              <option key={g.id} value={g.id}>
-                {genLabel(g.id)}
-              </option>
-            ))}
-          </select>
-          <Button onClick={() => update({})}>{t('popup.generate')}</Button>
-        </div>
-
-        {gen.options && (
-          <div className="flex flex-wrap gap-2">
-            {Object.entries(gen.options).map(([key, values]) => (
-              <label
-                key={key}
-                className="flex items-center gap-1 text-xs text-zinc-600 dark:text-zinc-400"
-              >
-                {optionLabel(key)}
-                <select
-                  className={selectClass}
-                  value={opts[key] ?? ''}
-                  onChange={(e) => update({ opts: { ...opts, [key]: e.target.value } })}
-                >
-                  {values.map((v) => (
-                    <option key={v} value={v}>
-                      {key === 'uf' && v ? v : optionLabel(v)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            ))}
-          </div>
+      <div className="px-4 pt-3">
+        <Button
+          variant="primary"
+          className="h-11 w-full rounded-lg text-[15px]"
+          icon={<WandSparkles size={17} />}
+          onClick={() => void fillPage()}
+        >
+          {t('popup.fillPage')}
+          {fillKeys && <Kbd keys={fillKeys} className="ml-auto opacity-80" />}
+        </Button>
+        {status && (
+          <p role="alert" className="mt-2 rounded-md bg-erro-claro px-3 py-2 text-[13px] text-erro">
+            {status}
+          </p>
         )}
+      </div>
 
-        {entries === null ? (
-          <div className="flex items-start gap-2">
-            <output
-              data-testid="result"
-              className="flex-1 break-all rounded-md bg-zinc-100 px-3 py-2 font-mono text-sm dark:bg-zinc-800"
-            >
-              {result as string}
-            </output>
-            <CopyButton value={result as string} />
-          </div>
-        ) : (
-          <div className="flex flex-col gap-1">
-            <dl className="max-h-80 overflow-y-auto">
-              {entries.map(([k, v]) => (
-                <div
-                  key={k}
-                  className="flex items-center gap-2 border-b border-zinc-100 py-1 dark:border-zinc-800"
-                >
-                  <dt className="w-28 shrink-0 text-xs text-zinc-500">{fieldLabel(k)}</dt>
-                  <dd className="flex-1 truncate font-mono text-xs" title={v}>
-                    {v}
-                  </dd>
-                  <CopyButton value={v} label={fieldLabel(k)} />
-                </div>
-              ))}
-            </dl>
-            <CopyButton
-              value={entries.map(([k, v]) => `${fieldLabel(k)}: ${v}`).join('\n')}
-              text={t('popup.copyAll')}
-            />
-          </div>
-        )}
-      </section>
+      <Generator masked={masked} />
 
       <Recent onReuse={(id) => void fillPage(id)} />
 
-      <nav className="flex gap-3 text-sm">
-        <a
-          href="#"
-          className="text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-400"
-          onClick={(e) => {
-            e.preventDefault();
-            void openHistory();
-          }}
-        >
-          {t('popup.history')}
-        </a>
-        <a
-          href="#"
-          className="text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-400"
-          onClick={(e) => {
-            e.preventDefault();
-            void openOptions();
-          }}
-        >
-          {t('popup.options')}
-        </a>
-      </nav>
-
-      <footer className="text-[11px] text-zinc-500">{t('disclaimer')}</footer>
+      <footer className="mt-1 flex flex-col gap-2 border-t border-linha px-4 pt-2 pb-3">
+        <nav className="-mx-2 flex gap-1">
+          <Button variant="ghost" icon={<History size={15} />} onClick={() => void openHistory()}>
+            {t('popup.history')}
+          </Button>
+          <Button variant="ghost" icon={<Settings2 size={15} />} onClick={() => void openOptions()}>
+            {t('popup.options')}
+          </Button>
+        </nav>
+        <p className="text-[11px] leading-snug text-grafite">{t('disclaimer')}</p>
+      </footer>
     </main>
   );
 }

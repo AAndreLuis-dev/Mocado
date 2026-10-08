@@ -1,4 +1,4 @@
-import type { Perfil } from '@mocado/core';
+import { FIELD_TYPES, type FieldType, type Perfil } from '@mocado/core';
 
 export type PerfilTipo = 'pessoa' | 'empresa' | 'avulso';
 export const PERFIL_TIPOS: readonly PerfilTipo[] = ['pessoa', 'empresa', 'avulso'];
@@ -44,3 +44,19 @@ export const generatedName = (r: HistoryRecord): string =>
 
 /** What the user calls it: their label, else the generated name. */
 export const displayName = (r: HistoryRecord): string => r.label || generatedName(r);
+
+/** Non-empty values in form order (storage returns keys sorted alphabetically). */
+export const orderedValues = (values: Perfil): [FieldType, string][] =>
+  FIELD_TYPES.flatMap((k) => (values[k] ? [[k, values[k]] as [FieldType, string]] : []));
+
+/** The few values that identify a profile at a glance: document, e-mail, city/UF. */
+export function keyValues(values: Perfil): [FieldType, string][] {
+  const city = values.cidade && values.uf ? `${values.cidade}/${values.uf}` : values.cidade;
+  const picks: [FieldType, string | undefined][] = [
+    values.cnpj ? ['cnpj', values.cnpj] : ['cpf', values.cpf],
+    ['email', values.email],
+    ['cidade', city],
+  ];
+  const found = picks.filter((p): p is [FieldType, string] => !!p[1]);
+  return found.length ? found : orderedValues(values).slice(0, 1);
+}

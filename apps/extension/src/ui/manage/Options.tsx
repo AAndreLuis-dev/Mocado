@@ -1,21 +1,57 @@
-import { useEffect, useState } from 'react';
 import { UFS } from '@mocado/core';
+import { Check } from 'lucide-react';
+import { useEffect, useState, type ReactNode } from 'react';
 import {
   CNPJ_TIPOS,
   DEFAULT_SETTINGS,
   IDADE_MAX,
   parseDomains,
+  THEMES,
   withSetting,
   type Settings,
 } from '../../domain/settings';
-import { t } from '../../infra/browser/i18n';
+import { optionLabel, t } from '../../infra/browser/i18n';
 import { shortcuts as loadShortcuts } from '../../infra/browser/navigation';
 import { preferences } from '../../infra/container';
-import { selectClass } from '../components';
+import { inputClass, Kbd, Select, Switch } from '../components/controls';
+import { Ficha } from '../components/ficha';
 
-const row = 'flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4';
-const inputClass =
-  'rounded-md border border-zinc-300 bg-transparent px-2 py-1 text-sm dark:border-zinc-600';
+const THEME_LABEL = {
+  system: 'options.themeSystem',
+  light: 'options.themeLight',
+  dark: 'options.themeDark',
+};
+
+function Section({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section>
+      <h2 className="mb-2 text-[15px] font-bold">{title}</h2>
+      <Ficha perforated={false}>
+        <div className="flex flex-col divide-y divide-pauta px-5 text-[15px] [&>*]:py-3.5">
+          {children}
+        </div>
+      </Ficha>
+    </section>
+  );
+}
+
+/** Label on the left, control on the right (stacked on narrow screens). */
+function Row({
+  label,
+  htmlFor,
+  children,
+}: {
+  label: string;
+  htmlFor?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+      <label htmlFor={htmlFor}>{label}</label>
+      {children}
+    </div>
+  );
+}
 
 export function Options() {
   const [s, setS] = useState<Settings>(DEFAULT_SETTINGS);
@@ -42,134 +78,142 @@ export function Options() {
   }
 
   const age = (key: 'idadeMin' | 'idadeMax') => (
-    <label className="flex items-center gap-1 text-sm">
+    <label className="flex items-center gap-2 text-sm text-grafite">
       {t(`options.${key}`)}
       <input
         type="number"
         min={0}
         max={IDADE_MAX}
-        className={`${inputClass} w-20`}
+        className={`${inputClass} w-20 font-mono tabular-nums`}
         value={s[key]}
-        onChange={(e) => {
-          void set(key, Number(e.target.value) || 0);
-        }}
+        onChange={(e) => void set(key, Number(e.target.value) || 0)}
       />
     </label>
   );
 
   return (
-    <section className="flex max-w-2xl flex-col gap-5">
-      <label className="flex items-center gap-2">
-        <input
-          type="checkbox"
+    <div className="flex max-w-2xl flex-col gap-7">
+      <Section title={t('options.sectionData')}>
+        <Switch
+          label={t('options.masked')}
           checked={s.masked}
           onChange={(e) => void set('masked', e.target.checked)}
         />
-        {t('options.masked')}
-      </label>
-      <div className={row}>
-        <label htmlFor="cnpjTipo">{t('options.cnpjTipo')}</label>
-        <select
-          id="cnpjTipo"
-          className={selectClass}
-          value={s.cnpjTipo}
-          onChange={(e) => void set('cnpjTipo', e.target.value as Settings['cnpjTipo'])}
-        >
-          {CNPJ_TIPOS.map((v) => (
-            <option key={v} value={v}>
-              {t(`opt.${v}`)}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className={row}>
-        <label htmlFor="uf">{t('options.uf')}</label>
-        <select
-          id="uf"
-          className={selectClass}
-          value={s.uf}
-          onChange={(e) => void set('uf', e.target.value as Settings['uf'])}
-        >
-          <option value="">{t('options.ufRandom')}</option>
-          {UFS.map((uf) => (
-            <option key={uf}>{uf}</option>
-          ))}
-        </select>
-      </div>
-      <fieldset className={row}>
-        <legend className="sr-only">{t('options.idade')}</legend>
-        <span aria-hidden>{t('options.idade')}</span>
-        <span className="flex gap-3">
-          {age('idadeMin')}
-          {age('idadeMax')}
-        </span>
-      </fieldset>
-      <div className="flex flex-col gap-1">
-        <label htmlFor="blocked">{t('options.blocked')}</label>
-        <textarea
-          id="blocked"
-          rows={4}
-          className={`${inputClass} font-mono`}
-          value={blockedText}
-          onChange={(e) => setBlockedText(e.target.value)}
-          onBlur={() => void set('blockedDomains', parseDomains(blockedText))}
-        />
-        <span className="text-xs text-zinc-500">{t('options.blockedHint')}</span>
-      </div>
-      <div className={row}>
-        <label htmlFor="theme">{t('options.theme')}</label>
-        <select
-          id="theme"
-          className={selectClass}
-          value={s.theme}
-          onChange={(e) => void set('theme', e.target.value as Settings['theme'])}
-        >
-          <option value="system">{t('options.themeSystem')}</option>
-          <option value="light">{t('options.themeLight')}</option>
-          <option value="dark">{t('options.themeDark')}</option>
-        </select>
-      </div>
-      <label className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          checked={s.fillPasswords}
-          onChange={(e) => void set('fillPasswords', e.target.checked)}
-        />
-        {t('options.fillPasswords')}
-      </label>
-      <label className="flex items-center gap-2">
-        <input
-          type="checkbox"
+        <Row label={t('options.cnpjTipo')} htmlFor="cnpjTipo">
+          <Select
+            id="cnpjTipo"
+            value={s.cnpjTipo}
+            onChange={(e) => void set('cnpjTipo', e.target.value as Settings['cnpjTipo'])}
+          >
+            {CNPJ_TIPOS.map((v) => (
+              <option key={v} value={v}>
+                {optionLabel(v)}
+              </option>
+            ))}
+          </Select>
+        </Row>
+        <Row label={t('options.uf')} htmlFor="uf">
+          <Select
+            id="uf"
+            value={s.uf}
+            onChange={(e) => void set('uf', e.target.value as Settings['uf'])}
+          >
+            <option value="">{t('options.ufRandom')}</option>
+            {UFS.map((uf) => (
+              <option key={uf}>{uf}</option>
+            ))}
+          </Select>
+        </Row>
+        <fieldset className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          <legend className="float-left">{t('options.idade')}</legend>
+          <span className="flex gap-4">
+            {age('idadeMin')}
+            {age('idadeMax')}
+          </span>
+        </fieldset>
+      </Section>
+
+      <Section title={t('options.sectionWhere')}>
+        <Switch
+          label={t('options.observe')}
           checked={s.observe}
           onChange={(e) => void set('observe', e.target.checked)}
         />
-        {t('options.observe')}
-      </label>
+        <Switch
+          label={t('options.fillPasswords')}
+          checked={s.fillPasswords}
+          onChange={(e) => void set('fillPasswords', e.target.checked)}
+        />
+        <div className="flex flex-col gap-2">
+          <label htmlFor="blocked">{t('options.blocked')}</label>
+          <textarea
+            id="blocked"
+            rows={4}
+            placeholder="banco.com.br"
+            className={`${inputClass} h-auto py-2 font-mono`}
+            value={blockedText}
+            onChange={(e) => setBlockedText(e.target.value)}
+            onBlur={() => void set('blockedDomains', parseDomains(blockedText))}
+          />
+          <span className="text-xs text-grafite">{t('options.blockedHint')}</span>
+        </div>
+      </Section>
 
-      <div className="flex flex-col gap-1 border-t border-zinc-200 pt-4 dark:border-zinc-700">
-        <h2 className="font-semibold">{t('options.shortcuts')}</h2>
-        <ul className="text-sm">
+      <Section title={t('options.sectionLook')}>
+        <fieldset className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          <legend className="float-left">{t('options.theme')}</legend>
+          <span className="inline-flex rounded-md border border-linha bg-papel p-0.5">
+            {THEMES.map((theme) => (
+              <label
+                key={theme}
+                className="cursor-pointer rounded px-3 py-1 text-sm font-semibold text-grafite has-checked:bg-ficha has-checked:text-caneta has-checked:shadow-sm has-focus-visible:outline-2 has-focus-visible:outline-caneta"
+              >
+                <input
+                  type="radio"
+                  name="theme"
+                  value={theme}
+                  className="sr-only"
+                  checked={s.theme === theme}
+                  onChange={() => void set('theme', theme)}
+                />
+                {t(THEME_LABEL[theme])}
+              </label>
+            ))}
+          </span>
+        </fieldset>
+      </Section>
+
+      <Section title={t('options.shortcuts')}>
+        <ul className="flex flex-col gap-2.5 text-sm">
           {shortcuts
             .filter((c) => c.description)
             .map((c) => (
-              <li key={c.name}>
-                <kbd className="rounded border border-zinc-300 px-1 font-mono text-xs dark:border-zinc-600">
-                  {c.shortcut || t('options.shortcutUnset')}
-                </kbd>{' '}
+              <li key={c.name} className="flex items-center justify-between gap-4">
                 {c.description}
+                {c.shortcut ? (
+                  <Kbd keys={c.shortcut} className="text-grafite" />
+                ) : (
+                  <span className="text-grafite">{t('options.shortcutUnset')}</span>
+                )}
               </li>
             ))}
         </ul>
-        <p className="text-xs text-zinc-500">{t('options.shortcutsHint')}</p>
-      </div>
-      <p className="text-xs text-zinc-500">{t('options.privacy')}</p>
+        <p className="text-xs text-grafite">{t('options.shortcutsHint')}</p>
+      </Section>
+
+      <p className="text-sm text-grafite">{t('options.privacy')}</p>
       <p
         role="status"
         aria-live="polite"
-        className="h-5 text-sm text-emerald-700 dark:text-emerald-400"
+        className="fixed right-6 bottom-6 flex items-center gap-1.5 rounded-md bg-tinta px-3 py-2 text-sm font-semibold text-papel shadow-lg transition-opacity empty:opacity-0"
       >
-        {saved ? t('options.saved') : ''}
+        {saved && (
+          <>
+            <Check size={15} aria-hidden />
+            {t('options.saved')}
+          </>
+        )}
       </p>
-    </section>
+    </div>
   );
 }

@@ -77,7 +77,7 @@ test('options: preferences are saved and used (UF, unmasked, passwords)', async 
   await opts.getByLabel('UF preferida').selectOption('PR');
   await opts.getByLabel('Usar máscara por padrão').uncheck();
   await opts.getByLabel('Preencher campos de senha').check();
-  await opts.getByLabel('Tema').selectOption('dark');
+  await opts.locator('label', { hasText: 'Escuro' }).click();
   await expect(opts.locator('html')).toHaveClass(/dark/);
   await expect(opts.getByRole('status')).toHaveText('Salvo.');
 
