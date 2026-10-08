@@ -1,12 +1,12 @@
-# Massa
+# Mocado
 
 **Gere e preencha dados de teste brasileiros direto no formulário, e saiba depois qual CPF foi usado em qual cadastro.**
 
 > ⚠️ **Dados fictícios, matematicamente válidos, apenas para testes de software.**
 
-![Demonstração do Massa preenchendo formulários e buscando no histórico](docs/demo.gif)
+![Demonstração do Mocado preenchendo formulários e buscando no histórico](docs/demo.gif)
 
-Massa é uma extensão de navegador (Chrome, Edge, Brave, Opera e Firefox) para quem testa sistemas brasileiros. Ela:
+Mocado é uma extensão de navegador (Chrome, Edge, Brave, Opera e Firefox) para quem testa sistemas brasileiros. Ela:
 
 1. **Detecta os campos** do formulário (CPF, CNPJ, nome, e-mail, CEP, telefone…) por `autocomplete`, `name`/`id`, `<label>`, `placeholder`, `aria-label`, `pattern`, `maxlength` e texto próximo, inclusive em shadow DOM aberto e iframes same-origin.
 2. **Gera dados válidos e coerentes**: uma _pessoa_ com a mesma UF no CPF, no título, no DDD e no endereço; uma _empresa_ com IE da UF do endereço. Tudo com os algoritmos oficiais de dígito verificador.
@@ -37,7 +37,7 @@ Os atalhos podem ser trocados em `chrome://extensions/shortcuts` ou em `about:ad
 - **Endereço:** CEP, logradouro, bairro, cidade e UF reais e coerentes, de um dataset local.
 - **Extras:** lorem ipsum, número aleatório, UUID.
 
-O 4devs serviu só de referência para a lista de geradores: o Massa não faz nenhuma chamada a ele nem a qualquer outro serviço.
+O 4devs serviu só de referência para a lista de geradores: o Mocado não faz nenhuma chamada a ele nem a qualquer outro serviço.
 
 ## Desenvolvimento
 
@@ -78,6 +78,6 @@ pnpm --filter extension exec wxt build -b firefox --mv3
 
 ## English
 
-**Massa** is a browser extension (Chrome, Edge, Brave, Opera, Firefox) that detects form fields, generates **valid Brazilian test data** (CPF, CNPJ, including the new alphanumeric CNPJ, IE for all 27 states, CNH, RENAVAM, credit cards, bank accounts, coherent people and companies with real addresses) and fills them with one click or `Ctrl+Shift+F`. It works with React, Vue, Angular and input-mask libraries. Every fill is saved to a searchable history, so you can paste a CPF and find where it was used, label profiles, reuse them and export/import JSON.
+**Mocado** is a browser extension (Chrome, Edge, Brave, Opera, Firefox) that detects form fields, generates **valid Brazilian test data** (CPF, CNPJ, including the new alphanumeric CNPJ, IE for all 27 states, CNH, RENAVAM, credit cards, bank accounts, coherent people and companies with real addresses) and fills them with one click or `Ctrl+Shift+F`. It works with React, Vue, Angular and input-mask libraries. Every fill is saved to a searchable history, so you can paste a CPF and find where it was used, label profiles, reuse them and export/import JSON.
 
 Everything runs locally: no network requests, no telemetry. _Fictitious, mathematically valid data, for software testing only._ The UI is in Portuguese, with English available when your browser runs in English.
