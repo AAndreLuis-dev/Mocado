@@ -1,3 +1,4 @@
+import icon from '@/assets/icon.svg';
 import type { ReactNode } from 'react';
 
 /** Rubber stamp ("FICTÍCIO", "FIXADO"). `replay` changes → the stamp hits the paper again. */
@@ -24,22 +25,8 @@ export function Stamp({
   );
 }
 
-/** The Mocado mark (same drawing as the extension icon). */
 export function Logo({ size = 24 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 128 128" aria-hidden className="shrink-0">
-      <rect width="128" height="128" rx="28" fill="#2448c8" />
-      <path
-        d="M30 94V36l34 38 34-38v58"
-        fill="none"
-        stroke="#fff"
-        strokeWidth="14"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <circle cx="100" cy="100" r="13" fill="#e7b6f2" stroke="#2448c8" strokeWidth="4" />
-    </svg>
-  );
+  return <img src={icon} alt="" width={size} height={size} className="shrink-0" />;
 }
 
 /** File-tab color per profile kind: person in pen blue, company in stamp violet. */
