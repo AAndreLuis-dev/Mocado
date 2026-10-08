@@ -1,6 +1,6 @@
 export const strip = (value: string): string => value.toUpperCase().replace(/[^0-9A-Z]/g, '');
 
-export const semAcento = (value: string): string =>
+export const stripAccents = (value: string): string =>
   value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
 export const onlyDigits = (value: string): string => value.replace(/\D/g, '');
@@ -23,7 +23,7 @@ export function mod11(values: readonly number[], weights: readonly number[]): nu
   return r < 2 ? 0 : 11 - r;
 }
 
-export const toNums = (s: string): number[] => [...s].map((c) => c.charCodeAt(0) - 48);
+export const toDigitValues = (s: string): number[] => [...s].map((c) => c.charCodeAt(0) - 48);
 
 export const allSame = (s: string): boolean => /^(.)\1*$/.test(s);
 

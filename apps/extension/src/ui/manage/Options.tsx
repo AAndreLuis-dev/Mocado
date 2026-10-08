@@ -1,7 +1,7 @@
 import { UFS } from '@mocado/core';
 import { useEffect, useState } from 'react';
 import {
-  CNPJ_TIPOS,
+  CNPJ_KINDS,
   DEFAULT_SETTINGS,
   IDADE_MAX,
   parseDomains,
@@ -34,7 +34,7 @@ const THEME_LABEL = {
 type Shortcut = { name?: string; description?: string; shortcut?: string };
 
 export function Options() {
-  const [s, setS] = useState<Settings>(DEFAULT_SETTINGS);
+  const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [blockedText, setBlockedText] = useState('');
   const [saves, setSaves] = useState(0);
   const [saved, setSaved] = useState(false);
@@ -42,7 +42,7 @@ export function Options() {
 
   useEffect(() => {
     void preferences.settings().then((loaded) => {
-      setS(loaded);
+      setSettings(loaded);
       setBlockedText(loaded.blockedDomains.join('\n'));
     });
     void loadShortcuts().then(setShortcuts);
@@ -55,9 +55,9 @@ export function Options() {
   }, [saved, saves]);
 
   async function set<K extends keyof Settings>(key: K, value: Settings[K]) {
-    setS((cur) => withSetting(cur, key, value));
-    setS(await preferences.setSetting(key, value));
-    setSaves((n) => n + 1);
+    setSettings((current) => withSetting(current, key, value));
+    setSettings(await preferences.setSetting(key, value));
+    setSaves((count) => count + 1);
     setSaved(true);
   }
 
@@ -69,7 +69,7 @@ export function Options() {
         min={0}
         max={IDADE_MAX}
         className="font-mono tabular-nums"
-        value={s[key]}
+        value={settings[key]}
         onChange={(e) => void set(key, Number(e.target.value) || 0)}
       />
     </Box>
@@ -82,10 +82,10 @@ export function Options() {
         <Box label={t('options.cnpjTipo')} htmlFor="cnpjTipo">
           <PenSelect
             id="cnpjTipo"
-            value={s.cnpjTipo}
+            value={settings.cnpjTipo}
             onChange={(e) => void set('cnpjTipo', e.target.value as Settings['cnpjTipo'])}
           >
-            {CNPJ_TIPOS.map((v) => (
+            {CNPJ_KINDS.map((v) => (
               <option key={v} value={v}>
                 {optionLabel(v)}
               </option>
@@ -95,7 +95,7 @@ export function Options() {
         <Box label={t('options.uf')} htmlFor="uf">
           <PenSelect
             id="uf"
-            value={s.uf}
+            value={settings.uf}
             onChange={(e) => void set('uf', e.target.value as Settings['uf'])}
           >
             <option value="">{t('options.ufRandom')}</option>
@@ -109,7 +109,7 @@ export function Options() {
         <Box span="full" className="justify-center">
           <PenCheck
             label={t('options.masked')}
-            checked={s.masked}
+            checked={settings.masked}
             onChange={(e) => void set('masked', e.target.checked)}
           />
         </Box>
@@ -118,14 +118,14 @@ export function Options() {
         <Box span={2} className="justify-center">
           <PenCheck
             label={t('options.observe')}
-            checked={s.observe}
+            checked={settings.observe}
             onChange={(e) => void set('observe', e.target.checked)}
           />
         </Box>
         <Box span={2} className="justify-center">
           <PenCheck
             label={t('options.fillPasswords')}
-            checked={s.fillPasswords}
+            checked={settings.fillPasswords}
             onChange={(e) => void set('fillPasswords', e.target.checked)}
           />
         </Box>
@@ -151,7 +151,7 @@ export function Options() {
                 name="theme"
                 value={theme}
                 label={t(THEME_LABEL[theme])}
-                checked={s.theme === theme}
+                checked={settings.theme === theme}
                 onChange={() => void set('theme', theme)}
               />
             ))}

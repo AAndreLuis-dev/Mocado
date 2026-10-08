@@ -4,7 +4,7 @@ import { maskIf, onlyDigits } from './mask';
 import { UFS, type UF } from './uf';
 import CEPS from './data/ceps.json' with { type: 'json' };
 
-export interface Endereco {
+export interface Address {
   cep: string;
   logradouro: string;
   numero: string;
@@ -14,7 +14,7 @@ export interface Endereco {
   uf: UF;
 }
 
-const FAIXAS: [UF, number, number][] = [
+const CEP_RANGES: [UF, number, number][] = [
   ['SP', 1000, 19999],
   ['RJ', 20000, 28999],
   ['ES', 29000, 29999],
@@ -49,7 +49,7 @@ const FAIXAS: [UF, number, number][] = [
 
 export const cepUF = (value: string): UF | undefined => {
   const n = Number(onlyDigits(value).slice(0, 5));
-  return FAIXAS.find(([, a, b]) => n >= a && n <= b)?.[0];
+  return CEP_RANGES.find(([, a, b]) => n >= a && n <= b)?.[0];
 };
 
 export const cep: Generator<{ uf?: UF }> = {
@@ -57,7 +57,7 @@ export const cep: Generator<{ uf?: UF }> = {
     const target = uf ?? pick(rng, UFS);
     const [, a, b] = pick(
       rng,
-      FAIXAS.filter(([u]) => u === target),
+      CEP_RANGES.filter(([u]) => u === target),
     );
     return cep.format(String(int(rng, a, b)).padStart(5, '0') + digits(rng, 3), { masked });
   },
@@ -70,13 +70,13 @@ export const cep: Generator<{ uf?: UF }> = {
   format: (value, { masked }) => maskIf(onlyDigits(value), '#####-###', masked),
 };
 
-const COMPLEMENTOS = ['', '', '', 'Casa', 'Casa 2', 'Fundos', 'Sala 3'];
+const COMPLEMENTS = ['', '', '', 'Casa', 'Casa 2', 'Fundos', 'Sala 3'];
 
-export function endereco({
+export function address({
   uf,
   rng = defaultRng,
   masked = true,
-}: { uf?: UF; rng?: Rng; masked?: boolean } = {}): Endereco {
+}: { uf?: UF; rng?: Rng; masked?: boolean } = {}): Address {
   const target = uf ?? pick(rng, UFS);
   const base = pick(
     rng,
@@ -87,7 +87,7 @@ export function endereco({
     cep: cep.format(base.cep, { masked }),
     logradouro: base.logradouro,
     numero: String(int(rng, 1, 3999)),
-    complemento: apto || pick(rng, COMPLEMENTOS),
+    complemento: apto || pick(rng, COMPLEMENTS),
     bairro: base.bairro,
     cidade: base.cidade,
     uf: target,

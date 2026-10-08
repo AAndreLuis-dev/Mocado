@@ -38,8 +38,8 @@ describe('createPageApi', () => {
       </fieldset>
       <input type="checkbox" name="termos" required>
       <select name="plano"><option value=""></option><option value="p">Pro</option></select>`;
-    const perfil = { cpf: '123.456.789-09', nome: 'Ana Lima', sexo: 'Feminino' };
-    const report = await createPageApi().fill(perfil, ctx());
+    const profile = { cpf: '123.456.789-09', nome: 'Ana Lima', sexo: 'Feminino' };
+    const report = await createPageApi().fill(profile, ctx());
     expect(report.fields).toEqual([
       { type: 'cpf', value: '12345678909' },
       { type: 'nome', value: 'Ana Lima' },

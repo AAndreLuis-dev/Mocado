@@ -1,24 +1,43 @@
 import { vi } from 'vitest';
 import type { FieldType } from '@mocado/core';
-import { DEFAULT_SETTINGS, type Settings } from '../domain/settings';
-import type { HistoryRecord } from '../domain/profile';
-import type { Deps, FillReport, HistoryRepository, PageGateway, ScanResult, Store } from './ports';
+import { DEFAULT_SETTINGS, type Settings } from '../src/domain/settings';
+import type { HistoryRecord } from '../src/domain/profile';
+import type {
+  Deps,
+  FillReport,
+  HistoryRepository,
+  PageGateway,
+  ScanResult,
+  Store,
+} from '../src/application/ports';
 
 export function memoryHistory(initial: HistoryRecord[] = []): HistoryRepository {
-  let list = [...initial];
+  let records = [...initial];
   return {
-    all: async () => list,
-    get: async (id) => list.find((r) => r.id === id),
-    save: async (r) => void (list = [r, ...list.filter((x) => x.id !== r.id)]),
-    update: async (id, patch) =>
-      void (list = list.map((r) => (r.id === id ? { ...r, ...patch } : r))),
-    remove: async (id) => void (list = list.filter((r) => r.id !== id)),
-    replaceAll: async (records) => void (list = records),
+    all: async () => records,
+    get: async (id) => records.find((record) => record.id === id),
+    async save(record) {
+      records = [record, ...records.filter((other) => other.id !== record.id)];
+    },
+    async update(id, patch) {
+      records = records.map((record) => (record.id === id ? { ...record, ...patch } : record));
+    },
+    async remove(id) {
+      records = records.filter((record) => record.id !== id);
+    },
+    async replaceAll(next) {
+      records = next;
+    },
   };
 }
 
 export function memoryStore<T>(value: T): Store<T> {
-  return { get: async () => value, set: async (v) => void (value = v) };
+  return {
+    get: async () => value,
+    async set(next) {
+      value = next;
+    },
+  };
 }
 
 export function fakePage(
@@ -34,9 +53,9 @@ export function fakePage(
   };
   const page = {
     scan: vi.fn(async () => scan),
-    fill: vi.fn(async (_tab, perfil): Promise<FillReport> => {
+    fill: vi.fn(async (_tab, profile): Promise<FillReport> => {
       const fields = types.flatMap((type) =>
-        perfil[type] ? [{ type, value: perfil[type]! }] : [],
+        profile[type] ? [{ type, value: profile[type]! }] : [],
       );
       return { filled: fields.length, fields };
     }),
@@ -48,15 +67,15 @@ export function fakePage(
   return page;
 }
 
-export function fakeDeps(over: Partial<Deps> & { settings?: Store<Settings> } = {}): Deps {
-  let t = 1000;
+export function fakeDeps(custom: Partial<Deps> & { settings?: Store<Settings> } = {}): Deps {
+  let clock = 1000;
   return {
     page: fakePage(['cpf', 'nome']),
     history: memoryHistory(),
     settings: memoryStore(DEFAULT_SETTINGS),
     overrides: memoryStore({}),
     pin: memoryStore<string | undefined>(undefined),
-    now: () => t++,
-    ...over,
+    now: () => clock++,
+    ...custom,
   };
 }

@@ -62,7 +62,7 @@ export const CPF_REGION: Record<UF, number> = {
   SC: 9,
 };
 
-export const TITULO_UF: Record<UF, number> = {
+export const VOTER_ID_UF_CODE: Record<UF, number> = {
   SP: 1,
   MG: 2,
   RJ: 3,

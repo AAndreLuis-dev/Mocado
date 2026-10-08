@@ -5,22 +5,22 @@ const WORDS =
     ' ',
   );
 
-const cap = (s: string) => s[0]!.toUpperCase() + s.slice(1);
+const capitalize = (s: string) => s[0]!.toUpperCase() + s.slice(1);
 
 export function lorem({
-  paragrafos = 1,
-  palavras,
+  paragraphs = 1,
+  words,
   rng = defaultRng,
-}: { paragrafos?: number; palavras?: number; rng?: Rng } = {}): string {
-  if (palavras)
-    return cap(Array.from({ length: palavras }, () => pick(rng, WORDS)).join(' ')) + '.';
+}: { paragraphs?: number; words?: number; rng?: Rng } = {}): string {
+  if (words)
+    return capitalize(Array.from({ length: words }, () => pick(rng, WORDS)).join(' ')) + '.';
   const sentence = () =>
-    cap(Array.from({ length: int(rng, 6, 14) }, () => pick(rng, WORDS)).join(' ')) + '.';
+    capitalize(Array.from({ length: int(rng, 6, 14) }, () => pick(rng, WORDS)).join(' ')) + '.';
   const paragraph = () => Array.from({ length: int(rng, 3, 6) }, sentence).join(' ');
-  return Array.from({ length: paragrafos }, paragraph).join('\n\n');
+  return Array.from({ length: paragraphs }, paragraph).join('\n\n');
 }
 
-export const numero = ({
+export const randomNumber = ({
   min = 0,
   max = 1000,
   rng = defaultRng,

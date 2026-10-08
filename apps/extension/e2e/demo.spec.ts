@@ -13,19 +13,19 @@ test('demo frames', async ({ context, sw, fill }) => {
 
   const page = await context.newPage();
   await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto('/pj.html');
+  await page.goto('/company.html');
   await shot(page, 'Formulário React vazio');
   await fill(page);
   await shot(page, 'Ctrl+Shift+F → empresa coerente (CNPJ, IE da UF, endereço)');
   await page.evaluate(() => scrollTo(0, document.body.scrollHeight));
   await shot(page, 'O estado do React reflete os valores');
 
-  await page.goto('/mascaras.html');
+  await page.goto('/masks.html');
   await fill(page);
   await shot(page, 'Respeita máscaras e campos só com números');
 
   const cpf = await (async () => {
-    await page.goto('/pf.html');
+    await page.goto('/person.html');
     await fill(page);
     return page.locator('#cpf').inputValue();
   })();

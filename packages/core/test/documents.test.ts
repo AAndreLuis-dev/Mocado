@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import {
-  certidao,
-  certidaoTipo,
+  civilCertificate,
+  certificateKind,
   cnh,
   ie,
   ieUFs,
@@ -9,8 +9,8 @@ import {
   pis,
   renavam,
   rg,
-  titulo,
-  tituloUF,
+  voterId,
+  voterIdUF,
   UFS,
 } from '../src';
 import { mutateLastDigit, roundTrip } from './helpers';
@@ -44,17 +44,17 @@ describe('pis', () => {
   });
 });
 
-describe('titulo', () => {
+describe('voterId', () => {
   test('known value', () => {
-    expect(titulo.validate('0043 5687 0906')).toBe(true);
-    expect(titulo.validate('004356870906', { uf: 'PR' })).toBe(false);
-    expect(tituloUF('004356870906')).toBe('SC');
+    expect(voterId.validate('0043 5687 0906')).toBe(true);
+    expect(voterId.validate('004356870906', { uf: 'PR' })).toBe(false);
+    expect(voterIdUF('004356870906')).toBe('SC');
   });
   test('5k round-trip per UF keeps UF', () => {
     for (const uf of UFS) {
-      for (const v of roundTrip(titulo, { uf }, 200)) expect(tituloUF(v)).toBe(uf);
+      for (const v of roundTrip(voterId, { uf }, 200)) expect(voterIdUF(v)).toBe(uf);
     }
-    roundTrip(titulo);
+    roundTrip(voterId);
   });
 });
 
@@ -64,11 +64,11 @@ describe('renavam', () => {
   });
 });
 
-describe('certidao', () => {
-  test.each(['nascimento', 'casamento', 'obito'] as const)('5k %s', (tipo) => {
-    for (const v of roundTrip(certidao, { tipo }, 2000)) {
-      expect(certidaoTipo(v)).toBe(tipo);
-      expect(certidao.validate(mutateLastDigit(v))).toBe(false);
+describe('civilCertificate', () => {
+  test.each(['nascimento', 'casamento', 'obito'] as const)('5k %s', (kind) => {
+    for (const v of roundTrip(civilCertificate, { kind }, 2000)) {
+      expect(certificateKind(v)).toBe(kind);
+      expect(civilCertificate.validate(mutateLastDigit(v))).toBe(false);
     }
   });
 });

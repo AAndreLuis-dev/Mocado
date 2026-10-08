@@ -1,7 +1,7 @@
 import { describe, expect, test, vi, beforeEach } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { cpf, cnpj, isCnpjAlfanumerico } from '@mocado/core';
+import { cpf, cnpj, isAlphanumericCnpj } from '@mocado/core';
 import { fakeBrowser } from 'wxt/testing/fake-browser';
 import { App } from './App';
 
@@ -39,7 +39,7 @@ describe('popup', () => {
     await user.selectOptions(screen.getByLabelText(/tipo/i), 'alfanumerico');
     const value = screen.getByTestId('result').textContent!;
     expect(cnpj.validate(value)).toBe(true);
-    expect(isCnpjAlfanumerico(value)).toBe(true);
+    expect(isAlphanumericCnpj(value)).toBe(true);
   });
 
   test('composite generators list each field with its own copy button', async () => {

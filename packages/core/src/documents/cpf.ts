@@ -1,14 +1,14 @@
 import { type Generator } from '../types';
 import { defaultRng, digits, int } from '../rng';
-import { allSame, maskIf, mod11, onlyDigits, toNums } from '../mask';
+import { allSame, maskIf, mod11, onlyDigits, toDigitValues } from '../mask';
 import { CPF_REGION, type UF } from '../uf';
 
 const W1 = [10, 9, 8, 7, 6, 5, 4, 3, 2];
 const W2 = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2];
 
 function withDv(base9: string): string {
-  const d1 = mod11(toNums(base9), W1);
-  const d2 = mod11(toNums(base9 + d1), W2);
+  const d1 = mod11(toDigitValues(base9), W1);
+  const d2 = mod11(toDigitValues(base9 + d1), W2);
   return `${base9}${d1}${d2}`;
 }
 
