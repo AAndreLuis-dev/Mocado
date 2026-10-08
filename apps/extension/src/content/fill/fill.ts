@@ -101,35 +101,35 @@ export function adapt(
   if (input?.type === 'date' && /^\d{2}\/\d{2}\/\d{4}$/.test(value))
     return value.split('/').reverse().join('-');
   if (input?.type === 'month' && type === 'cartaoValidade') {
-    const [m, y] = value.split('/');
-    return `20${y}-${m}`;
+    const [month, year] = value.split('/');
+    return `20${year}-${month}`;
   }
   if (type === 'cartaoValidade' && input?.maxLength === 7)
     return value.replace(/\/(\d{2})$/, '/20$1');
   if (type === 'cartaoValidade' && input?.maxLength === 4) return value.replace('/', '');
-  let v = value;
-  if (!TEXTUAL.has(type) && (masked === false || input?.type === 'number')) v = alnum(value);
+  let adapted = value;
+  if (!TEXTUAL.has(type) && (masked === false || input?.type === 'number')) adapted = alnum(value);
   const max = input?.maxLength ?? (el as HTMLTextAreaElement).maxLength ?? -1;
-  if (max > 0 && v.length > max) {
-    const stripped = alnum(v);
-    v = stripped.length <= max && !TEXTUAL.has(type) ? stripped : v.slice(0, max);
+  if (max > 0 && adapted.length > max) {
+    const stripped = alnum(adapted);
+    adapted = stripped.length <= max && !TEXTUAL.has(type) ? stripped : adapted.slice(0, max);
   }
-  return v;
+  return adapted;
 }
 
 export function chooseOption(
   select: HTMLSelectElement,
   value: string,
 ): HTMLOptionElement | undefined {
-  const options = [...select.options].filter((o) => !o.disabled && o.value !== '');
+  const options = [...select.options].filter((option) => !option.disabled && option.value !== '');
   if (!options.length) return undefined;
   const wanted = [value, UF_NAMES[value.toUpperCase()] ?? ''].filter(Boolean).map(normalize);
-  const norm = (o: HTMLOptionElement) => [normalize(o.value), normalize(o.text)];
+  const textsOf = (option: HTMLOptionElement) => [normalize(option.value), normalize(option.text)];
+  const isPrefixMatch = (text: string) =>
+    !!text && wanted.some((target) => text.startsWith(target) || target.startsWith(text));
   return (
-    options.find((o) => norm(o).some((x) => wanted.includes(x))) ??
-    options.find((o) =>
-      norm(o).some((x) => wanted.some((w) => x && (x.startsWith(w) || w.startsWith(x)))),
-    ) ??
+    options.find((option) => textsOf(option).some((text) => wanted.includes(text))) ??
+    options.find((option) => textsOf(option).some(isPrefixMatch)) ??
     options[Math.floor(Math.random() * options.length)]
   );
 }
@@ -139,9 +139,9 @@ export function fillElement(el: FieldEl, value: string): boolean {
     el.focus({ preventScroll: true });
     fire(el, 'focus', { bubbles: false });
     if (el.tagName === 'SELECT') {
-      const opt = chooseOption(el as HTMLSelectElement, value);
-      if (!opt) return false;
-      setNativeValue(el, opt.value);
+      const option = chooseOption(el as HTMLSelectElement, value);
+      if (!option) return false;
+      setNativeValue(el, option.value);
       fire(el, 'input');
     } else {
       setNativeValue(el, value);
@@ -165,20 +165,16 @@ export function chooseRadio(
   value: string | undefined,
 ): HTMLInputElement | undefined {
   if (value) {
-    const w = normalize(value);
-    const labelOf = (r: HTMLInputElement) =>
-      normalize(`${r.value} ${[...(r.labels ?? [])].map((l) => l.textContent).join(' ')}`);
-    const hit = radios.find((r) => {
-      const l = labelOf(r);
-      return l
-        .split(' ')
-        .some(
-          (tok) =>
-            tok === w ||
-            tok.startsWith(w) ||
-            ((tok.length === 1 || tok.length >= 3) && w.startsWith(tok)),
-        );
-    });
+    const wanted = normalize(value);
+    const labelOf = (radio: HTMLInputElement) =>
+      normalize(
+        `${radio.value} ${[...(radio.labels ?? [])].map((label) => label.textContent).join(' ')}`,
+      );
+    const matchesWord = (word: string) =>
+      word === wanted ||
+      word.startsWith(wanted) ||
+      ((word.length === 1 || word.length >= 3) && wanted.startsWith(word));
+    const hit = radios.find((radio) => labelOf(radio).split(' ').some(matchesWord));
     if (hit) return hit;
   }
   return radios[0];

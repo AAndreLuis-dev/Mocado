@@ -111,12 +111,12 @@ export function stableSelector(el: Element): string {
     cur && cur.tagName !== 'FORM' && cur.tagName !== 'BODY';
     cur = cur.parentElement
   ) {
-    const t = cur.tagName.toLowerCase();
-    const idx =
+    const tagName = cur.tagName.toLowerCase();
+    const position =
       [...(cur.parentElement?.children ?? [])]
-        .filter((c) => c.tagName === cur!.tagName)
+        .filter((sibling) => sibling.tagName === cur!.tagName)
         .indexOf(cur) + 1;
-    path.unshift(`${t}:nth-of-type(${idx})`);
+    path.unshift(`${tagName}:nth-of-type(${position})`);
   }
   return path.join(' > ');
 }
@@ -137,10 +137,10 @@ export function collectFields(root: Document | Element, opts: CollectOptions = {
     }
     const signals = signalsOf(el);
     if (signals.type === 'password' && !opts.fillPasswords) continue;
-    const c = classify(signals);
-    if (!c) continue;
-    if (c.type === 'senha' && !opts.fillPasswords) continue;
-    out.push({ el, ...c });
+    const classification = classify(signals);
+    if (!classification) continue;
+    if (classification.type === 'senha' && !opts.fillPasswords) continue;
+    out.push({ el, ...classification });
   }
   return out;
 }
@@ -151,9 +151,9 @@ export function radioGroups(
   const groups = new Map<string, HTMLInputElement[]>();
   for (const el of deepElements(root)) {
     if (el.tagName !== 'INPUT' || (el as HTMLInputElement).type !== 'radio') continue;
-    const r = el as HTMLInputElement;
-    if (r.disabled || !r.name) continue;
-    groups.set(r.name, [...(groups.get(r.name) ?? []), r]);
+    const radio = el as HTMLInputElement;
+    if (radio.disabled || !radio.name) continue;
+    groups.set(radio.name, [...(groups.get(radio.name) ?? []), radio]);
   }
   return [...groups].map(([name, radios]) => ({
     name,

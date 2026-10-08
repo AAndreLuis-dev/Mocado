@@ -1,4 +1,4 @@
-import type { Perfil } from '@mocado/core';
+import type { Profile } from '@mocado/core';
 import type { FillReport, PageContext } from '../application/ports';
 import type { MocadoApi } from './api';
 import { classify } from './detect/classify';
@@ -14,16 +14,16 @@ export function createPageApi(doc: Document = document): MocadoApi {
   const filled = new WeakSet<Element>();
   const focusedField = createFocusTracker(doc);
   let observer: MutationObserver | null = null;
-  let current: { perfil: Perfil; ctx: PageContext } | null = null;
+  let current: { profile: Profile; ctx: PageContext } | null = null;
 
   const detect = (ctx: PageContext): Detected[] =>
     collectFields(doc, { fillPasswords: ctx.fillPasswords, overrides: ctx.overrides[hostname] });
 
-  function fillDetected(list: Detected[], perfil: Perfil, ctx: PageContext, onlyNew: boolean) {
+  function fillDetected(list: Detected[], profile: Profile, ctx: PageContext, onlyNew: boolean) {
     const report: FillReport = { filled: 0, fields: [] };
     for (const d of list) {
       if (onlyNew && (filled.has(d.el) || d.el.value !== '')) continue;
-      const value = perfil[d.type];
+      const value = profile[d.type];
       if (!value) continue;
       const v = adapt(value, d.type, d.el, d.masked ?? ctx.masked);
       if (fillElement(d.el, v)) {
@@ -35,10 +35,10 @@ export function createPageApi(doc: Document = document): MocadoApi {
     return report;
   }
 
-  function fillAll(perfil: Perfil, ctx: PageContext, onlyNew: boolean): FillReport {
+  function fillAll(profile: Profile, ctx: PageContext, onlyNew: boolean): FillReport {
     const list = detect(ctx);
-    const report = fillDetected(list, perfil, ctx, onlyNew);
-    report.filled += fillChoices(doc, perfil, new Set(list.map((d) => d.el)), filled);
+    const report = fillDetected(list, profile, ctx, onlyNew);
+    report.filled += fillChoices(doc, profile, new Set(list.map((d) => d.el)), filled);
     return report;
   }
 
@@ -47,7 +47,7 @@ export function createPageApi(doc: Document = document): MocadoApi {
     let timer: ReturnType<typeof setTimeout> | undefined;
     observer = new MutationObserver(() => {
       clearTimeout(timer);
-      timer = setTimeout(() => current && fillAll(current.perfil, current.ctx, true), 250);
+      timer = setTimeout(() => current && fillAll(current.profile, current.ctx, true), 250);
     });
     observer.observe(doc.documentElement, { childList: true, subtree: true });
   }
@@ -68,9 +68,9 @@ export function createPageApi(doc: Document = document): MocadoApi {
       };
     },
 
-    async fill(perfil, ctx) {
-      const report = fillAll(perfil, ctx, false);
-      current = { perfil, ctx };
+    async fill(profile, ctx) {
+      const report = fillAll(profile, ctx, false);
+      current = { profile, ctx };
       if (ctx.observe) observe();
       return report;
     },

@@ -27,7 +27,7 @@ export function Logo({ size = 24 }: { size?: number }) {
   return <img src={icon} alt="" width={size} height={size} className="shrink-0" />;
 }
 
-export const TIPO_BG = {
+export const KIND_BADGE = {
   pessoa: 'bg-caneta text-sobre-caneta',
   empresa: 'bg-carimbo text-ficha',
   avulso: 'bg-grafite text-ficha',

@@ -2,12 +2,12 @@ import { describe, expect, test } from 'vitest';
 import { mergeRecords, parseImport, sanitize, toExport } from './history-import';
 import { search } from './history-query';
 import { displayName, domains, generatedName, keyValues, orderedValues } from './profile';
-import { rec } from './test-data';
+import { makeRecord } from '../../test/records';
 
 describe('search', () => {
   test('newest first by last use', () => {
-    const a = rec({ id: 'a' }, 1000);
-    const b = rec({ id: 'b' }, 2000);
+    const a = makeRecord({ id: 'a' }, 1000);
+    const b = makeRecord({ id: 'b' }, 2000);
     expect(search([a, b]).map((r) => r.id)).toEqual(['b', 'a']);
     const reused = { ...a, uses: [...a.uses, { domain: 'o.test', url: 'u', at: 3000 }] };
     expect(search([reused, b]).map((r) => r.id)).toEqual(['a', 'b']);
@@ -15,8 +15,8 @@ describe('search', () => {
 
   test('ignores masks and accents, matches label and domain', () => {
     const list = [
-      rec({ id: 'a', label: 'Admin teste' }),
-      rec({
+      makeRecord({ id: 'a', label: 'Admin teste' }),
+      makeRecord({
         id: 'b',
         values: { cnpj: '12.ABC.345/01DE-35' },
         uses: [{ domain: 'erp.test', url: 'u', at: 1 }],
@@ -34,8 +34,8 @@ describe('search', () => {
 
   test('filters: domain (any use) and favorites', () => {
     const list = [
-      rec({ id: 'a', favorite: true }),
-      rec({
+      makeRecord({ id: 'a', favorite: true }),
+      makeRecord({
         id: 'b',
         uses: [
           { domain: 'x.test', url: 'u', at: 1 },
@@ -50,14 +50,16 @@ describe('search', () => {
 });
 
 test('names: label wins for display, company before person', () => {
-  expect(displayName(rec({ label: 'cliente PJ' }))).toBe('cliente PJ');
-  expect(generatedName(rec({ label: 'x' }))).toBe('João Araújo Silva');
-  expect(generatedName(rec({ values: { nome: 'A', razaoSocial: 'Empresa' } }))).toBe('Empresa');
+  expect(displayName(makeRecord({ label: 'cliente PJ' }))).toBe('cliente PJ');
+  expect(generatedName(makeRecord({ label: 'x' }))).toBe('João Araújo Silva');
+  expect(generatedName(makeRecord({ values: { nome: 'A', razaoSocial: 'Empresa' } }))).toBe(
+    'Empresa',
+  );
 });
 
 describe('import/export', () => {
   test('export round-trips through parseImport', () => {
-    const records = [rec({ id: 'a', label: 'um', favorite: true }), rec({ id: 'b' })];
+    const records = [makeRecord({ id: 'a', label: 'um', favorite: true }), makeRecord({ id: 'b' })];
     const dump = JSON.parse(JSON.stringify(toExport(records, 0)));
     expect(dump).toMatchObject({
       app: 'mocado',
@@ -72,30 +74,29 @@ describe('import/export', () => {
       { id: 'x' },
       null,
       'str',
-      { ...rec({ id: 'ok' }), values: { cpf: '1', hack: '<script>', nome: 5 } },
+      { ...makeRecord({ id: 'ok' }), values: { cpf: '1', hack: '<script>', nome: 5 } },
     ];
     const parsed = parseImport({ records: bad });
     expect(parsed.map((r) => [r.id, r.values])).toEqual([['ok', { cpf: '1' }]]);
     expect(() => parseImport({ nope: true })).toThrow('invalid-file');
-    expect(parseImport([rec({ id: 'arr' })])[0]?.id).toBe('arr');
+    expect(parseImport([makeRecord({ id: 'arr' })])[0]?.id).toBe('arr');
   });
 
   test('sanitize keeps known types only', () => {
-    expect(sanitize({ ...rec(), extra: 1, tipo: 'hacker' })).toBeNull();
-    expect(sanitize(rec())).toMatchObject({ tipo: 'pessoa', favorite: false });
+    expect(sanitize({ ...makeRecord(), extra: 1, tipo: 'hacker' })).toBeNull();
+    expect(sanitize(makeRecord())).toMatchObject({ tipo: 'pessoa', favorite: false });
   });
 
   test('merge keeps existing records, replace drops them; incoming wins on id', () => {
-    const keep = rec({ id: 'keep' });
-    const incoming = [rec({ id: 'keep', label: 'novo' }), rec({ id: 'new' })];
+    const keep = makeRecord({ id: 'keep' });
+    const incoming = [makeRecord({ id: 'keep', label: 'novo' }), makeRecord({ id: 'new' })];
     expect(mergeRecords([keep], incoming, 'merge').map((r) => [r.id, r.label])).toEqual([
       ['keep', 'novo'],
       ['new', ''],
     ]);
-    expect(mergeRecords([rec({ id: 'old' })], incoming, 'replace').map((r) => r.id)).toEqual([
-      'keep',
-      'new',
-    ]);
+    expect(mergeRecords([makeRecord({ id: 'old' })], incoming, 'replace').map((r) => r.id)).toEqual(
+      ['keep', 'new'],
+    );
   });
 });
 

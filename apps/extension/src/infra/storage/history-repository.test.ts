@@ -1,7 +1,7 @@
 import { beforeEach, expect, test } from 'vitest';
 import { fakeBrowser } from 'wxt/testing/fake-browser';
 import { DEFAULT_SETTINGS } from '../../domain/settings';
-import { rec } from '../../domain/test-data';
+import { makeRecord } from '../../../test/records';
 import { LocalHistoryRepository } from './history-repository';
 import { overridesStore, pinStore, settingsStore, watchStorage } from './stores';
 
@@ -10,9 +10,9 @@ beforeEach(() => fakeBrowser.reset());
 test('history repository: save (upsert, newest first), get, update, remove, replaceAll', async () => {
   const repo = new LocalHistoryRepository();
   expect(await repo.all()).toEqual([]);
-  await repo.save(rec({ id: 'a' }));
-  await repo.save(rec({ id: 'b' }));
-  await repo.save(rec({ id: 'a', label: 'de novo' }));
+  await repo.save(makeRecord({ id: 'a' }));
+  await repo.save(makeRecord({ id: 'b' }));
+  await repo.save(makeRecord({ id: 'a', label: 'de novo' }));
   expect((await repo.all()).map((r) => r.id)).toEqual(['a', 'b']);
   await repo.update('b', { favorite: true });
   expect(await repo.get('b')).toMatchObject({ favorite: true });
@@ -41,8 +41,8 @@ test('watchStorage only fires for the watched keys', async () => {
   const seen: string[] = [];
   const stop = watchStorage(['history'], () => seen.push('history'));
   await pinStore.set('x');
-  await new LocalHistoryRepository().save(rec());
+  await new LocalHistoryRepository().save(makeRecord());
   stop();
-  await new LocalHistoryRepository().save(rec());
+  await new LocalHistoryRepository().save(makeRecord());
   expect(seen).toEqual(['history']);
 });

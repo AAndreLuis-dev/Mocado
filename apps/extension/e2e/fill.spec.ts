@@ -1,14 +1,14 @@
-import { cep, cepUF, cnpj, cpf, ie, rg, telefone, type UF } from '@mocado/core';
+import { cep, cepUF, cnpj, cpf, ie, rg, phone, type UF } from '@mocado/core';
 import { expect, test } from './fixtures';
 
 const val = (page: import('@playwright/test').Page, sel: string) => page.locator(sel).inputValue();
 
 test('1. HTML puro (PF)', async ({ context, fill, pageErrors }) => {
   const page = await context.newPage();
-  await page.goto('/pf.html');
+  await page.goto('/person.html');
   const res = await fill(page);
   expect(res.ok).toBe(true);
-  expect(res.tipo).toBe('pessoa');
+  expect(res.kind).toBe('pessoa');
 
   expect(await val(page, '#nome')).toMatch(/^\S+ \S+ \S+$/);
   const c = await val(page, '#cpf');
@@ -18,7 +18,7 @@ test('1. HTML puro (PF)', async ({ context, fill, pageErrors }) => {
   expect(await val(page, '#nasc')).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   expect(await page.locator('input[name=sexo]:checked').count()).toBe(1);
   expect(await val(page, '#email')).toMatch(/^[a-z0-9.]+@example\.(com|net|org)$/);
-  expect(telefone.validate(await val(page, '#cel'), { tipo: 'celular' })).toBe(true);
+  expect(phone.validate(await val(page, '#cel'), { kind: 'celular' })).toBe(true);
   const uf = (await val(page, '#uf')) as UF;
   expect(uf).toMatch(/^[A-Z]{2}$/);
   expect(cepUF(await val(page, '#cep'))).toBe(uf);
@@ -34,10 +34,10 @@ test('2. React controlado (PJ): state reflects the values', async ({
   pageErrors,
 }) => {
   const page = await context.newPage();
-  await page.goto('/pj.html');
+  await page.goto('/company.html');
   const res = await fill(page);
   expect(res.ok).toBe(true);
-  expect(res.tipo).toBe('empresa');
+  expect(res.kind).toBe('empresa');
 
   const state = JSON.parse((await page.getByTestId('state').textContent())!) as Record<
     string,
@@ -66,7 +66,7 @@ test('2. React controlado (PJ): state reflects the values', async ({
 
 test('3. Máscaras (IMask)', async ({ context, fill, pageErrors }) => {
   const page = await context.newPage();
-  await page.goto('/mascaras.html');
+  await page.goto('/masks.html');
   expect((await fill(page)).ok).toBe(true);
 
   const c = await val(page, '[name=cpf]');
@@ -97,7 +97,7 @@ test('4. SPA/modal + shadow DOM + iframe', async ({ context, fill, pageErrors })
   await expect(page.locator('[name=cliente_cpf]')).not.toHaveValue('', { timeout: 5000 });
   expect(cpf.validate(await val(page, '[name=cliente_cpf]'))).toBe(true);
   expect(await val(page, '[name=cliente_nome]')).toBe(await val(page, '[name=atendente_nome]'));
-  expect(telefone.validate(await val(page, '[name=cliente_celular]'))).toBe(true);
+  expect(phone.validate(await val(page, '[name=cliente_celular]'))).toBe(true);
   expect(pageErrors).toEqual([]);
 });
 
@@ -107,7 +107,7 @@ test('5. Nomes ruins: label/placeholder/aria/texto próximo', async ({
   pageErrors,
 }) => {
   const page = await context.newPage();
-  await page.goto('/nomes-ruins.html');
+  await page.goto('/bad-names.html');
   expect((await fill(page)).ok).toBe(true);
 
   expect(await val(page, '[name=campo1]')).toMatch(/^\S+ \S+ \S+$/);
@@ -116,7 +116,7 @@ test('5. Nomes ruins: label/placeholder/aria/texto próximo', async ({
   expect(await val(page, '[name=campo4]')).toMatch(/^\d{2}\/\d{2}\/\d{4}$/);
   expect(cep.validate(await val(page, '[name=campo5]'))).toBe(true);
   expect(await val(page, '[name=campo6]')).toMatch(/@example\./);
-  expect(telefone.validate(await val(page, '[name=campo7]'), { tipo: 'celular' })).toBe(true);
+  expect(phone.validate(await val(page, '[name=campo7]'), { kind: 'celular' })).toBe(true);
   expect(await val(page, '[name=campo8]')).toBe('');
   expect(pageErrors).toEqual([]);
 });

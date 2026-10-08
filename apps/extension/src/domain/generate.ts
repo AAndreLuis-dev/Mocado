@@ -1,32 +1,32 @@
 import {
-  empresa,
-  EMPRESA_FIELDS,
-  pessoa,
-  valorAvulso,
+  company,
+  COMPANY_FIELDS,
+  person,
+  singleValue,
   type FieldType,
-  type Perfil,
-  type PerfilOptions,
+  type Profile,
+  type ProfileOptions,
 } from '@mocado/core';
-import type { PerfilTipo } from './profile';
+import type { ProfileKind } from './profile';
 import type { Settings } from './settings';
 
-export const perfilOptions = (s: Settings): PerfilOptions => ({
+export const profileOptions = (s: Settings): ProfileOptions => ({
   uf: s.uf || undefined,
-  idadeMin: s.idadeMin,
-  idadeMax: s.idadeMax,
-  cnpjTipo: s.cnpjTipo,
+  minAge: s.idadeMin,
+  maxAge: s.idadeMax,
+  cnpjKind: s.cnpjTipo,
   masked: true,
 });
 
 export function generateFor(
   types: readonly FieldType[],
   settings: Settings,
-): { tipo: PerfilTipo; perfil: Perfil } {
-  const opts = perfilOptions(settings);
-  return types.some((t) => EMPRESA_FIELDS.includes(t))
-    ? { tipo: 'empresa', perfil: empresa(opts) }
-    : { tipo: 'pessoa', perfil: pessoa(opts) };
+): { kind: ProfileKind; profile: Profile } {
+  const opts = profileOptions(settings);
+  return types.some((t) => COMPANY_FIELDS.includes(t))
+    ? { kind: 'empresa', profile: company(opts) }
+    : { kind: 'pessoa', profile: person(opts) };
 }
 
 export const generateValue = (type: FieldType, settings: Settings) =>
-  valorAvulso(type, perfilOptions(settings));
+  singleValue(type, profileOptions(settings));

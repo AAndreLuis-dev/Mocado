@@ -1,38 +1,38 @@
 import {
-  BANCOS,
-  BANDEIRAS,
-  cartaoCompleto,
-  certidao,
+  BANKS,
+  CARD_BRANDS,
+  creditCardDetails,
+  civilCertificate,
   cnh,
   cnpj,
-  contaBancaria,
+  bankAccount,
   cpf,
   email,
-  empresa,
-  endereco,
+  company,
+  address,
   ie,
   lorem,
-  nascimento,
-  nomeCompleto,
-  numero,
-  pessoa,
+  birthDate,
+  fullName,
+  randomNumber,
+  person,
   pis,
-  placa,
+  licensePlate,
   renavam,
   rg,
-  senha,
-  telefone,
-  titulo,
+  password,
+  phone,
+  voterId,
   UFS,
   uuid,
-  veiculo,
-  type Banco,
-  type Bandeira,
-  type CertidaoTipo,
-  type CnpjTipo,
-  type PlacaTipo,
-  type Sexo,
-  type TelefoneTipo,
+  vehicle,
+  type Bank,
+  type CardBrand,
+  type CertificateKind,
+  type CnpjKind,
+  type PlateKind,
+  type Sex,
+  type PhoneKind,
   type UF,
 } from '@mocado/core';
 
@@ -42,30 +42,40 @@ export type Result = string | Record<string, string>;
 export interface GeneratorDef {
   id: string;
   options?: Choices;
-  run(opts: Record<string, string>, masked: boolean): Result;
+  run(selected: Record<string, string>, masked: boolean): Result;
 }
 
 const UF_OPT = ['', ...UFS] as const;
-const uf = (o: Record<string, string>) => (o.uf || undefined) as UF | undefined;
+const uf = (selected: Record<string, string>) => (selected.uf || undefined) as UF | undefined;
 
 export const GENERATORS: GeneratorDef[] = [
   {
     id: 'pessoa',
     options: { uf: UF_OPT, sexo: ['', 'M', 'F'] },
-    run: (o, masked) =>
-      pessoa({ uf: uf(o), sexo: (o.sexo || undefined) as Sexo, masked }) as Record<string, string>,
+    run: (selected, masked) =>
+      person({ uf: uf(selected), sex: (selected.sexo || undefined) as Sex, masked }) as Record<
+        string,
+        string
+      >,
   },
   {
     id: 'empresa',
     options: { uf: UF_OPT, tipo: ['numerico', 'alfanumerico', 'aleatorio'] },
-    run: (o, masked) =>
-      empresa({ uf: uf(o), cnpjTipo: o.tipo as CnpjTipo, masked }) as Record<string, string>,
+    run: (selected, masked) =>
+      company({ uf: uf(selected), cnpjKind: selected.tipo as CnpjKind, masked }) as Record<
+        string,
+        string
+      >,
   },
-  { id: 'cpf', options: { uf: UF_OPT }, run: (o, masked) => cpf.generate({ uf: uf(o), masked }) },
+  {
+    id: 'cpf',
+    options: { uf: UF_OPT },
+    run: (selected, masked) => cpf.generate({ uf: uf(selected), masked }),
+  },
   {
     id: 'cnpj',
     options: { tipo: ['numerico', 'alfanumerico', 'aleatorio'] },
-    run: (o, masked) => cnpj.generate({ tipo: o.tipo as CnpjTipo, masked }),
+    run: (selected, masked) => cnpj.generate({ kind: selected.tipo as CnpjKind, masked }),
   },
   { id: 'rg', run: (_, masked) => rg.generate({ masked }) },
   { id: 'cnh', run: () => cnh.generate() },
@@ -73,91 +83,108 @@ export const GENERATORS: GeneratorDef[] = [
   {
     id: 'titulo',
     options: { uf: UF_OPT },
-    run: (o, masked) => titulo.generate({ uf: uf(o), masked }),
+    run: (selected, masked) => voterId.generate({ uf: uf(selected), masked }),
   },
-  { id: 'ie', options: { uf: UF_OPT }, run: (o, masked) => ie.generate({ uf: uf(o), masked }) },
+  {
+    id: 'ie',
+    options: { uf: UF_OPT },
+    run: (selected, masked) => ie.generate({ uf: uf(selected), masked }),
+  },
   {
     id: 'certidao',
     options: { tipo: ['nascimento', 'casamento', 'obito'] },
-    run: (o, masked) => certidao.generate({ tipo: o.tipo as CertidaoTipo, masked }),
+    run: (selected, masked) =>
+      civilCertificate.generate({ kind: selected.tipo as CertificateKind, masked }),
   },
   { id: 'renavam', run: () => renavam.generate() },
   {
     id: 'placa',
     options: { tipo: ['mercosul', 'antiga', 'aleatorio'] },
-    run: (o, masked) => placa.generate({ tipo: o.tipo as PlacaTipo, masked }),
+    run: (selected, masked) => licensePlate.generate({ kind: selected.tipo as PlateKind, masked }),
   },
   {
     id: 'veiculo',
     run: () => {
-      const v = veiculo();
+      const car = vehicle();
       return {
-        veiculoMarca: v.marca,
-        veiculoModelo: v.modelo,
-        veiculoAno: v.ano,
-        placa: placa.generate(),
+        veiculoMarca: car.make,
+        veiculoModelo: car.model,
+        veiculoAno: car.year,
+        placa: licensePlate.generate(),
         renavam: renavam.generate(),
       };
     },
   },
   {
     id: 'cartao',
-    options: { bandeira: ['', ...Object.keys(BANDEIRAS)] },
-    run: (o, masked) => {
-      const c = cartaoCompleto({ bandeira: (o.bandeira || undefined) as Bandeira, masked });
+    options: { bandeira: ['', ...Object.keys(CARD_BRANDS)] },
+    run: (selected, masked) => {
+      const card = creditCardDetails({
+        brand: (selected.bandeira || undefined) as CardBrand,
+        masked,
+      });
       return {
-        cartaoNumero: c.numero,
-        cartaoBandeira: c.bandeira,
-        cartaoValidade: c.validade,
-        cartaoCvv: c.cvv,
+        cartaoNumero: card.number,
+        cartaoBandeira: card.brand,
+        cartaoValidade: card.expiry,
+        cartaoCvv: card.cvv,
       };
     },
   },
   {
     id: 'conta',
-    options: { banco: ['', ...Object.keys(BANCOS)] },
-    run: (o) => {
-      const c = contaBancaria({ banco: (o.banco || undefined) as Banco });
-      return { banco: c.banco, nomeBanco: c.nomeBanco, agencia: c.agencia, conta: c.conta };
+    options: { banco: ['', ...Object.keys(BANKS)] },
+    run: (selected) => {
+      const account = bankAccount({ bank: (selected.banco || undefined) as Bank });
+      return {
+        banco: account.bankCode,
+        nomeBanco: account.bankName,
+        agencia: account.branch,
+        conta: account.account,
+      };
     },
   },
   {
     id: 'nome',
     options: { sexo: ['', 'M', 'F'] },
-    run: (o) => nomeCompleto({ sexo: (o.sexo || undefined) as Sexo }),
+    run: (selected) => fullName({ sex: (selected.sexo || undefined) as Sex }),
   },
-  { id: 'email', run: () => email(nomeCompleto()) },
+  { id: 'email', run: () => email(fullName()) },
   {
     id: 'telefone',
     options: { tipo: ['celular', 'fixo'], uf: UF_OPT },
-    run: (o, masked) => telefone.generate({ uf: uf(o), tipo: o.tipo as TelefoneTipo, masked }),
+    run: (selected, masked) =>
+      phone.generate({ uf: uf(selected), kind: selected.tipo as PhoneKind, masked }),
   },
   {
     id: 'endereco',
     options: { uf: UF_OPT },
-    run: (o, masked) => ({ ...endereco({ uf: uf(o), masked }) }),
+    run: (selected, masked) => ({ ...address({ uf: uf(selected), masked }) }),
   },
   {
     id: 'nascimento',
     options: { idade: ['18-25', '26-40', '41-60', '61-90', '0-17'] },
-    run: (o) => {
-      const [min = 18, max = 60] = (o.idade ?? '18-60').split('-').map(Number);
-      return nascimento({ idadeMin: min, idadeMax: max });
+    run: (selected) => {
+      const [min = 18, max = 60] = (selected.idade ?? '18-60').split('-').map(Number);
+      return birthDate({ minAge: min, maxAge: max });
     },
   },
   {
     id: 'senha',
     options: { tamanho: ['12', '8', '16', '24', '32'], simbolos: ['sim', 'nao'] },
-    run: (o) => senha({ tamanho: Number(o.tamanho), simbolos: o.simbolos !== 'nao' }),
+    run: (selected) =>
+      password({ length: Number(selected.tamanho), symbols: selected.simbolos !== 'nao' }),
   },
   {
     id: 'lorem',
     options: { paragrafos: ['1', '2', '3', '5'] },
-    run: (o) => lorem({ paragrafos: Number(o.paragrafos) }),
+    run: (selected) => lorem({ paragraphs: Number(selected.paragrafos) }),
   },
-  { id: 'numero', run: () => String(numero({ min: 0, max: 100000 })) },
+  { id: 'numero', run: () => String(randomNumber({ min: 0, max: 100000 })) },
   { id: 'uuid', run: () => uuid() },
 ];
 
-export const defaultOptions = (g: GeneratorDef): Record<string, string> =>
-  Object.fromEntries(Object.entries(g.options ?? {}).map(([k, v]) => [k, v[0] ?? '']));
+export const defaultOptions = (generator: GeneratorDef): Record<string, string> =>
+  Object.fromEntries(
+    Object.entries(generator.options ?? {}).map(([name, choices]) => [name, choices[0] ?? '']),
+  );

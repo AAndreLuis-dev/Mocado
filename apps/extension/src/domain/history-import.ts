@@ -1,5 +1,5 @@
-import { FIELD_TYPES, type FieldType, type Perfil } from '@mocado/core';
-import { PERFIL_TIPOS, type HistoryRecord, type PerfilTipo, type Use } from './profile';
+import { FIELD_TYPES, type FieldType, type Profile } from '@mocado/core';
+import { PROFILE_KINDS, type HistoryRecord, type ProfileKind, type Use } from './profile';
 
 export interface HistoryExport {
   app: 'mocado';
@@ -26,30 +26,30 @@ const isUse = (u: unknown): u is Use =>
   typeof (u as Use).url === 'string' &&
   typeof (u as Use).at === 'number';
 
-export function sanitize(x: unknown): HistoryRecord | null {
-  if (!x || typeof x !== 'object') return null;
-  const r = x as Record<string, unknown>;
-  if (typeof r.id !== 'string' || !r.id || typeof r.createdAt !== 'number') return null;
-  if (!PERFIL_TIPOS.includes(r.tipo as PerfilTipo)) return null;
-  if (!r.values || typeof r.values !== 'object' || !Array.isArray(r.uses)) return null;
-  const values: Perfil = {};
-  for (const [k, v] of Object.entries(r.values as object))
-    if (FIELDS.has(k) && typeof v === 'string') values[k as FieldType] = v;
+export function sanitize(input: unknown): HistoryRecord | null {
+  if (!input || typeof input !== 'object') return null;
+  const raw = input as Record<string, unknown>;
+  if (typeof raw.id !== 'string' || !raw.id || typeof raw.createdAt !== 'number') return null;
+  if (!PROFILE_KINDS.includes(raw.tipo as ProfileKind)) return null;
+  if (!raw.values || typeof raw.values !== 'object' || !Array.isArray(raw.uses)) return null;
+  const values: Profile = {};
+  for (const [field, value] of Object.entries(raw.values as object))
+    if (FIELDS.has(field) && typeof value === 'string') values[field as FieldType] = value;
   return {
-    id: r.id,
-    label: typeof r.label === 'string' ? r.label : '',
-    tipo: r.tipo as PerfilTipo,
-    favorite: r.favorite === true,
-    createdAt: r.createdAt,
+    id: raw.id,
+    label: typeof raw.label === 'string' ? raw.label : '',
+    tipo: raw.tipo as ProfileKind,
+    favorite: raw.favorite === true,
+    createdAt: raw.createdAt,
     values,
-    uses: r.uses.filter(isUse).map(({ domain, url, at }) => ({ domain, url, at })),
+    uses: raw.uses.filter(isUse).map(({ domain, url, at }) => ({ domain, url, at })),
   };
 }
 
 export function parseImport(data: unknown): HistoryRecord[] {
   const raw = Array.isArray(data) ? data : (data as Partial<HistoryExport> | null)?.records;
   if (!Array.isArray(raw)) throw new Error('invalid-file');
-  return raw.map(sanitize).filter((r): r is HistoryRecord => r !== null);
+  return raw.map(sanitize).filter((record): record is HistoryRecord => record !== null);
 }
 
 export function mergeRecords(
@@ -57,7 +57,7 @@ export function mergeRecords(
   incoming: readonly HistoryRecord[],
   mode: ImportMode,
 ): HistoryRecord[] {
-  const byId = new Map((mode === 'replace' ? [] : existing).map((r) => [r.id, r]));
-  for (const r of incoming) byId.set(r.id, r);
+  const byId = new Map((mode === 'replace' ? [] : existing).map((record) => [record.id, record]));
+  for (const record of incoming) byId.set(record.id, record);
   return [...byId.values()];
 }

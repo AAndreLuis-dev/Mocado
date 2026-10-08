@@ -11,7 +11,7 @@ import { fieldLabel, plural, t } from '../../infra/browser/i18n';
 import { historyService } from '../../infra/container';
 import { watchStorage } from '../../infra/storage/stores';
 import { Button, CopyIconButton, IconButton } from '../components/controls';
-import { Stamp, TIPO_BG } from '../components/brand';
+import { Stamp, KIND_BADGE } from '../components/brand';
 import {
   Box,
   FormGrid,
@@ -43,7 +43,7 @@ function Record({
   return (
     <li data-testid="record" className="border-t-2 border-tinta/70 pt-3 pb-7">
       <div className="mb-3 flex items-center gap-2.5">
-        <span className={`rounded-sm px-1.5 py-0.5 text-[11px] font-bold ${TIPO_BG[r.tipo]}`}>
+        <span className={`rounded-sm px-1.5 py-0.5 text-[11px] font-bold ${KIND_BADGE[r.tipo]}`}>
           {t(`history.${r.tipo}`)}
         </span>
         <h3 className="min-w-0 truncate text-[19px] font-bold tracking-tight">
@@ -170,17 +170,17 @@ export function History() {
     const url = URL.createObjectURL(
       new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }),
     );
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `mocado-historico-${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `mocado-historico-${new Date().toISOString().slice(0, 10)}.json`;
+    link.click();
     URL.revokeObjectURL(url);
   }
 
   async function importJson(file: File) {
     try {
-      const n = await historyService.importFile(JSON.parse(await file.text()));
-      setMessage({ text: plural('history.imported', n) });
+      const count = await historyService.importFile(JSON.parse(await file.text()));
+      setMessage({ text: plural('history.imported', count) });
       refresh();
     } catch {
       setMessage({ text: t('history.importError'), error: true });
@@ -233,8 +233,8 @@ export function History() {
             accept="application/json,.json"
             className="sr-only"
             onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) void importJson(f);
+              const file = e.target.files?.[0];
+              if (file) void importJson(file);
               e.target.value = '';
             }}
           />

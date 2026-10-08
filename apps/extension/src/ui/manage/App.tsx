@@ -9,8 +9,8 @@ const TABS = ['history', 'options', 'overrides'] as const;
 export type Tab = (typeof TABS)[number];
 
 const fromHash = (fallback: Tab): Tab => {
-  const h = location.hash.slice(1);
-  return (TABS as readonly string[]).includes(h) ? (h as Tab) : fallback;
+  const hash = location.hash.slice(1);
+  return (TABS as readonly string[]).includes(hash) ? (hash as Tab) : fallback;
 };
 
 export function ManageApp({ initial }: { initial: Tab }) {

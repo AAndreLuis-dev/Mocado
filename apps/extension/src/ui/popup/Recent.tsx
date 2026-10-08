@@ -4,7 +4,7 @@ import { displayName, type HistoryRecord } from '../../domain/profile';
 import { t } from '../../infra/browser/i18n';
 import { historyService } from '../../infra/container';
 import { Button, IconButton } from '../components/controls';
-import { Stamp, TIPO_BG } from '../components/brand';
+import { Stamp, KIND_BADGE } from '../components/brand';
 import { Band, Box, FormGrid } from '../components/form';
 
 export function Recent({ onReuse }: { onReuse: (id: string) => void }) {
@@ -43,7 +43,7 @@ export function Recent({ onReuse }: { onReuse: (id: string) => void }) {
       {recent.map((r) => (
         <Box key={r.id} span="full" dense className="flex-row items-center gap-2.5">
           <span
-            className={`shrink-0 rounded-sm px-1.5 py-0.5 text-[10px] font-bold ${TIPO_BG[r.tipo]}`}
+            className={`shrink-0 rounded-sm px-1.5 py-0.5 text-[10px] font-bold ${KIND_BADGE[r.tipo]}`}
           >
             {t(`history.${r.tipo}`)}
           </span>
