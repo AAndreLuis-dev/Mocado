@@ -3,7 +3,9 @@ import { createMenus, onCommand, onMenuClick } from '@/src/background/menus';
 import type { BackgroundMessage, FillResult } from '@/src/messages';
 
 export default defineBackground(() => {
+  // Chrome keeps menus across restarts; Firefox event pages may not, so register on startup too.
   browser.runtime.onInstalled.addListener(createMenus);
+  browser.runtime.onStartup.addListener(createMenus);
   browser.contextMenus.onClicked.addListener((info, tab) => void onMenuClick(info, tab));
   browser.commands.onCommand.addListener((command, tab) => void onCommand(command, tab));
 

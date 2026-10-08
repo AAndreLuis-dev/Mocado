@@ -5,11 +5,13 @@ disclaimer: Dados fictícios, matematicamente válidos, apenas para testes de so
 popup:
   fillPage: Preencher página
   fillError: Não foi possível preencher esta página.
+  blocked: Esta página está na lista de domínios bloqueados (Opções).
   noFields: Nenhum campo reconhecido nesta página.
   masked: Com máscara
   generate: Gerar
   copy: Copiar
   copied: Copiado!
+  copyFailed: Falhou
   copyAll: Copiar tudo
   generator: Gerador
   history: Histórico

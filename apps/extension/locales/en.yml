@@ -5,11 +5,13 @@ disclaimer: Fictitious, mathematically valid data, for software testing only.
 popup:
   fillPage: Fill page
   fillError: Could not fill this page.
+  blocked: This site is on your blocked domains list (Options).
   noFields: No recognized fields on this page.
   masked: Masked
   generate: Generate
   copy: Copy
   copied: Copied!
+  copyFailed: Failed
   copyAll: Copy all
   generator: Generator
   history: History

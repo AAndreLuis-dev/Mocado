@@ -51,7 +51,8 @@ export function App() {
     const res = await sendToBackground({ type: 'fill-tab', tabId: tab.id, reuseId }).catch(
       () => null,
     );
-    if (!res || !res.ok) return setStatus(i18n.t('popup.fillError'));
+    if (!res || !res.ok)
+      return setStatus(i18n.t(res?.error === 'blocked' ? 'popup.blocked' : 'popup.fillError'));
     if (res.filled === 0) return setStatus(i18n.t('popup.noFields'));
     window.close();
   }
@@ -158,7 +159,7 @@ export function App() {
             </dl>
             <CopyButton
               value={entries.map(([k, v]) => `${fieldLabel(k)}: ${v}`).join('\n')}
-              label={i18n.t('popup.copyAll')}
+              text={i18n.t('popup.copyAll')}
             />
           </div>
         )}

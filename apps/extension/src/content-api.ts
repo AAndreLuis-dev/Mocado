@@ -18,7 +18,7 @@ export interface FillReport {
 /** What the content script exposes on `globalThis.__mocado` (called via scripting.executeScript). */
 export interface MocadoApi {
   scan(): Promise<ScanResult>;
-  fill(perfil: Perfil, opts?: { focusedOnly?: boolean }): Promise<FillReport>;
+  fill(perfil: Perfil): Promise<FillReport>;
   /** Writes a raw value into the focused field ("Gerar CPF aqui"). */
   fillFocused(value: string, type: FieldType): Promise<FillReport>;
   /** Saves a per-domain override for the focused field. */
