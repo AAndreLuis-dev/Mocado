@@ -1,9 +1,9 @@
 import { type Generator } from '../types';
 import { defaultRng, digits } from '../rng';
-import { allSame, maskIf, strip, toNums, weighted } from '../mask';
+import { allSame, maskIf, strip, toDigitValues, weighted } from '../mask';
 
 function dv(base8: string): string {
-  const r = weighted(toNums(base8), [9, 8, 7, 6, 5, 4, 3, 2]) % 11;
+  const r = weighted(toDigitValues(base8), [9, 8, 7, 6, 5, 4, 3, 2]) % 11;
   return r === 10 ? 'X' : String(r);
 }
 

@@ -1,26 +1,26 @@
 import { type Generator } from '../types';
 import { alnum, defaultRng, digits, pick } from '../rng';
-import { allSame, maskIf, mod11, strip, toNums } from '../mask';
+import { allSame, maskIf, mod11, strip, toDigitValues } from '../mask';
 
 const W1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
 const W2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
 
 function withDv(base12: string): string {
-  const d1 = mod11(toNums(base12), W1);
-  const d2 = mod11(toNums(base12 + d1), W2);
+  const d1 = mod11(toDigitValues(base12), W1);
+  const d2 = mod11(toDigitValues(base12 + d1), W2);
   return `${base12}${d1}${d2}`;
 }
 
 const format = (value: string, { masked }: { masked: boolean }) =>
   maskIf(strip(value), '##.###.###/####-##', masked);
 
-export type CnpjTipo = 'numerico' | 'alfanumerico' | 'aleatorio';
+export type CnpjKind = 'numerico' | 'alfanumerico' | 'aleatorio';
 
 export interface CnpjOptions {
-  tipo?: CnpjTipo;
+  kind?: CnpjKind;
 }
 
-function base(rng: () => number, tipo: CnpjTipo): string {
+function base(rng: () => number, tipo: CnpjKind): string {
   const kind = tipo === 'aleatorio' ? pick(rng, ['numerico', 'alfanumerico'] as const) : tipo;
   if (kind === 'numerico') return digits(rng, 8) + '0001';
   let root: string;
@@ -30,9 +30,9 @@ function base(rng: () => number, tipo: CnpjTipo): string {
 }
 
 export const cnpj: Generator<CnpjOptions> = {
-  generate({ tipo = 'numerico', rng = defaultRng, masked = true } = {}) {
+  generate({ kind = 'numerico', rng = defaultRng, masked = true } = {}) {
     let value: string;
-    do value = withDv(base(rng, tipo));
+    do value = withDv(base(rng, kind));
     while (allSame(value));
     return format(value, { masked });
   },
@@ -45,4 +45,4 @@ export const cnpj: Generator<CnpjOptions> = {
   format,
 };
 
-export const isCnpjAlfanumerico = (value: string): boolean => /[A-Z]/.test(strip(value));
+export const isAlphanumericCnpj = (value: string): boolean => /[A-Z]/.test(strip(value));

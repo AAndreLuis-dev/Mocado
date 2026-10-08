@@ -1,14 +1,14 @@
-import { UFS, type CnpjTipo, type UF } from '@mocado/core';
+import { UFS, type CnpjKind, type UF } from '@mocado/core';
 
 export type Theme = 'system' | 'light' | 'dark';
 export const THEMES: readonly Theme[] = ['system', 'light', 'dark'];
-export const CNPJ_TIPOS: readonly CnpjTipo[] = ['numerico', 'alfanumerico', 'aleatorio'];
+export const CNPJ_KINDS: readonly CnpjKind[] = ['numerico', 'alfanumerico', 'aleatorio'];
 
 export const IDADE_MAX = 120;
 
 export interface Settings {
   masked: boolean;
-  cnpjTipo: CnpjTipo;
+  cnpjTipo: CnpjKind;
   uf: UF | '';
   idadeMin: number;
   idadeMax: number;
@@ -32,37 +32,39 @@ export const DEFAULT_SETTINGS: Settings = {
 
 const oneOf = <T>(list: readonly T[], v: unknown, fallback: T): T =>
   list.includes(v as T) ? (v as T) : fallback;
-const bool = (v: unknown, fallback: boolean) => (typeof v === 'boolean' ? v : fallback);
-const age = (v: unknown, fallback: number) =>
-  typeof v === 'number' && Number.isFinite(v)
-    ? Math.max(0, Math.min(IDADE_MAX, Math.round(v)))
+const bool = (value: unknown, fallback: boolean) => (typeof value === 'boolean' ? value : fallback);
+const age = (value: unknown, fallback: number) =>
+  typeof value === 'number' && Number.isFinite(value)
+    ? Math.max(0, Math.min(IDADE_MAX, Math.round(value)))
     : fallback;
 
 export function normalizeSettings(raw: unknown): Settings {
-  const r = (raw && typeof raw === 'object' ? raw : {}) as Partial<Record<keyof Settings, unknown>>;
-  const d = DEFAULT_SETTINGS;
-  const idadeMin = age(r.idadeMin, d.idadeMin);
+  const stored = (raw && typeof raw === 'object' ? raw : {}) as Partial<
+    Record<keyof Settings, unknown>
+  >;
+  const defaults = DEFAULT_SETTINGS;
+  const idadeMin = age(stored.idadeMin, defaults.idadeMin);
   return {
-    masked: bool(r.masked, d.masked),
-    cnpjTipo: oneOf(CNPJ_TIPOS, r.cnpjTipo, d.cnpjTipo),
-    uf: oneOf<UF | ''>(['', ...UFS], r.uf, d.uf),
+    masked: bool(stored.masked, defaults.masked),
+    cnpjTipo: oneOf(CNPJ_KINDS, stored.cnpjTipo, defaults.cnpjTipo),
+    uf: oneOf<UF | ''>(['', ...UFS], stored.uf, defaults.uf),
     idadeMin,
-    idadeMax: Math.max(idadeMin, age(r.idadeMax, d.idadeMax)),
-    blockedDomains: Array.isArray(r.blockedDomains)
-      ? r.blockedDomains.filter((x): x is string => typeof x === 'string')
-      : d.blockedDomains,
-    theme: oneOf(THEMES, r.theme, d.theme),
-    fillPasswords: bool(r.fillPasswords, d.fillPasswords),
-    observe: bool(r.observe, d.observe),
+    idadeMax: Math.max(idadeMin, age(stored.idadeMax, defaults.idadeMax)),
+    blockedDomains: Array.isArray(stored.blockedDomains)
+      ? stored.blockedDomains.filter((domain): domain is string => typeof domain === 'string')
+      : defaults.blockedDomains,
+    theme: oneOf(THEMES, stored.theme, defaults.theme),
+    fillPasswords: bool(stored.fillPasswords, defaults.fillPasswords),
+    observe: bool(stored.observe, defaults.observe),
   };
 }
 
 export function withSetting<K extends keyof Settings>(
-  s: Settings,
+  settings: Settings,
   key: K,
   value: Settings[K],
 ): Settings {
-  const next = { ...s, [key]: value };
+  const next = { ...settings, [key]: value };
   if (key === 'idadeMin' && next.idadeMax < next.idadeMin) next.idadeMax = next.idadeMin;
   if (key === 'idadeMax' && next.idadeMin > next.idadeMax) next.idadeMin = next.idadeMax;
   return normalizeSettings(next);

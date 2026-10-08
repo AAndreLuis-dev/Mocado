@@ -14,7 +14,7 @@ test('menu "Marcar este campo como" saves a per-domain override', async ({
   pageErrors,
 }) => {
   const page = await context.newPage();
-  await page.goto('/nomes-ruins.html');
+  await page.goto('/bad-names.html');
   await page.locator('[name=campo8]').focus();
   await bg(page, 'onMenuClick', { menuItemId: 'mark:cpf' }, '$TAB');
   expect(cpf.validate(await page.locator('[name=campo8]').inputValue())).toBe(true);
@@ -38,7 +38,7 @@ test('shortcut "fill-field" fills only the focused field; "Gerar CNPJ aqui" forc
   bg,
 }) => {
   const page = await context.newPage();
-  await page.goto('/pf.html');
+  await page.goto('/person.html');
   await page.locator('#cpf').focus();
   const res = await bg(page, 'onCommand', 'fill-field', '$TAB');
   expect(res?.filled).toBe(1);
@@ -57,7 +57,7 @@ test('shortcut "fill-field" fills only the focused field; "Gerar CNPJ aqui" forc
 test('blocked domain: nothing is filled', async ({ context, sw, fill }) => {
   await setStorage(sw, { settings: { blockedDomains: ['localhost'] } });
   const page = await context.newPage();
-  await page.goto('/pf.html');
+  await page.goto('/person.html');
   const res = await fill(page);
   expect(res).toMatchObject({ ok: false, error: 'blocked' });
   expect(await page.locator('#nome').inputValue()).toBe('');
@@ -79,7 +79,7 @@ test('options: preferences are saved and used (UF, unmasked, passwords)', async 
   await expect(opts.getByRole('status')).toHaveText('Salvo.');
 
   const page = await context.newPage();
-  await page.goto('/pf.html');
+  await page.goto('/person.html');
   await fill(page);
   expect(await page.locator('#uf').inputValue()).toBe('PR');
   expect(await page.locator('#cep').inputValue()).toMatch(/^8\d{7}$/);
@@ -89,10 +89,10 @@ test('options: preferences are saved and used (UF, unmasked, passwords)', async 
 
 test('popup → background message path ("Preencher página")', async ({ context, sw }) => {
   const page = await context.newPage();
-  await page.goto('/pf.html');
+  await page.goto('/person.html');
   const tabId = await sw.evaluate(async () => {
     const g = globalThis as unknown as { chrome: typeof browser };
-    const [tab] = await g.chrome.tabs.query({ url: 'http://localhost:5174/pf.html' });
+    const [tab] = await g.chrome.tabs.query({ url: 'http://localhost:5174/person.html' });
     return tab!.id!;
   });
   const extId = new URL(sw.url()).host;

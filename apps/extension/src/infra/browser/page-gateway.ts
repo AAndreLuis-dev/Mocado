@@ -19,7 +19,7 @@ async function call<M extends Method>(tabId: number, method: M, ...args: Args<M>
 
 export const scriptingPageGateway: PageGateway = {
   scan: (tabId, ctx) => call(tabId, 'scan', ctx),
-  fill: (tabId, perfil, ctx) => call(tabId, 'fill', perfil, ctx),
+  fill: (tabId, profile, ctx) => call(tabId, 'fill', profile, ctx),
   fillFocused: (tabId, value, type, ctx) => call(tabId, 'fillFocused', value, type, ctx),
   focusedSelector: (tabId) => call(tabId, 'focusedSelector'),
 };

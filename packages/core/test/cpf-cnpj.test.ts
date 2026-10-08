@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { cnpj, cpf, cpfRegion, CPF_REGION, isCnpjAlfanumerico, mulberry32, UFS } from '../src';
+import { cnpj, cpf, cpfRegion, CPF_REGION, isAlphanumericCnpj, mulberry32, UFS } from '../src';
 import { mutateLastDigit, roundTrip } from './helpers';
 
 describe('cpf', () => {
@@ -47,12 +47,12 @@ describe('cnpj', () => {
     expect(cnpj.validate('12.ABC.345/01DE-3A')).toBe(false);
   });
 
-  test.each(['numerico', 'alfanumerico', 'aleatorio'] as const)('10k %s', (tipo) => {
-    const values = roundTrip(cnpj, { tipo }, 10000);
+  test.each(['numerico', 'alfanumerico', 'aleatorio'] as const)('10k %s', (kind) => {
+    const values = roundTrip(cnpj, { kind }, 10000);
     for (const v of values) expect(cnpj.validate(mutateLastDigit(v))).toBe(false);
-    const alfa = values.filter(isCnpjAlfanumerico).length;
-    if (tipo === 'numerico') expect(alfa).toBe(0);
-    if (tipo === 'alfanumerico') expect(alfa).toBe(values.length);
-    if (tipo === 'aleatorio') expect(alfa).toBeGreaterThan(values.length * 0.4);
+    const alphanumeric = values.filter(isAlphanumericCnpj).length;
+    if (kind === 'numerico') expect(alphanumeric).toBe(0);
+    if (kind === 'alfanumerico') expect(alphanumeric).toBe(values.length);
+    if (kind === 'aleatorio') expect(alphanumeric).toBeGreaterThan(values.length * 0.4);
   });
 });

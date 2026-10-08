@@ -7,21 +7,27 @@ export interface HistoryFilter {
   favoritesOnly?: boolean;
 }
 
-export function matches(r: HistoryRecord, f: HistoryFilter): boolean {
-  if (f.favoritesOnly && !r.favorite) return false;
-  if (f.domain && !r.uses.some((u) => u.domain === f.domain)) return false;
-  const q = f.query?.trim();
-  if (!q) return true;
-  const haystack = [r.label, ...Object.values(r.values), ...r.uses.map((u) => u.domain)].filter(
-    Boolean,
-  ) as string[];
-  const qa = alnum(q);
-  const qp = plain(q);
-  return haystack.some((h) => plain(h).includes(qp) || (qa.length >= 3 && alnum(h).includes(qa)));
+export function matches(record: HistoryRecord, filter: HistoryFilter): boolean {
+  if (filter.favoritesOnly && !record.favorite) return false;
+  if (filter.domain && !record.uses.some((use) => use.domain === filter.domain)) return false;
+  const query = filter.query?.trim();
+  if (!query) return true;
+  const haystack = [
+    record.label,
+    ...Object.values(record.values),
+    ...record.uses.map((use) => use.domain),
+  ].filter(Boolean) as string[];
+  const queryText = plain(query);
+  const queryChars = alnum(query);
+  return haystack.some(
+    (text) =>
+      plain(text).includes(queryText) ||
+      (queryChars.length >= 3 && alnum(text).includes(queryChars)),
+  );
 }
 
 export const byLastUse = (records: readonly HistoryRecord[]) =>
   [...records].sort((a, b) => lastUse(b) - lastUse(a));
 
-export const search = (records: readonly HistoryRecord[], f: HistoryFilter = {}) =>
-  byLastUse(records.filter((r) => matches(r, f)));
+export const search = (records: readonly HistoryRecord[], filter: HistoryFilter = {}) =>
+  byLastUse(records.filter((record) => matches(record, filter)));

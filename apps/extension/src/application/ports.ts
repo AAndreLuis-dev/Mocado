@@ -1,4 +1,4 @@
-import type { FieldType, Perfil } from '@mocado/core';
+import type { FieldType, Profile } from '@mocado/core';
 import type { Overrides } from '../domain/overrides';
 import type { HistoryRecord } from '../domain/profile';
 import type { Settings } from '../domain/settings';
@@ -39,7 +39,7 @@ export interface FillReport {
 
 export interface PageGateway {
   scan(tabId: number, ctx: PageContext): Promise<ScanResult>;
-  fill(tabId: number, perfil: Perfil, ctx: PageContext): Promise<FillReport>;
+  fill(tabId: number, profile: Profile, ctx: PageContext): Promise<FillReport>;
   fillFocused(tabId: number, value: string, type: FieldType, ctx: PageContext): Promise<FillReport>;
   focusedSelector(tabId: number): Promise<{ hostname: string; selector: string } | null>;
 }

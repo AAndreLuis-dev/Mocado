@@ -9,7 +9,7 @@ test('histórico: busca pelo CPF, reuso, export/import', async ({
 }) => {
   const extId = new URL(sw.url()).host;
   const form = await context.newPage();
-  await form.goto('/pf.html');
+  await form.goto('/person.html');
   const first = await fill(form);
   expect(first.recordId).toBeTruthy();
   const cpf = await form.locator('#cpf').inputValue();
@@ -32,7 +32,7 @@ test('histórico: busca pelo CPF, reuso, export/import', async ({
   await hist.getByRole('button', { name: 'Reusar este perfil' }).click();
   await expect(hist.getByText(/Fixado/)).toBeVisible();
   const again = await context.newPage();
-  await again.goto('/pf.html');
+  await again.goto('/person.html');
   const second = await fill(again);
   expect(second.recordId).toBe(first.recordId);
   expect(await again.locator('#cpf').inputValue()).toBe(cpf);
@@ -42,7 +42,7 @@ test('histórico: busca pelo CPF, reuso, export/import', async ({
   await expect(hist.getByText(/Usado em/)).toContainText(/localhost.*localhost/);
 
   const third = await context.newPage();
-  await third.goto('/pf.html');
+  await third.goto('/person.html');
   expect((await fill(third)).recordId).not.toBe(first.recordId);
   await expect(hist.getByTestId('record')).toHaveCount(2);
 
