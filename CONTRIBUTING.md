@@ -22,7 +22,7 @@ pnpm e2e     # Playwright carregando a extensão no Chromium
 - **Script injetado (`apps/extension/entrypoints/injected.ts`):** TS puro, sem React e sem o core (só tipos). O build falha se ele passar de 25 kB.
 - **Textos de UI:** sempre via `i18n.t(...)`, com a chave em `locales/pt_BR.yml` **e** `locales/en.yml` (um teste confere a paridade).
 - **Permissões:** só `activeTab`, `scripting`, `storage` e `contextMenus`. Não adicione host permissions fixas, requisições de rede nem telemetria.
-- **Novo campo detectável:** adicione o tipo em `FIELD_TYPES` (core), sinônimos em `apps/extension/src/detect/synonyms.ts`, casos em `classify.test.ts` e o rótulo `field.<tipo>` nos dois locales.
+- **Novo campo detectável:** adicione o tipo em `FIELD_TYPES` (core), sinônimos em `apps/extension/src/content/detect/synonyms.ts`, casos em `classify.test.ts` e o rótulo `field.<tipo>` nos dois locales.
 - **Formulário que o Mocado não preenche bem?** Adicione uma página em `apps/playground` e um caso no e2e.
 
 Decisões técnicas relevantes ficam em `docs/decisions.md`.

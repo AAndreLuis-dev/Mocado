@@ -86,7 +86,7 @@ O código é minificado pelo Vite/Rolldown, nunca ofuscado.
 ## 4. Imagens
 
 - [ ] **Ícone 128×128:** `apps/extension/public/icon/128.png` (fonte em `assets/icon.svg`; regenere com `pnpm --filter extension icons`)
-- [ ] **Screenshots 1280×800:** `pnpm --filter extension demo` grava os quadros em `apps/extension/.output/demo/*.png`. Sugeridos: formulário React preenchido, máscaras, cadastro PF, histórico com busca por CPF. Inclua também o popup (abra-o e capture manualmente).
+- [ ] **Screenshots 1280×800:** `pnpm --filter extension demo` grava os quadros em `apps/extension/.output/demo/*.png` (formulário React preenchido, máscaras, cadastro PF, histórico com busca por CPF, popup). Em `.output/demo/ui/` ficam popup, histórico, opções e campos corrigidos nos temas claro e escuro.
 - [ ] **GIF do README:** `docs/demo.gif` (gerado pelo mesmo comando)
 - [ ] **Tile promocional 440×280 (Chrome, opcional):** ícone + "Mocado: dados de teste brasileiros"
 

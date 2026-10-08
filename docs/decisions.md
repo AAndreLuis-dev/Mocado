@@ -77,4 +77,16 @@ Formato: data, decisão e porquê. A mais recente fica no fim.
 - **Ícones** gerados a partir de `assets/icon.svg` pelo Chromium do Playwright (`pnpm --filter extension icons`), sem nova dependência. Os PNGs são versionados.
 - **GIF do README:** quadros 1280×800 capturados por uma spec do Playwright que só roda com `MOCADO_DEMO=1`. O Pillow monta o GIF (~160 KB). Os mesmos quadros servem de screenshots para as lojas.
 - **i18n:** um teste garante que `en.yml` tem exatamente as mesmas chaves de `pt_BR.yml`. Contagens usam a forma plural do `@wxt-dev/i18n`.
-- **Orçamento do script injetado:** 25 kB, verificado no build (hoje são 16,4 kB).
+- **Orçamento do script injetado:** 25 kB, verificado no build (eram 16,4 kB; depois da reorganização, 15,4 kB).
+
+## 2026-10-08: Revisão para a 0.1.0: Clean Architecture e identidade visual
+
+- **Camadas:** `domain` (regras puras) → `application` (portas + casos de uso) → `infra` / `content` / `ui`. Uma regra `no-restricted-imports` + `no-restricted-globals` por camada no `eslint.config.js` impede que o domínio e a aplicação toquem em `browser.*`, React ou camadas externas, e que o `content` importe valores do core. Substitui o `StorageAdapter` de `src/history.ts`: o `HistoryRepository` só persiste; busca, import/export e merge viraram funções puras do domínio.
+- **Casos de uso por fábrica** (`makeFillForm(deps)`), sem classes nem framework de DI. O único lugar que escolhe adaptadores reais é `infra/container.ts`. Os testes usam fakes em memória das mesmas portas.
+- **O script da página não lê storage:** settings e overrides chegam num `PageContext` a cada chamada, e a regra de domínio bloqueado mora no caso de uso. O injetado ficou menor (15,4 kB) e testável por inteiro em jsdom (`createPageApi`).
+- **"Marcar este campo como"** agora é o caso de uso `fillField.markAs`: a página só devolve o seletor estável do campo focado; quem grava o override é a aplicação.
+- **`normalizeSettings`** valida o que vem do storage (enum, UF, idade de 0 a 120 com mín ≤ máx); a regra de idade saiu da tela de Opções.
+- **Correções da revisão:** botão "Copiar tudo" mostrava "Copiar"; domínio bloqueado aparecia como erro genérico no popup; menus de contexto agora também são registrados no `onStartup` (event pages do Firefox); falha de clipboard tratada; código morto `fill({ focusedOnly })` removido; remoção de acentos centralizada (`semAcento` no core, `domain/text.ts` na extensão).
+- **Identidade visual "Ficha + carimbo":** papel frio (`#F3F5F7`, não creme), azul de caneta esferográfica para ações (`#2448C8`), carimbo violeta (`#7A2E8E`) para "Fictício" e "Fixado". O carimbo é o único elemento ousado e o único movimento (desligado com `prefers-reduced-motion`). O picote no topo marca dados gerados (fichas do popup e do histórico); painéis de configuração não têm picote.
+- **Tipografia:** Atkinson Hyperlegible Next (UI) e Mono (valores), empacotadas via `@fontsource-variable` (~88 kB, nenhuma requisição de rede). Escolhidas porque em documentos gerados 0/O e 1/l/I precisam ser inconfundíveis.
+- **Ícones:** `lucide-react` (tree-shaken). Switches são `<input type="checkbox" role="switch">`, o que mantém a semântica de checkbox para formulários e testes.
