@@ -1,39 +1,50 @@
 import { ChevronDown } from 'lucide-react';
-import type {
-  InputHTMLAttributes,
-  ReactNode,
-  SelectHTMLAttributes,
-  TextareaHTMLAttributes,
+import {
+  createContext,
+  useContext,
+  type InputHTMLAttributes,
+  type ReactNode,
+  type SelectHTMLAttributes,
+  type TextareaHTMLAttributes,
 } from 'react';
 
-/*
- * A printed form filled in by hand: boxes with shared rules and a small printed label in the
- * corner; whatever the user chose is written in ballpoint blue (`caneta`).
- */
+const COLS = {
+  2: ['sm:grid-cols-2', 'grid-cols-2'],
+  3: ['sm:grid-cols-3', 'grid-cols-3'],
+  4: ['sm:grid-cols-4', 'grid-cols-4'],
+} as const;
 
-const COLS = { 2: 'sm:grid-cols-2', 3: 'sm:grid-cols-3', 4: 'sm:grid-cols-4' } as const;
-const SPAN = { 1: '', 2: 'sm:col-span-2', 3: 'sm:col-span-3', full: 'col-span-full' } as const;
+const SPAN = {
+  1: ['', ''],
+  2: ['sm:col-span-2', 'col-span-2'],
+  3: ['sm:col-span-3', 'col-span-3'],
+  full: ['col-span-full', 'col-span-full'],
+} as const;
 
-/** Grid of boxes. Each cell draws its right/bottom rule; the grid draws the top/left one. */
+const Fixed = createContext(false);
+
 export function FormGrid({
   cols = 2,
+  fixed = false,
+  bare = false,
   className = '',
   children,
 }: {
   cols?: keyof typeof COLS;
+  fixed?: boolean;
+  bare?: boolean;
   className?: string;
   children: ReactNode;
 }) {
+  const layout = fixed ? COLS[cols][1] : `grid-cols-1 ${COLS[cols][0]}`;
+  const rules = bare ? '' : 'border-t border-l border-tinta/25';
   return (
-    <div
-      className={`grid grid-cols-1 border-t border-l border-tinta/25 ${COLS[cols]} ${className}`}
-    >
-      {children}
-    </div>
+    <Fixed.Provider value={fixed}>
+      <div className={`grid ${layout} ${rules} ${className}`}>{children}</div>
+    </Fixed.Provider>
   );
 }
 
-/** Section band across the whole form ("Dados gerados"). */
 export function Band({ children, aside }: { children: ReactNode; aside?: ReactNode }) {
   return (
     <div className="col-span-full flex min-h-9 items-center justify-between gap-3 border-r border-b border-tinta/25 bg-pauta px-3 py-1">
@@ -43,7 +54,6 @@ export function Band({ children, aside }: { children: ReactNode; aside?: ReactNo
   );
 }
 
-/** One form box: printed label on top, the filled-in content below. */
 export function Box({
   label,
   htmlFor,
@@ -55,14 +65,14 @@ export function Box({
   label?: ReactNode;
   htmlFor?: string;
   span?: keyof typeof SPAN;
-  /** A one-line strip (notes, usage) instead of a full-height field. */
   dense?: boolean;
   className?: string;
   children: ReactNode;
 }) {
+  const fixed = useContext(Fixed);
   return (
     <div
-      className={`flex min-w-0 ${dense ? 'py-2' : 'min-h-16 pt-1.5 pb-2'} flex-col gap-1 border-r border-b border-tinta/25 px-3 transition-colors focus-within:bg-caneta-claro/60 ${SPAN[span]} ${className}`}
+      className={`flex min-w-0 ${dense ? 'py-2' : 'min-h-16 pt-1.5 pb-2'} flex-col gap-1 border-r border-b border-tinta/25 px-3 transition-colors focus-within:bg-caneta-claro/60 ${SPAN[span][fixed ? 1 : 0]} ${className}`}
     >
       {label && (
         <label htmlFor={htmlFor} className="text-[11.5px] leading-tight text-grafite">
@@ -204,7 +214,7 @@ export function ValueBox({
     <Box label={label} span={span}>
       <span className="flex items-center gap-1">
         <span
-          className={`min-w-0 flex-1 truncate font-mono text-[14px] tabular-nums ${pen}`}
+          className={`min-w-0 flex-1 truncate font-mono text-[13px] tracking-tight tabular-nums ${pen}`}
           title={value}
         >
           {value}
@@ -214,3 +224,17 @@ export function ValueBox({
     </Box>
   );
 }
+
+export const LONG_FIELDS = new Set<string>([
+  'nome',
+  'mae',
+  'pai',
+  'email',
+  'logradouro',
+  'complemento',
+  'razaoSocial',
+  'nomeFantasia',
+  'cartaoNome',
+  'certidao',
+  'texto',
+]);

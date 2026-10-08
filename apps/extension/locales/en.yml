@@ -21,6 +21,7 @@ popup:
   pinned: 'Next fill will use: $1'
   unpin: Unpin
   fictitious: Fictitious
+  standalone: Standalone generator
 
 gen:
   cpf: CPF

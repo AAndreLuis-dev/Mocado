@@ -3,14 +3,12 @@ import { useEffect, useState } from 'react';
 import { t } from '../../infra/browser/i18n';
 import { sendToBackground } from '../../infra/browser/messages';
 import { activeTabId, openHistory, openOptions, shortcuts } from '../../infra/browser/navigation';
-import { Button, Kbd, Switch } from '../components/controls';
-import { Logo } from '../components/ficha';
+import { Button, Kbd } from '../components/controls';
+import { Logo } from '../components/brand';
 import { Generator } from './Generator';
 import { Recent } from './Recent';
-import { load, save } from './local';
 
 export function App() {
-  const [masked, setMasked] = useState(() => load('mocado.masked', '1') === '1');
   const [status, setStatus] = useState('');
   const [fillKeys, setFillKeys] = useState('');
 
@@ -31,25 +29,34 @@ export function App() {
   }
 
   return (
-    <main className="flex w-[380px] flex-col bg-papel font-sans text-tinta">
-      <header className="flex items-center gap-2 px-4 pt-3.5">
+    <main className="flex w-[380px] flex-col bg-ficha font-sans text-tinta">
+      <header className="flex items-center gap-2 px-4 pt-3.5 pb-3">
         <Logo size={22} />
         <h1 className="text-[17px] font-bold tracking-tight">{t('extName')}</h1>
-        <Switch
-          className="ml-auto items-center text-[13px] text-grafite"
-          label={t('popup.masked')}
-          checked={masked}
-          onChange={(e) => {
-            setMasked(e.target.checked);
-            save('mocado.masked', e.target.checked ? '1' : '0');
-          }}
-        />
+        <nav className="ml-auto flex">
+          <Button
+            variant="ghost"
+            className="min-h-7 px-2"
+            icon={<History size={15} />}
+            onClick={() => void openHistory()}
+          >
+            {t('popup.history')}
+          </Button>
+          <Button
+            variant="ghost"
+            className="min-h-7 px-2"
+            icon={<Settings2 size={15} />}
+            onClick={() => void openOptions()}
+          >
+            {t('popup.options')}
+          </Button>
+        </nav>
       </header>
 
-      <div className="px-4 pt-3">
+      <div className="px-4 pb-4">
         <Button
           variant="primary"
-          className="h-11 w-full rounded-lg text-[15px]"
+          className="h-11 w-full rounded-md text-[15px]"
           icon={<WandSparkles size={17} />}
           onClick={() => void fillPage()}
         >
@@ -57,25 +64,21 @@ export function App() {
           {fillKeys && <Kbd keys={fillKeys} className="ml-auto opacity-80" />}
         </Button>
         {status && (
-          <p role="alert" className="mt-2 rounded-md bg-erro-claro px-3 py-2 text-[13px] text-erro">
+          <p
+            role="alert"
+            className="mt-2 border-l-4 border-erro bg-erro-claro px-3 py-2 text-[13px] text-erro"
+          >
             {status}
           </p>
         )}
       </div>
 
-      <Generator masked={masked} />
+      <div className="px-4">
+        <Generator />
+        <Recent onReuse={(id) => void fillPage(id)} />
+      </div>
 
-      <Recent onReuse={(id) => void fillPage(id)} />
-
-      <footer className="mt-1 flex flex-col gap-2 border-t border-linha px-4 pt-2 pb-3">
-        <nav className="-mx-2 flex gap-1">
-          <Button variant="ghost" icon={<History size={15} />} onClick={() => void openHistory()}>
-            {t('popup.history')}
-          </Button>
-          <Button variant="ghost" icon={<Settings2 size={15} />} onClick={() => void openOptions()}>
-            {t('popup.options')}
-          </Button>
-        </nav>
+      <footer className="px-4 pt-3 pb-3.5">
         <p className="text-[11px] leading-snug text-grafite">{t('disclaimer')}</p>
       </footer>
     </main>

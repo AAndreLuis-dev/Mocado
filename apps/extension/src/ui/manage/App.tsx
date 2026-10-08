@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { t } from '../../infra/browser/i18n';
-import { Logo } from '../components/ficha';
+import { Logo } from '../components/brand';
 import { History } from './History';
 import { Options } from './Options';
 import { Overrides } from './Overrides';

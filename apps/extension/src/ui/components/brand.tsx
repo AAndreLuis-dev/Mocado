@@ -1,22 +1,4 @@
 import type { ReactNode } from 'react';
-import { CopyIconButton } from './controls';
-
-/** A form slip: white card with a perforated top edge. */
-export function Ficha({
-  children,
-  className = '',
-  ...props
-}: { children: ReactNode; className?: string } & React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={`relative rounded-lg border border-linha bg-ficha shadow-[0_1px_0_var(--linha)] ${className}`}
-      {...props}
-    >
-      <div aria-hidden className="picote h-1.5 rounded-t-lg" />
-      {children}
-    </div>
-  );
-}
 
 /** Rubber stamp ("FICTÍCIO", "FIXADO"). `replay` changes → the stamp hits the paper again. */
 export function Stamp({
@@ -39,33 +21,6 @@ export function Stamp({
     >
       {children}
     </span>
-  );
-}
-
-/** Ruled list of label/value rows, each copyable (generated profiles, history details). */
-export function FieldList({
-  entries,
-  labelOf,
-  className = '',
-}: {
-  entries: [string, string][];
-  labelOf: (key: string) => string;
-  className?: string;
-}) {
-  return (
-    <dl className={`divide-y divide-pauta ${className}`}>
-      {entries.map(([k, v]) => (
-        <div key={k} className="flex items-center gap-2 py-1.5">
-          <div className="min-w-0 flex-1">
-            <dt className="text-[11px] text-grafite">{labelOf(k)}</dt>
-            <dd className="truncate font-mono text-[13px] tabular-nums" title={v}>
-              {v}
-            </dd>
-          </div>
-          <CopyIconButton value={v} label={labelOf(k)} />
-        </div>
-      ))}
-    </dl>
   );
 }
 

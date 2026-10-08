@@ -25,7 +25,7 @@ describe('popup', () => {
   test('mask toggle and regenerate', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('switch'));
+    await user.click(screen.getByRole('checkbox', { name: /máscara/i }));
     const first = screen.getByTestId('result').textContent!;
     expect(first).toMatch(/^\d{11}$/);
     await user.click(screen.getByRole('button', { name: /gerar outro/i }));
@@ -46,7 +46,7 @@ describe('popup', () => {
     const user = userEvent.setup();
     render(<App />);
     await user.selectOptions(screen.getByLabelText(/gerador/i), 'pessoa');
-    const list = document.querySelector('dl')! as HTMLElement;
+    const list = screen.getByTestId('result-fields');
     expect(within(list).getByText('CPF')).toBeTruthy();
     expect(within(list).getAllByRole('button').length).toBeGreaterThan(30);
   });
@@ -58,7 +58,8 @@ describe('popup', () => {
     for (const opt of [...select.options]) {
       await user.selectOptions(select, opt.value);
       const out =
-        screen.queryByTestId('result')?.textContent ?? document.querySelector('dl')?.textContent;
+        screen.queryByTestId('result')?.textContent ??
+        screen.queryByTestId('result-fields')?.textContent;
       expect(out, opt.value).toBeTruthy();
     }
   });

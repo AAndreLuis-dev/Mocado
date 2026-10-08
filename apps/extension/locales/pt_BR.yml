@@ -21,6 +21,7 @@ popup:
   pinned: 'Próximo preenchimento usará: $1'
   unpin: Desafixar
   fictitious: Fictício
+  standalone: Gerador avulso
 
 gen:
   cpf: CPF

@@ -1,5 +1,4 @@
 import { ChevronDown, Download, Star, Trash2, Upload, WandSparkles } from 'lucide-react';
-import type { FieldType } from '@mocado/core';
 import { useEffect, useState } from 'react';
 import {
   domains,
@@ -12,14 +11,16 @@ import { fieldLabel, plural, t } from '../../infra/browser/i18n';
 import { historyService } from '../../infra/container';
 import { watchStorage } from '../../infra/storage/stores';
 import { Button, CopyIconButton, IconButton } from '../components/controls';
-import { Stamp, TIPO_BG } from '../components/ficha';
-import { Box, FormGrid, PenCheck, PenInput, PenSelect, ValueBox } from '../components/form';
-
-/** Free-text values get a double-width box, like the name line of a paper form. */
-const WIDE = new Set<FieldType>([
-  'nome', 'mae', 'pai', 'email', 'logradouro', 'complemento', 'razaoSocial', 'nomeFantasia',
-  'cartaoNome', 'certidao', 'texto',
-]); // prettier-ignore
+import { Stamp, TIPO_BG } from '../components/brand';
+import {
+  Box,
+  FormGrid,
+  LONG_FIELDS,
+  PenCheck,
+  PenInput,
+  PenSelect,
+  ValueBox,
+} from '../components/form';
 
 const when = (at: number) =>
   new Date(at).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' });
@@ -93,7 +94,7 @@ function Record({
               key={k}
               label={fieldLabel(k)}
               value={v}
-              span={WIDE.has(k) ? 2 : 1}
+              span={LONG_FIELDS.has(k) ? 2 : 1}
               action={<CopyIconButton value={v} label={fieldLabel(k)} />}
             />
           ))}
