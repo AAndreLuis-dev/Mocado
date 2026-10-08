@@ -90,3 +90,10 @@ Formato: data, decisão e porquê. A mais recente fica no fim.
 - **Identidade visual "Ficha + carimbo":** papel frio (`#F3F5F7`, não creme), azul de caneta esferográfica para ações (`#2448C8`), carimbo violeta (`#7A2E8E`) para "Fictício" e "Fixado". O carimbo é o único elemento ousado e o único movimento (desligado com `prefers-reduced-motion`). O picote no topo marca dados gerados (fichas do popup e do histórico); painéis de configuração não têm picote.
 - **Tipografia:** Atkinson Hyperlegible Next (UI) e Mono (valores), empacotadas via `@fontsource-variable` (~88 kB, nenhuma requisição de rede). Escolhidas porque em documentos gerados 0/O e 1/l/I precisam ser inconfundíveis.
 - **Ícones:** `lucide-react` (tree-shaken). Switches são `<input type="checkbox" role="switch">`, o que mantém a semântica de checkbox para formulários e testes.
+
+## 2026-10-08: Página de configurações como formulário impresso
+
+- **O kit genérico de configurações saiu** (barra lateral com ícones, cartões com divisórias, switches de celular, selects alinhados à direita). No lugar dele entrou um formulário de repartição preenchido à caneta: caixas com bordas compartilhadas e o rótulo impresso miúdo no canto (`ui/components/form.tsx`: `FormGrid`, `Box`, `Band`), valores do usuário em azul de caneta, quadradinhos marcados com um X de caneta (`PenCheck`) e bolinhas preenchidas (`PenRadio`). Seções viram faixas cinza, o campo de domínios bloqueados é pautado e "Salvo" é o carimbo, que bate a cada gravação.
+- **Navegação** por abas de pasta presas à folha, sem barra lateral. O título da aba não se repete na folha (fica só para leitor de tela).
+- **Histórico:** cada perfil é a ficha de cadastro preenchida. Os valores principais e os detalhes usam as mesmas caixas, e textos longos (nomes, e-mail, logradouro) ocupam caixa dupla.
+- O popup mantém os componentes de `controls.tsx` (switch, select com borda); o formulário vale para as páginas inteiras.

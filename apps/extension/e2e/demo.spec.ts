@@ -53,6 +53,7 @@ test('demo frames', async ({ context, sw, fill }) => {
       (t) =>
         (globalThis as unknown as { chrome: typeof browser }).chrome.storage.local.set({
           settings: { theme: t },
+          overrides: { localhost: { 'input[name="campo8"]': 'cpf', '#doc-cliente': 'cnpj' } },
         }),
       theme,
     );

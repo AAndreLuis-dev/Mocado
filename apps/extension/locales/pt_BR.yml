@@ -127,7 +127,7 @@ history:
   favoritesOnly: Só favoritos
   empty: Nenhum perfil ainda. Preencha um formulário para começar.
   noResults: Nada encontrado.
-  labelPlaceholder: 'Sem rótulo (ex.: admin teste)'
+  labelPlaceholder: 'ex.: admin teste'
   labelAria: Rótulo do perfil
   favorite: Favoritar
   unfavorite: Remover dos favoritos
@@ -151,6 +151,9 @@ history:
   empresa: Empresa
   avulso: Avulso
   pinnedStamp: Fixado
+  searchLabel: Buscar
+  domain: Domínio
+  label: Rótulo
 
 cmdFillForm: Preencher o formulário inteiro
 cmdFillField: Preencher só o campo focado
@@ -198,3 +201,5 @@ overrides:
   empty: Nenhuma correção salva.
   remove: Remover
   removeDomain: Remover todas deste domínio
+  selector: Campo (seletor)
+  type: Tratar como

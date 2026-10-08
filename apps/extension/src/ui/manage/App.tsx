@@ -1,5 +1,4 @@
-import { History as HistoryIcon, SlidersHorizontal, Wrench } from 'lucide-react';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { t } from '../../infra/browser/i18n';
 import { Logo } from '../components/ficha';
 import { History } from './History';
@@ -9,18 +8,15 @@ import { Overrides } from './Overrides';
 const TABS = ['history', 'options', 'overrides'] as const;
 export type Tab = (typeof TABS)[number];
 
-const ICONS: Record<Tab, ReactNode> = {
-  history: <HistoryIcon size={17} />,
-  options: <SlidersHorizontal size={17} />,
-  overrides: <Wrench size={17} />,
-};
-
 const fromHash = (fallback: Tab): Tab => {
   const h = location.hash.slice(1);
   return (TABS as readonly string[]).includes(h) ? (h as Tab) : fallback;
 };
 
-/** History, Options and field corrections share one app (two entrypoints pick the initial tab). */
+/**
+ * History, Options and field corrections share one app (two entrypoints pick the initial tab).
+ * Laid out as a sheet in a file folder: the tabs are the folder's index tabs.
+ */
 export function ManageApp({ initial }: { initial: Tab }) {
   const [tab, setTab] = useState<Tab>(() => fromHash(initial));
   useEffect(() => {
@@ -31,48 +27,47 @@ export function ManageApp({ initial }: { initial: Tab }) {
 
   return (
     <div className="min-h-screen bg-papel font-sans text-tinta">
-      <div className="mx-auto grid max-w-5xl gap-6 px-4 py-6 sm:grid-cols-[13rem_1fr] sm:gap-10 sm:px-6 sm:py-10">
-        <aside className="flex flex-col gap-5 sm:sticky sm:top-10 sm:self-start">
+      <div className="mx-auto max-w-4xl px-3 pt-6 pb-16 sm:px-8 sm:pt-10">
+        <header className="mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 px-1">
           <div className="flex items-center gap-2.5">
             <Logo size={30} />
-            <span className="text-xl font-bold tracking-tight">{t('extName')}</span>
+            <span className="text-[22px] font-bold tracking-tight">{t('extName')}</span>
           </div>
-          <nav
-            role="tablist"
-            aria-orientation="vertical"
-            className="-mx-1 flex gap-1 overflow-x-auto sm:flex-col"
-          >
-            {TABS.map((id) => (
-              <a
-                key={id}
-                role="tab"
-                href={`#${id}`}
-                aria-selected={tab === id}
-                className={`flex shrink-0 items-center gap-2.5 rounded-md px-3 py-2 text-sm font-semibold transition-colors ${
-                  tab === id
-                    ? 'bg-ficha text-caneta shadow-[inset_3px_0_0_var(--caneta)] ring-1 ring-linha'
-                    : 'text-grafite hover:bg-pauta hover:text-tinta'
-                }`}
-              >
-                {ICONS[id]}
-                {t(`tabs.${id}`)}
-              </a>
-            ))}
-          </nav>
-          <p className="hidden text-xs leading-relaxed text-grafite sm:block">{t('disclaimer')}</p>
-        </aside>
+          <p className="text-xs text-grafite">{t('disclaimer')}</p>
+        </header>
 
-        <main role="tabpanel" className="min-w-0">
+        <nav
+          role="tablist"
+          className="relative z-10 -mb-px flex gap-1 overflow-x-auto px-3 sm:px-5"
+        >
+          {TABS.map((id) => (
+            <a
+              key={id}
+              role="tab"
+              href={`#${id}`}
+              aria-selected={tab === id}
+              className={`shrink-0 rounded-t-lg border px-4 pt-2 pb-2 text-sm font-semibold transition-colors ${
+                tab === id
+                  ? 'border-tinta/25 border-b-ficha bg-ficha text-tinta'
+                  : 'border-transparent text-grafite hover:bg-pauta hover:text-tinta'
+              }`}
+            >
+              {t(`tabs.${id}`)}
+            </a>
+          ))}
+        </nav>
+
+        <main
+          role="tabpanel"
+          className="rounded-lg border border-tinta/25 bg-ficha px-4 pt-6 pb-8 shadow-[0_1px_0_var(--linha),0_12px_32px_-24px_rgb(28_35_48/0.35)] sm:px-8 sm:pt-8"
+        >
           <header className="mb-6">
-            <h1 className="text-[28px] leading-tight font-bold tracking-tight">
-              {t(`tabs.${tab}`)}
-            </h1>
-            <p className="mt-1 max-w-prose text-[15px] text-grafite">{t(`tabs.${tab}Hint`)}</p>
+            <h1 className="sr-only">{t(`tabs.${tab}`)}</h1>
+            <p className="max-w-prose text-[15px] text-grafite">{t(`tabs.${tab}Hint`)}</p>
           </header>
           {tab === 'history' && <History />}
           {tab === 'options' && <Options />}
           {tab === 'overrides' && <Overrides />}
-          <p className="mt-10 text-xs text-grafite sm:hidden">{t('disclaimer')}</p>
         </main>
       </div>
     </div>

@@ -5,20 +5,14 @@ import { CopyIconButton } from './controls';
 export function Ficha({
   children,
   className = '',
-  perforated = true,
   ...props
-}: {
-  children: ReactNode;
-  className?: string;
-  /** The torn-off edge marks generated data; plain panels (settings) go without. */
-  perforated?: boolean;
-} & React.HTMLAttributes<HTMLDivElement>) {
+}: { children: ReactNode; className?: string } & React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={`relative rounded-lg border border-linha bg-ficha shadow-[0_1px_0_var(--linha)] ${className}`}
       {...props}
     >
-      {perforated && <div aria-hidden className="picote h-1.5 rounded-t-lg" />}
+      <div aria-hidden className="picote h-1.5 rounded-t-lg" />
       {children}
     </div>
   );
