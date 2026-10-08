@@ -127,7 +127,7 @@ history:
   favoritesOnly: Favorites only
   empty: No profiles yet. Fill a form to get started.
   noResults: Nothing found.
-  labelPlaceholder: 'No label (e.g. admin test)'
+  labelPlaceholder: 'e.g. admin test'
   labelAria: Profile label
   favorite: Favorite
   unfavorite: Remove from favorites
@@ -151,6 +151,9 @@ history:
   empresa: Company
   avulso: Single field
   pinnedStamp: Pinned
+  searchLabel: Search
+  domain: Domain
+  label: Label
 
 cmdFillForm: Fill the whole form
 cmdFillField: Fill only the focused field
@@ -198,3 +201,5 @@ overrides:
   empty: No saved corrections.
   remove: Remove
   removeDomain: Remove all for this domain
+  selector: Field (selector)
+  type: Treat as

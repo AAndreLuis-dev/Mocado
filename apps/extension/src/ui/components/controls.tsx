@@ -148,9 +148,6 @@ export function Select({
   );
 }
 
-export const inputClass =
-  'h-8 rounded-md border border-linha bg-ficha px-2.5 text-sm text-tinta placeholder:text-grafite/80 hover:border-grafite/60';
-
 /** "Ctrl+Shift+F" as keycaps. */
 export function Kbd({ keys, className = '' }: { keys: string; className?: string }) {
   return (

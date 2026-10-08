@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import type { Overrides as Data } from '../../domain/overrides';
 import { fieldLabel, t } from '../../infra/browser/i18n';
 import { preferences } from '../../infra/container';
-import { Button, IconButton, Select } from '../components/controls';
-import { Ficha } from '../components/ficha';
+import { Button } from '../components/controls';
+import { Band, Box, FormGrid, PenSelect } from '../components/form';
 
 export function Overrides() {
   const [data, setData] = useState<Data>({});
@@ -19,39 +19,40 @@ export function Overrides() {
   const hosts = Object.keys(data).sort();
   if (hosts.length === 0)
     return (
-      <Ficha className="border-dashed">
-        <p className="px-6 py-12 text-center text-grafite">{t('overrides.empty')}</p>
-      </Ficha>
+      <p className="border-2 border-dashed border-linha px-6 py-14 text-center text-grafite">
+        {t('overrides.empty')}
+      </p>
     );
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       {hosts.map((host) => (
-        <Ficha key={host} perforated={false}>
-          <div className="px-5 pt-3 pb-4">
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="truncate text-[17px] font-bold">{host}</h2>
+        <FormGrid key={host} cols={4}>
+          <Band
+            aside={
               <Button
                 variant="ghost"
+                className="min-h-7 text-xs"
                 onClick={() => void preferences.removeOverride(host).then(refresh)}
               >
                 {t('overrides.removeDomain')}
               </Button>
-            </div>
-            <ul className="mt-2 flex flex-col divide-y divide-pauta">
-              {Object.entries(data[host] ?? {}).map(([selector, type]) => (
-                <li
-                  key={selector}
-                  data-testid="override"
-                  className="flex flex-wrap items-center gap-2 py-2"
-                >
-                  <code
-                    className="min-w-0 flex-1 truncate rounded bg-papel px-2 py-1 font-mono text-xs text-grafite"
-                    title={selector}
-                  >
+            }
+          >
+            {host}
+          </Band>
+          {Object.entries(data[host] ?? {}).map(([selector, type], i) => {
+            const id = `ov-${host}-${i}`;
+            return (
+              <div key={selector} data-testid="override" className="contents">
+                <Box span={2} label={t('overrides.selector')}>
+                  <code className="truncate font-mono text-[13px] text-tinta" title={selector}>
                     {selector}
                   </code>
-                  <Select
+                </Box>
+                <Box label={t('overrides.type')} htmlFor={id}>
+                  <PenSelect
+                    id={id}
                     aria-label={selector}
                     value={type}
                     onChange={(e) =>
@@ -65,19 +66,22 @@ export function Overrides() {
                         {fieldLabel(ft)}
                       </option>
                     ))}
-                  </Select>
-                  <IconButton
-                    label={t('overrides.remove')}
+                  </PenSelect>
+                </Box>
+                <Box className="items-start justify-center">
+                  <Button
+                    variant="ghost"
+                    icon={<X size={15} />}
                     className="hover:bg-erro-claro hover:text-erro"
                     onClick={() => void preferences.removeOverride(host, selector).then(refresh)}
                   >
-                    <X size={16} />
-                  </IconButton>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Ficha>
+                    {t('overrides.remove')}
+                  </Button>
+                </Box>
+              </div>
+            );
+          })}
+        </FormGrid>
       ))}
     </div>
   );
