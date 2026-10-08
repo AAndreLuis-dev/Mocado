@@ -139,11 +139,11 @@ export function collectFields(root: Document | Element, opts: CollectOptions = {
   for (const el of deepElements(root)) {
     if (!isField(el) || !isFillable(el)) continue;
     const override = opts.overrides?.[stableSelector(el)];
-    const signals = signalsOf(el);
     if (override) {
       out.push({ el, type: override, score: Infinity, masked: undefined });
       continue;
     }
+    const signals = signalsOf(el);
     if (signals.type === 'password' && !opts.fillPasswords) continue;
     const c = classify(signals);
     if (!c) continue;
@@ -172,5 +172,3 @@ export function radioGroups(
     ),
   }));
 }
-
-export { normalize };

@@ -16,18 +16,39 @@ export function Button({
 }
 
 /** Copy button with short "copied" feedback. */
-export function CopyButton({ value, label }: { value: string; label?: ReactNode }) {
-  const [copied, setCopied] = useState(false);
+export function CopyButton({
+  value,
+  label,
+  text = i18n.t('popup.copy'),
+}: {
+  value: string;
+  /** What is copied, for screen readers ("Copiar CPF"). */
+  label?: ReactNode;
+  /** Visible text; defaults to "Copiar". */
+  text?: string;
+}) {
+  const [state, setState] = useState<'idle' | 'copied' | 'failed'>('idle');
   return (
     <Button
-      aria-label={`${i18n.t('popup.copy')} ${typeof label === 'string' ? label : ''}`.trim()}
+      aria-label={
+        label
+          ? `${i18n.t('popup.copy')} ${typeof label === 'string' ? label : ''}`.trim()
+          : undefined
+      }
       onClick={async () => {
-        await navigator.clipboard.writeText(value);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 1200);
+        const ok = await navigator.clipboard.writeText(value).then(
+          () => true,
+          () => false,
+        );
+        setState(ok ? 'copied' : 'failed');
+        setTimeout(() => setState('idle'), 1200);
       }}
     >
-      {copied ? i18n.t('popup.copied') : i18n.t('popup.copy')}
+      {state === 'copied'
+        ? i18n.t('popup.copied')
+        : state === 'failed'
+          ? i18n.t('popup.copyFailed')
+          : text}
     </Button>
   );
 }

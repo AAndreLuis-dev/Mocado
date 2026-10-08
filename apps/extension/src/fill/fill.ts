@@ -11,6 +11,13 @@ const UF_NAMES: Record<string, string> = {
   SC: 'Santa Catarina', SP: 'São Paulo', SE: 'Sergipe', TO: 'Tocantins',
 };
 
+/** Free-text types: never stripped to alphanumerics (masks don't apply). */
+const TEXTUAL = new Set<FieldType>([
+  'nome', 'primeiroNome', 'sobrenome', 'mae', 'pai', 'logradouro', 'complemento', 'bairro',
+  'cidade', 'razaoSocial', 'nomeFantasia', 'cartaoNome', 'email', 'senha', 'texto',
+  'veiculoMarca', 'veiculoModelo', 'sexo',
+]); // prettier-ignore
+
 const alnum = (s: string) => s.toUpperCase().replace(/[^0-9A-Z]/g, '');
 
 /**
@@ -71,32 +78,12 @@ export function adapt(
   if (type === 'cartaoValidade' && input?.maxLength === 7)
     return value.replace(/\/(\d{2})$/, '/20$1');
   if (type === 'cartaoValidade' && input?.maxLength === 4) return value.replace('/', '');
-  const textual = [
-    'nome',
-    'primeiroNome',
-    'sobrenome',
-    'mae',
-    'pai',
-    'logradouro',
-    'complemento',
-    'bairro',
-    'cidade',
-    'razaoSocial',
-    'nomeFantasia',
-    'cartaoNome',
-    'email',
-    'senha',
-    'texto',
-    'veiculoMarca',
-    'veiculoModelo',
-    'sexo',
-  ];
   let v = value;
-  if (!textual.includes(type) && (masked === false || input?.type === 'number')) v = alnum(value);
+  if (!TEXTUAL.has(type) && (masked === false || input?.type === 'number')) v = alnum(value);
   const max = input?.maxLength ?? (el as HTMLTextAreaElement).maxLength ?? -1;
   if (max > 0 && v.length > max) {
     const stripped = alnum(v);
-    v = stripped.length <= max && !textual.includes(type) ? stripped : v.slice(0, max);
+    v = stripped.length <= max && !TEXTUAL.has(type) ? stripped : v.slice(0, max);
   }
   return v;
 }

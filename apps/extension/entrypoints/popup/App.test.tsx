@@ -2,9 +2,13 @@ import { describe, expect, test, vi, beforeEach } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { cpf, cnpj, isCnpjAlfanumerico } from '@mocado/core';
+import { fakeBrowser } from 'wxt/testing/fake-browser';
 import { App } from './App';
 
-beforeEach(() => localStorage.clear());
+beforeEach(() => {
+  localStorage.clear();
+  fakeBrowser.reset();
+});
 
 describe('popup', () => {
   test('generates a masked CPF by default and copies it', async () => {
@@ -57,5 +61,26 @@ describe('popup', () => {
         screen.queryByTestId('result')?.textContent ?? document.querySelector('dl')?.textContent;
       expect(out, opt.value).toBeTruthy();
     }
+  });
+
+  test('"Copiar tudo" says so and copies every field', async () => {
+    const user = userEvent.setup();
+    const writeText = vi.spyOn(navigator.clipboard, 'writeText');
+    render(<App />);
+    await user.selectOptions(screen.getByLabelText(/gerador/i), 'endereco');
+    await user.click(screen.getByRole('button', { name: 'Copiar tudo' }));
+    expect(writeText.mock.lastCall?.[0]).toMatch(/^CEP: /m);
+  });
+
+  test('blocked domain gets its own message', async () => {
+    const user = userEvent.setup();
+    vi.spyOn(fakeBrowser.tabs, 'query').mockResolvedValue([{ id: 7 }] as never);
+    vi.spyOn(fakeBrowser.runtime, 'sendMessage').mockResolvedValue({
+      ok: false,
+      error: 'blocked',
+    } as never);
+    render(<App />);
+    await user.click(screen.getByRole('button', { name: /preencher/i }));
+    expect(await screen.findByText(/domínios bloqueados/)).toBeTruthy();
   });
 });

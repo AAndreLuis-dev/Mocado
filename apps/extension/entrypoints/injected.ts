@@ -4,12 +4,12 @@ import {
   deepElements,
   isFillable,
   radioGroups,
+  signalsOf,
   stableSelector,
   type Detected,
   type FieldEl,
 } from '@/src/detect/collect';
 import { classify } from '@/src/detect/classify';
-import { signalsOf } from '@/src/detect/collect';
 import { adapt, checkRadio, chooseOption, chooseRadio, fillElement } from '@/src/fill/fill';
 import { getSettings, isBlocked, type Settings } from '@/src/settings';
 import { getOverrides, setOverride } from '@/src/overrides';
@@ -155,15 +155,10 @@ export default defineUnlistedScript(() => {
       };
     },
 
-    async fill(perfil, opts = {}) {
+    async fill(perfil) {
       const settings = await getSettings();
       if (isBlocked(hostname, settings.blockedDomains)) return { filled: 0, fields: [] };
-      let list = await detect(settings);
-      if (opts.focusedOnly) {
-        const f = focusedField();
-        list = list.filter((d) => d.el === f);
-        return fillDetected(list, perfil, settings, false);
-      }
+      const list = await detect(settings);
       const report = fillDetected(list, perfil, settings, false);
       report.filled += fillChoices(list, perfil, false);
       current = { perfil, settings };
