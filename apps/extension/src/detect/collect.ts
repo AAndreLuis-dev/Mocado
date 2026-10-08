@@ -1,4 +1,4 @@
-import type { FieldType } from '@massa/core';
+import type { FieldType } from '@mocado/core';
 import { classify, normalize, type Classification, type Signals } from './classify';
 
 export type FieldEl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;

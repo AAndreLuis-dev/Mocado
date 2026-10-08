@@ -1,5 +1,5 @@
 import { i18n } from '#i18n';
-import type { FieldType } from '@massa/core';
+import type { FieldType } from '@mocado/core';
 import { callContent, fillFocusedTab, fillTab, fillTypeHere } from './actions';
 
 const t = (k: string) => i18n.t(k as Parameters<typeof i18n.t>[0]) as string;

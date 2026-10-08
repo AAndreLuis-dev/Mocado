@@ -1,4 +1,4 @@
-import type { FieldType } from '@massa/core';
+import type { FieldType } from '@mocado/core';
 
 /** hostname → (stable selector → field type), set by the user via the context menu. */
 export type Overrides = Record<string, Record<string, FieldType>>;

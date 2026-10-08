@@ -1,4 +1,4 @@
-import { FIELD_TYPES, type FieldType, type Perfil } from '@massa/core';
+import { FIELD_TYPES, type FieldType, type Perfil } from '@mocado/core';
 
 export type PerfilTipo = 'pessoa' | 'empresa' | 'avulso';
 
@@ -29,7 +29,7 @@ export interface HistoryFilter {
 }
 
 export interface HistoryExport {
-  app: 'massa';
+  app: 'mocado';
   version: 1;
   exportedAt: string;
   records: HistoryRecord[];
@@ -142,7 +142,7 @@ export class LocalStorageAdapter implements StorageAdapter {
 
   async exportAll(): Promise<HistoryExport> {
     return {
-      app: 'massa',
+      app: 'mocado',
       version: 1,
       exportedAt: new Date().toISOString(),
       records: await this.all(),

@@ -20,6 +20,6 @@ export default defineBackground(() => {
 
   // Hooks for e2e tests (Playwright cannot press extension shortcuts or open context menus).
   Object.assign(globalThis, {
-    massa: { fillTab, fillFocusedTab, fillTypeHere, onMenuClick, onCommand },
+    mocado: { fillTab, fillFocusedTab, fillTypeHere, onMenuClick, onCommand },
   });
 });

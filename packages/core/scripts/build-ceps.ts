@@ -1,7 +1,7 @@
 /**
  * Dev-only: builds src/data/ceps.json from ViaCEP (a few real addresses per city).
  * The extension NEVER calls the network; this runs once by hand and the JSON is committed.
- *   pnpm --filter @massa/core build-ceps
+ *   pnpm --filter @mocado/core build-ceps
  */
 import { writeFileSync } from 'node:fs';
 

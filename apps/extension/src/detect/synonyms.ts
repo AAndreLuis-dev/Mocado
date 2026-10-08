@@ -1,4 +1,4 @@
-import type { FieldType } from '@massa/core';
+import type { FieldType } from '@mocado/core';
 
 /**
  * Synonyms per field type, already normalized (lowercase, no accents, words split by spaces).

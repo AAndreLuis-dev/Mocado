@@ -193,7 +193,7 @@ importers:
 
   apps/extension:
     dependencies:
-      '@massa/core':
+      '@mocado/core':
         specifier: workspace:*
         version: link:../../packages/core
       react:

@@ -6,17 +6,17 @@ import {
   type FieldType,
   type Perfil,
   type PerfilOptions,
-} from '@massa/core';
-import type { FillReport, MassaApi, MassaMethod, ScanResult } from '../content-api';
+} from '@mocado/core';
+import type { FillReport, MocadoApi, MocadoMethod, ScanResult } from '../content-api';
 import { getPinned, history, newRecord, setPinned, type PerfilTipo } from '../history';
 import type { FillResult } from '../messages';
 import { getSettings, type Settings } from '../settings';
 
-type Args<M extends MassaMethod> = Parameters<MassaApi[M]>;
-type Ret<M extends MassaMethod> = Awaited<ReturnType<MassaApi[M]>>;
+type Args<M extends MocadoMethod> = Parameters<MocadoApi[M]>;
+type Ret<M extends MocadoMethod> = Awaited<ReturnType<MocadoApi[M]>>;
 
 /** Injects the content script (idempotent) and calls one of its methods in the tab's main frame. */
-export async function callContent<M extends MassaMethod>(
+export async function callContent<M extends MocadoMethod>(
   tabId: number,
   method: M,
   ...args: Args<M>
@@ -25,9 +25,8 @@ export async function callContent<M extends MassaMethod>(
   const [res] = await browser.scripting.executeScript({
     target: { tabId },
     func: (m: string, a: unknown[]) =>
-      (globalThis as unknown as { __massa: Record<string, (...x: unknown[]) => unknown> }).__massa[
-        m
-      ]!(...a),
+      (globalThis as unknown as { __mocado: Record<string, (...x: unknown[]) => unknown> })
+        .__mocado[m]!(...a),
     args: [method, args],
   });
   return res?.result as Ret<M>;

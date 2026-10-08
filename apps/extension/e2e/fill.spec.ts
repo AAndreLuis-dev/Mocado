@@ -1,4 +1,4 @@
-import { cep, cepUF, cnpj, cpf, ie, rg, telefone, type UF } from '@massa/core';
+import { cep, cepUF, cnpj, cpf, ie, rg, telefone, type UF } from '@mocado/core';
 import { expect, test } from './fixtures';
 
 const val = (page: import('@playwright/test').Page, sel: string) => page.locator(sel).inputValue();
@@ -90,7 +90,7 @@ test('4. SPA/modal + shadow DOM + iframe', async ({ context, fill, pageErrors })
   expect(res.ok).toBe(true);
 
   expect(await val(page, '[name=atendente_nome]')).not.toBe('');
-  expect(await page.locator('massa-email').locator('input').inputValue()).toMatch(/@/); // open shadow root
+  expect(await page.locator('mocado-email').locator('input').inputValue()).toMatch(/@/); // open shadow root
   const frameCnpj = await page.frameLocator('#frame').locator('[name=doc_cnpj]').inputValue();
   expect(cnpj.validate(frameCnpj)).toBe(true); // same-origin iframe
 

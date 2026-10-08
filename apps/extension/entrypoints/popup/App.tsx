@@ -27,10 +27,10 @@ const save = (key: string, value: string) => {
 };
 
 export function App() {
-  const [genId, setGenId] = useState(() => load('massa.gen', 'cpf'));
+  const [genId, setGenId] = useState(() => load('mocado.gen', 'cpf'));
   const gen = GENERATORS.find((g) => g.id === genId) ?? GENERATORS[0]!;
   const [opts, setOpts] = useState<Record<string, string>>(() => defaultOptions(gen));
-  const [masked, setMasked] = useState(() => load('massa.masked', '1') === '1');
+  const [masked, setMasked] = useState(() => load('mocado.masked', '1') === '1');
   const [result, setResult] = useState<Result>(() => gen.run(opts, masked));
   const [status, setStatus] = useState('');
 
@@ -69,7 +69,7 @@ export function App() {
             checked={masked}
             onChange={(e) => {
               update({ masked: e.target.checked });
-              save('massa.masked', e.target.checked ? '1' : '0');
+              save('mocado.masked', e.target.checked ? '1' : '0');
             }}
           />
           {i18n.t('popup.masked')}
@@ -94,7 +94,7 @@ export function App() {
             onChange={(e) => {
               const next = GENERATORS.find((g) => g.id === e.target.value)!;
               update({ genId: next.id, opts: defaultOptions(next) });
-              save('massa.gen', next.id);
+              save('mocado.gen', next.id);
             }}
           >
             {GENERATORS.map((g) => (

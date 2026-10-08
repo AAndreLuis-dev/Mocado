@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { FieldType } from '@massa/core';
+import type { FieldType } from '@mocado/core';
 import { classify, expectedMask, normalize, type Signals } from './classify';
 
 const i = (s: Partial<Signals>): Signals => ({ tag: 'input', type: 'text', ...s });

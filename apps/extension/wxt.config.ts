@@ -2,15 +2,15 @@ import { defineConfig } from 'wxt';
 import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'node:path';
 
-const e2e = process.env.MASSA_E2E === '1';
+const e2e = process.env.MOCADO_E2E === '1';
 
 export default defineConfig({
   modules: ['@wxt-dev/module-react', '@wxt-dev/i18n/module'],
   vite: () => ({ plugins: [tailwindcss()] }),
   outDir: e2e ? '.output/e2e' : '.output',
   zip: {
-    artifactTemplate: 'massa-{{browser}}.zip',
-    sourcesTemplate: 'massa-sources.zip',
+    artifactTemplate: 'mocado-{{browser}}.zip',
+    sourcesTemplate: 'mocado-sources.zip',
     // AMO needs the whole monorepo to rebuild (core is a workspace package).
     sourcesRoot: resolve(import.meta.dirname, '../..'),
     excludeSources: [
@@ -44,7 +44,7 @@ export default defineConfig({
     ...(browser === 'firefox' && {
       browser_specific_settings: {
         gecko: {
-          id: 'massa@massa.dev',
+          id: 'mocado@mocado.dev',
           strict_min_version: '140.0',
           // Nothing leaves the browser: declare no data collection (AMO requirement).
           data_collection_permissions: { required: ['none'] },

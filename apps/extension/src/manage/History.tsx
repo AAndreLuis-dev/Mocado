@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { i18n } from '#i18n';
-import { FIELD_TYPES, type FieldType } from '@massa/core';
+import { FIELD_TYPES, type FieldType } from '@mocado/core';
 import {
   displayName,
   domains,
@@ -158,7 +158,7 @@ export function History() {
     );
     const a = document.createElement('a');
     a.href = url;
-    a.download = `massa-historico-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `mocado-historico-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
   }

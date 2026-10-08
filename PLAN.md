@@ -1,8 +1,8 @@
-# PLAN — Massa
+# PLAN — Mocado
 
 ## Contexto
 
-Você gera dados de teste brasileiros manualmente no 4devs (abre o site, gera, copia, cola) e perde o rastro de qual CPF foi usado em qual cadastro. O Massa é uma extensão (Chrome/Edge/Brave/Opera + Firefox, MV3) que detecta campos, gera dados válidos **localmente** e preenche com um clique ou atalho. Cada preenchimento fica num histórico pesquisável e reutilizável. O 4devs serve só como referência funcional: nada de scraping e nenhuma chamada a ele.
+Você gera dados de teste brasileiros manualmente no 4devs (abre o site, gera, copia, cola) e perde o rastro de qual CPF foi usado em qual cadastro. O Mocado é uma extensão (Chrome/Edge/Brave/Opera + Firefox, MV3) que detecta campos, gera dados válidos **localmente** e preenche com um clique ou atalho. Cada preenchimento fica num histórico pesquisável e reutilizável. O 4devs serve só como referência funcional: nada de scraping e nenhuma chamada a ele.
 
 Estado atual: diretório vazio, sem git. Node 24.20 instalado; pnpm não (usar `corepack enable pnpm` ou `npx pnpm`, com a versão travada em `packageManager`).
 
@@ -91,7 +91,7 @@ Geradores avulsos estilo 4devs (seletor de tipo + opções: máscara, UF, tipo d
 ### [x] Fase 5 — Detecção + preenchimento + playground + e2e
 
 Classificador por pontuação (autocomplete > name/id > label/aria > placeholder > type/maxlength/pattern > texto próximo), sinônimos PT/EN, detecção de formato, iframes same-origin, shadow DOM aberto, preenchimento compatível com frameworks, MutationObserver, as 5 páginas do playground e o fluxo completo do background.
-**e2e:** Playwright com Chromium carregando a extensão (`launchPersistentContext` + `--load-extension`). Atalhos de extensão não podem ser disparados no Playwright, então um build `MASSA_E2E=1` adiciona `host_permissions: http://localhost/*` (somente nesse build) e o teste chama `fillActiveTab()` pelo service worker.
+**e2e:** Playwright com Chromium carregando a extensão (`launchPersistentContext` + `--load-extension`). Atalhos de extensão não podem ser disparados no Playwright, então um build `MOCADO_E2E=1` adiciona `host_permissions: http://localhost/*` (somente nesse build) e o teste chama `fillActiveTab()` pelo service worker.
 **Aceite:** as 5 páginas preenchidas com valores válidos para o tipo detectado; na página React, o `<pre data-testid="state">` reflete os valores; as máscaras ficam no formato correto; o formulário que surge depois de um clique é preenchido pelo observer; zero erros de console/pageerror; testes unitários do classificador com uma tabela de ~60 casos de input → tipo.
 
 ### [x] Fase 6 — Histórico
@@ -106,7 +106,7 @@ Classificador por pontuação (autocomplete > name/id > label/aria > placeholder
 
 ### [x] Fase 8 — Polimento e publicação
 
-i18n EN completo, README PT + seção EN + aviso "Dados fictícios, matematicamente válidos, apenas para testes de software." + GIF (gravado do e2e com vídeo do Playwright + ffmpeg, se disponível; senão, item no checklist), `CONTRIBUTING.md`, `PRIVACY.md`, `docs/publishing.md` (textos da loja, justificativa de cada permissão, lista de screenshots), `pnpm zip` gerando `massa-chrome.zip`, `massa-firefox.zip` e `massa-sources.zip`; `web-ext lint` no build do Firefox.
+i18n EN completo, README PT + seção EN + aviso "Dados fictícios, matematicamente válidos, apenas para testes de software." + GIF (gravado do e2e com vídeo do Playwright + ffmpeg, se disponível; senão, item no checklist), `CONTRIBUTING.md`, `PRIVACY.md`, `docs/publishing.md` (textos da loja, justificativa de cada permissão, lista de screenshots), `pnpm zip` gerando `mocado-chrome.zip`, `mocado-firefox.zip` e `mocado-sources.zip`; `web-ext lint` no build do Firefox.
 **Aceite:** CI verde (local: o mesmo script que o CI roda); `web-ext lint` sem erros; tamanho do content script verificado.
 
 ## Riscos técnicos

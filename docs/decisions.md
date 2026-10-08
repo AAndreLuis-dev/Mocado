@@ -8,7 +8,7 @@ Formato: data, decisão e porquê. A mais recente fica no fim.
 - **pnpm 12 via corepack.** `allowBuilds` em `pnpm-workspace.yaml` libera só o esbuild.
 - **Firefox em MV3** (`wxt -b firefox --mv3`, `strict_min_version 140`). A AMO exige `data_collection_permissions`, e declaramos `required: ['none']`. O `browser_specific_settings` só entra no manifest do Firefox.
 - **Core exporta o código-fonte TS** (`exports: ./src/index.ts`) enquanto for `private`. A extensão faz o bundle; um build para o npm só quando for publicar.
-- **Sem host permissions fixas.** Tudo roda por gesto do usuário (atalho, menu de contexto, popup), o que concede `activeTab`. O build e2e (`MASSA_E2E=1`) adiciona `http://localhost/*` porque o Playwright não consegue apertar atalhos de extensão.
+- **Sem host permissions fixas.** Tudo roda por gesto do usuário (atalho, menu de contexto, popup), o que concede `activeTab`. O build e2e (`MOCADO_E2E=1`) adiciona `http://localhost/*` porque o Playwright não consegue apertar atalhos de extensão.
 - **Geração no background, preenchimento no content.** O content script não importa o core nem os datasets, e fica pequeno.
 - **Dataset de CEP** montado uma vez por script de dev (ViaCEP), versionado como JSON. Em runtime não há rede nenhuma.
 
@@ -40,14 +40,14 @@ Formato: data, decisão e porquê. A mais recente fica no fim.
 
 ## 2026-10-06: Detecção, preenchimento e e2e
 
-- **Script injetado (`entrypoints/injected.ts`) + `scripting.executeScript({ func, args })`** em vez de `runtime` messaging. O script expõe `globalThis.__massa` no mundo isolado, e o background chama `__massa.scan()` / `__massa.fill(perfil)` e recebe o retorno direto. Assim não há `sendResponse`/`return true` e nenhuma diferença entre Chrome e Firefox.
+- **Script injetado (`entrypoints/injected.ts`) + `scripting.executeScript({ func, args })`** em vez de `runtime` messaging. O script expõe `globalThis.__mocado` no mundo isolado, e o background chama `__mocado.scan()` / `__mocado.fill(perfil)` e recebe o retorno direto. Assim não há `sendResponse`/`return true` e nenhuma diferença entre Chrome e Firefox.
 - **O injetado lê `storage.local` direto** (configurações e overrides), sem o wrapper `storage.defineItem` do WXT: ~9 KB a menos (16 KB minificado).
 - **Classificador:** pontuação por fonte (autocomplete 100, label/aria 45, name/id 40, placeholder 30, title 20, texto próximo 15) × força da frase (frases mais longas valem mais; palavras genéricas como "nome", "doc", "numero" valem metade), mais dicas de `type`. Mínimo de 12 pontos. Ignora busca, captcha, token e OTP.
 - **Texto próximo** só conta quando não há `<label>`, e nunca "atravessa" outro campo: o texto antes de um campo anterior pertence a ele.
 - **Formato:** `pattern` (testado contra amostras com e sem máscara) > `maxlength` > `placeholder` em forma de máscara > padrão das Opções. `type=number` → sem máscara.
 - **Preenchimento:** setter nativo do protótipo do _realm_ do elemento (iframes têm protótipos próprios) + `input`/`change`/`blur`. Se os dígitos finais diferirem (máscara que só aceita digitação), redigita caractere a caractere. Radios: sexo casa por rótulo; outros grupos sem seleção recebem a 1ª opção. Checkboxes: só os `required`. Selects sem tipo e vazios: opção aleatória não vazia.
 - **Observer:** depois do 1º preenchimento, um `MutationObserver` (debounce de 250 ms) preenche, com o mesmo perfil, campos novos e vazios. Ele não enxerga mutações dentro de shadow roots nem de iframes (limitação do MutationObserver); esses campos entram no próximo gatilho.
-- **e2e:** Chromium com `channel: 'chromium'` (o novo headless carrega extensões). O build `MASSA_E2E=1` vai para `.output/e2e`, para não contaminar o build de produção.
+- **e2e:** Chromium com `channel: 'chromium'` (o novo headless carrega extensões). O build `MOCADO_E2E=1` vai para `.output/e2e`, para não contaminar o build de produção.
 - **Import attributes em JSON** (`with { type: 'json' }`) no core: o Node ESM exige (o Playwright importa o core para validar).
 
 ## 2026-10-07: Histórico
@@ -68,13 +68,13 @@ Formato: data, decisão e porquê. A mais recente fica no fim.
 - **Opções e Histórico são o mesmo app React** com abas (`#history`, `#options`, `#overrides`). Os dois entrypoints só mudam a aba inicial; `options_ui` abre em aba (`open_in_tab`).
 - **Tema:** variante `dark` do Tailwind por classe (`@custom-variant`), aplicada por `initTheme()` a partir das Opções (sistema/claro/escuro), e atualizada ao vivo via `storage.onChanged`.
 - **Máscara:** a "máscara padrão" das Opções vale para preenchimento quando o campo não dá pista. O toggle do popup vale só para os geradores avulsos do popup (preferência local).
-- **Hooks de teste:** `globalThis.massa` no background expõe `fillTab`, `onCommand`, `onMenuClick` etc. O e2e chama os mesmos handlers de atalho e menu, já que o Playwright não aciona os de verdade.
+- **Hooks de teste:** `globalThis.mocado` no background expõe `fillTab`, `onCommand`, `onMenuClick` etc. O e2e chama os mesmos handlers de atalho e menu, já que o Playwright não aciona os de verdade.
 - **`web-ext lint`:** 0 erros. Avisos conhecidos: `innerHTML` interno do react-dom e `data_collection_permissions` sem suporte em versões antigas do Firefox Android.
 
 ## 2026-10-07: Polimento e publicação
 
-- **ZIPs:** `massa-chrome.zip`, `massa-firefox.zip` e `massa-sources.zip`. O ZIP de fontes parte da raiz do monorepo (o core é um pacote do workspace) e exclui `node_modules`, saídas, testes e o playground. O WXT imprime avisos "Could not get stats" ao listar esses arquivos, porque resolve os caminhos a partir de `apps/extension`. O conteúdo do ZIP está correto (conferido com `unzip`).
+- **ZIPs:** `mocado-chrome.zip`, `mocado-firefox.zip` e `mocado-sources.zip`. O ZIP de fontes parte da raiz do monorepo (o core é um pacote do workspace) e exclui `node_modules`, saídas, testes e o playground. O WXT imprime avisos "Could not get stats" ao listar esses arquivos, porque resolve os caminhos a partir de `apps/extension`. O conteúdo do ZIP está correto (conferido com `unzip`).
 - **Ícones** gerados a partir de `assets/icon.svg` pelo Chromium do Playwright (`pnpm --filter extension icons`), sem nova dependência. Os PNGs são versionados.
-- **GIF do README:** quadros 1280×800 capturados por uma spec do Playwright que só roda com `MASSA_DEMO=1`. O Pillow monta o GIF (~160 KB). Os mesmos quadros servem de screenshots para as lojas.
+- **GIF do README:** quadros 1280×800 capturados por uma spec do Playwright que só roda com `MOCADO_DEMO=1`. O Pillow monta o GIF (~160 KB). Os mesmos quadros servem de screenshots para as lojas.
 - **i18n:** um teste garante que `en.yml` tem exatamente as mesmas chaves de `pt_BR.yml`. Contagens usam a forma plural do `@wxt-dev/i18n`.
 - **Orçamento do script injetado:** 25 kB, verificado no build (hoje são 16,4 kB).

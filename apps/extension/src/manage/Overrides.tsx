@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { i18n } from '#i18n';
-import { FIELD_TYPES, type FieldType } from '@massa/core';
+import { FIELD_TYPES, type FieldType } from '@mocado/core';
 import { getOverrides, removeOverride, setOverride, type Overrides as Data } from '@/src/overrides';
 import { Button, fieldLabel, selectClass } from '@/src/ui';
 

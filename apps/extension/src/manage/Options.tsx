@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { i18n } from '#i18n';
-import { UFS } from '@massa/core';
+import { UFS } from '@mocado/core';
 import { DEFAULT_SETTINGS, getSettings, saveSettings, type Settings } from '@/src/settings';
 import { selectClass } from '@/src/ui';
 

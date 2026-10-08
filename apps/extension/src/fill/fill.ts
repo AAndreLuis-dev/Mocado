@@ -1,4 +1,4 @@
-import type { FieldType } from '@massa/core';
+import type { FieldType } from '@mocado/core';
 import type { FieldEl } from '../detect/collect';
 import { normalize } from '../detect/classify';
 
