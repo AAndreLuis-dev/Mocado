@@ -17,7 +17,7 @@ export const test = base.extend<{
   /** Triggers a whole-form fill on `page` the same way the shortcut/popup do. */
   fill: (page: Page) => Promise<FillOutcome>;
   /**
-   * Calls a background hook (`globalThis.massa[method]`) for `page`'s tab: the strings '$TAB_ID'
+   * Calls a background hook (`globalThis.mocado[method]`) for `page`'s tab: the strings '$TAB_ID'
    * and '$TAB' in `args` are replaced by the tab id / tab object (shortcuts and menus need them).
    */
   bg: (page: Page, method: string, ...args: unknown[]) => Promise<FillOutcome | undefined>;
@@ -46,11 +46,11 @@ export const test = base.extend<{
         async ({ url, method, args }) => {
           const g = globalThis as unknown as {
             chrome: typeof browser;
-            massa: Record<string, (...a: unknown[]) => Promise<unknown>>;
+            mocado: Record<string, (...a: unknown[]) => Promise<unknown>>;
           };
           const [tab] = await g.chrome.tabs.query({ url, active: true });
           const resolved = args.map((a) => (a === '$TAB_ID' ? tab!.id : a === '$TAB' ? tab : a));
-          return g.massa[method]!(...resolved);
+          return g.mocado[method]!(...resolved);
         },
         { url: page.url().split('#')[0]!, method, args },
       ) as Promise<FillOutcome | undefined>;

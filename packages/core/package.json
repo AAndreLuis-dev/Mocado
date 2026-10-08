@@ -1,5 +1,5 @@
 {
-  "name": "@massa/core",
+  "name": "@mocado/core",
   "version": "0.1.0",
   "private": true,
   "description": "Geradores, validadores e formatadores de dados brasileiros para testes de software.",

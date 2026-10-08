@@ -1,4 +1,4 @@
-import type { FieldType, Perfil } from '@massa/core';
+import type { FieldType, Perfil } from '@mocado/core';
 
 export interface ScanResult {
   url: string;
@@ -15,8 +15,8 @@ export interface FillReport {
   fields: { type: FieldType; value: string }[];
 }
 
-/** What the content script exposes on `globalThis.__massa` (called via scripting.executeScript). */
-export interface MassaApi {
+/** What the content script exposes on `globalThis.__mocado` (called via scripting.executeScript). */
+export interface MocadoApi {
   scan(): Promise<ScanResult>;
   fill(perfil: Perfil, opts?: { focusedOnly?: boolean }): Promise<FillReport>;
   /** Writes a raw value into the focused field ("Gerar CPF aqui"). */
@@ -25,4 +25,4 @@ export interface MassaApi {
   markFocused(type: FieldType): Promise<boolean>;
 }
 
-export type MassaMethod = keyof MassaApi;
+export type MocadoMethod = keyof MocadoApi;

@@ -1,5 +1,5 @@
 {
-  "name": "massa",
+  "name": "mocado",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@12.9.1",

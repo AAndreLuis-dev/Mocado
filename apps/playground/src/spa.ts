@@ -12,7 +12,7 @@ document.getElementById('novo')!.addEventListener('click', () => {
 });
 
 customElements.define(
-  'massa-email',
+  'mocado-email',
   class extends HTMLElement {
     connectedCallback() {
       this.attachShadow({ mode: 'open' }).innerHTML =

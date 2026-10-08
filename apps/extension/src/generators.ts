@@ -34,7 +34,7 @@ import {
   type Sexo,
   type TelefoneTipo,
   type UF,
-} from '@massa/core';
+} from '@mocado/core';
 
 /** Option values; '' means "any". Labels come from i18n `opt.<value>` (UFs/banks/brands shown raw). */
 export type Choices = Record<string, readonly string[]>;

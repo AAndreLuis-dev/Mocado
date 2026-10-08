@@ -1,4 +1,4 @@
-extName: Massa
+extName: Mocado
 extDescription: Generates and fills Brazilian test data (CPF, CNPJ, address…) right into forms. Everything stays local.
 disclaimer: Fictitious, mathematically valid data, for software testing only.
 
@@ -171,7 +171,7 @@ options:
   idade: Age range
   idadeMin: Minimum age
   idadeMax: Maximum age
-  blocked: Domains where Massa never acts
+  blocked: Domains where Mocado never acts
   blockedHint: One per line. Subdomains included (e.g. bank.com).
   theme: Theme
   themeSystem: System

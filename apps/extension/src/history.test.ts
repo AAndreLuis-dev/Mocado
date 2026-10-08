@@ -80,7 +80,7 @@ describe('LocalStorageAdapter', () => {
     await history.put(rec({ id: 'a', label: 'um', favorite: true }));
     await history.put(rec({ id: 'b' }));
     const dump = JSON.parse(JSON.stringify(await history.exportAll()));
-    expect(dump).toMatchObject({ app: 'massa', version: 1 });
+    expect(dump).toMatchObject({ app: 'mocado', version: 1 });
     await fakeBrowser.storage.local.clear();
     expect(await history.importAll(dump)).toBe(2);
     expect((await history.list()).map((r) => r.id).sort()).toEqual(['a', 'b']);

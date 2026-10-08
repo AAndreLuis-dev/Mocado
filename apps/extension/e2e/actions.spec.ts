@@ -1,4 +1,4 @@
-import { cnpj, cpf } from '@massa/core';
+import { cnpj, cpf } from '@mocado/core';
 import { expect, test } from './fixtures';
 
 const setStorage = (sw: import('@playwright/test').Worker, data: Record<string, unknown>) =>

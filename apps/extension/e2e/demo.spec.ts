@@ -2,8 +2,8 @@ import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { test } from './fixtures';
 
-// Frames for docs/demo.gif — run with: MASSA_DEMO=1 pnpm --filter extension demo
-test.skip(!process.env.MASSA_DEMO, 'demo frames only on demand');
+// Frames for docs/demo.gif — run with: MOCADO_DEMO=1 pnpm --filter extension demo
+test.skip(!process.env.MOCADO_DEMO, 'demo frames only on demand');
 
 test('demo frames', async ({ context, sw, fill }) => {
   const out = resolve(import.meta.dirname, '../.output/demo');

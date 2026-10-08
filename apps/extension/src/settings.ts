@@ -1,4 +1,4 @@
-import type { CnpjTipo, UF } from '@massa/core';
+import type { CnpjTipo, UF } from '@mocado/core';
 
 export interface Settings {
   /** Default mask when the field gives no hint (maxlength/pattern/placeholder). */
@@ -8,7 +8,7 @@ export interface Settings {
   uf: UF | '';
   idadeMin: number;
   idadeMax: number;
-  /** Hostnames (suffix match) where Massa never acts. */
+  /** Hostnames (suffix match) where Mocado never acts. */
   blockedDomains: string[];
   theme: 'system' | 'light' | 'dark';
   fillPasswords: boolean;

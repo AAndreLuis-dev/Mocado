@@ -1,4 +1,4 @@
-import type { FieldType, Perfil } from '@massa/core';
+import type { FieldType, Perfil } from '@mocado/core';
 import {
   collectFields,
   deepElements,
@@ -13,12 +13,12 @@ import { signalsOf } from '@/src/detect/collect';
 import { adapt, checkRadio, chooseOption, chooseRadio, fillElement } from '@/src/fill/fill';
 import { getSettings, isBlocked, type Settings } from '@/src/settings';
 import { getOverrides, setOverride } from '@/src/overrides';
-import type { FillReport, MassaApi } from '@/src/content-api';
+import type { FillReport, MocadoApi } from '@/src/content-api';
 
 // Injected on demand (activeTab) — never declared in the manifest, so it never runs on its own.
 export default defineUnlistedScript(() => {
-  const g = globalThis as typeof globalThis & { __massa?: MassaApi };
-  if (g.__massa) return; // already injected in this tab
+  const g = globalThis as typeof globalThis & { __mocado?: MocadoApi };
+  if (g.__mocado) return; // already injected in this tab
 
   const filled = new WeakSet<Element>();
   let lastContextTarget: Element | null = null;
@@ -136,7 +136,7 @@ export default defineUnlistedScript(() => {
     observer.observe(document.documentElement, { childList: true, subtree: true });
   }
 
-  const api: MassaApi = {
+  const api: MocadoApi = {
     async scan() {
       const settings = await getSettings();
       const blocked = isBlocked(hostname, settings.blockedDomains);
@@ -190,5 +190,5 @@ export default defineUnlistedScript(() => {
     },
   };
 
-  g.__massa = api;
+  g.__mocado = api;
 });

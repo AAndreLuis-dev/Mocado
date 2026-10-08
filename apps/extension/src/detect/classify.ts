@@ -1,4 +1,4 @@
-import type { FieldType } from '@massa/core';
+import type { FieldType } from '@mocado/core';
 import { AUTOCOMPLETE, IGNORE_WORDS, SYNONYMS, WEAK_WORDS } from './synonyms';
 
 /** Everything the classifier looks at, already extracted from the DOM (keeps this pure/testable). */

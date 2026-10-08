@@ -1,4 +1,4 @@
-extName: Massa
+extName: Mocado
 extDescription: Gera e preenche dados de teste brasileiros (CPF, CNPJ, endereço…) direto no formulário. Tudo local.
 disclaimer: Dados fictícios, matematicamente válidos, apenas para testes de software.
 
@@ -171,7 +171,7 @@ options:
   idade: Faixa de idade
   idadeMin: Idade mínima
   idadeMax: Idade máxima
-  blocked: Domínios onde o Massa nunca atua
+  blocked: Domínios onde o Mocado nunca atua
   blockedHint: 'Um por linha. Subdomínios incluídos (ex.: banco.com.br).'
   theme: Tema
   themeSystem: Do sistema

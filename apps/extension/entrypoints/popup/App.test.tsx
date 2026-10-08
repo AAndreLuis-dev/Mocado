@@ -1,7 +1,7 @@
 import { describe, expect, test, vi, beforeEach } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { cpf, cnpj, isCnpjAlfanumerico } from '@massa/core';
+import { cpf, cnpj, isCnpjAlfanumerico } from '@mocado/core';
 import { App } from './App';
 
 beforeEach(() => localStorage.clear());
