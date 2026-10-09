@@ -21,7 +21,7 @@ export function Button({
   return (
     <button
       type="button"
-      className={`inline-flex min-h-8 items-center justify-center gap-1.5 rounded-md px-3 text-sm font-semibold transition-colors disabled:opacity-50 ${VARIANTS[variant]} ${className}`}
+      className={`inline-flex min-h-8 items-center justify-center gap-1.5 rounded-lg px-3 text-sm font-semibold transition-colors disabled:opacity-50 ${VARIANTS[variant]} ${className}`}
       {...props}
     >
       {icon}
@@ -40,7 +40,7 @@ export function IconButton({
       type="button"
       aria-label={label}
       title={label}
-      className={`inline-flex size-8 shrink-0 items-center justify-center rounded-md text-grafite transition-colors hover:bg-pauta hover:text-tinta ${className}`}
+      className={`inline-flex size-8 shrink-0 items-center justify-center rounded-lg text-grafite transition-colors hover:bg-pauta hover:text-tinta ${className}`}
       {...props}
     />
   );

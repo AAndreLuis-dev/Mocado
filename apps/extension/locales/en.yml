@@ -1,4 +1,5 @@
 extName: Mocado
+htmlLang: en
 extDescription: Generates and fills Brazilian test data (CPF, CNPJ, address…) right into forms. Everything stays local.
 disclaimer: Fictitious, mathematically valid data, for software testing only.
 
@@ -17,10 +18,11 @@ popup:
   history: History
   options: Options
   recent: Recent profiles
+  showMore: Show more ($1)
+  showLess: Show less
   reuse: Reuse
   pinned: 'Next fill will use: $1'
   unpin: Unpin
-  fictitious: Fictitious
   standalone: Standalone generator
 
 gen:
@@ -188,6 +190,10 @@ options:
   themeSystem: System
   themeLight: Light
   themeDark: Dark
+  language: Language
+  languageAuto: Browser default
+  languagePt: Português (Brasil)
+  languageEn: English
   fillPasswords: Fill password fields
   observe: Fill fields that appear later (SPAs, modals, wizards)
   shortcuts: Shortcuts

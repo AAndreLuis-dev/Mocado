@@ -21,6 +21,8 @@ Funciona no Chrome, Edge, Brave, Opera e Firefox. Tudo roda no navegador: sem re
 
 Os atalhos podem ser trocados em `chrome://extensions/shortcuts` ou, no Firefox, em `about:addons` → engrenagem → _Gerenciar atalhos_.
 
+A interface segue o idioma do navegador. Para fixar português ou inglês, use o botão **PT/EN** no topo do popup ou **Opções → Idioma**.
+
 No histórico dá para colar um CPF (com ou sem pontuação) e ver em que site e quando ele foi usado, dar um rótulo ao perfil ("admin teste", "cliente PJ"), favoritar, reusar, excluir e exportar/importar tudo em JSON.
 
 ## O que ele gera
@@ -143,7 +145,7 @@ Regras do projeto:
 - **Commits** em [Conventional Commits](https://www.conventionalcommits.org/pt-br/) (`feat(core): …`, `fix(extension): …`).
 - **Core:** nada de APIs de navegador (o tsconfig nem inclui a lib DOM). Gerador com dígito verificador precisa de teste gera→valida com milhares de iterações e de pelo menos um exemplo real conhecido. A cobertura mínima é 90% de linhas.
 - **Script injetado:** TypeScript puro, sem React e sem valores do core (só tipos).
-- **Textos de interface:** sempre via `i18n.t(...)`, com a chave em `locales/pt_BR.yml` e `locales/en.yml`. Um teste confere que os dois têm as mesmas chaves.
+- **Textos de interface:** sempre via `t(...)` de `src/infra/browser/i18n.ts`, com a chave em `locales/pt_BR.yml` e `locales/en.yml`. Um teste confere que os dois têm as mesmas chaves. Com um idioma escolhido nas opções, `t` lê `/_locales/<idioma>/messages.json` do próprio pacote em vez de `chrome.i18n`; nome, descrição e atalhos do manifesto continuam no idioma do navegador.
 - **Permissões:** só as quatro da tabela acima. Nada de host permissions fixas, rede ou telemetria.
 - **Novo tipo de campo:** adicione em `FIELD_TYPES` (`packages/core/src/profiles.ts`), os sinônimos em `synonyms.ts`, casos em `classify.test.ts` e o rótulo `field.<tipo>` nos dois locales.
 - **Formulário que o Mocado preenche mal:** crie uma página em `apps/playground` e um caso no e2e.

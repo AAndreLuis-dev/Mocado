@@ -1,12 +1,32 @@
-import { i18n } from '#i18n';
+import type { Language } from '../../domain/settings';
 
-type Key = Parameters<typeof i18n.t>[0];
+type Messages = Record<string, { message: string }>;
 
-export const t = (key: string, subs?: (string | number)[]): string =>
-  (subs ? i18n.t(key as Key, subs.map(String) as never) : i18n.t(key as Key)) as string;
+let dictionary: Messages | undefined;
 
-export const plural = (key: string, n: number): string =>
-  i18n.t(key as Key, n as never) as unknown as string;
+type MessageName = Parameters<typeof browser.i18n.getMessage>[0];
+
+export async function loadLanguage(language: Language) {
+  dictionary =
+    language === 'auto'
+      ? undefined
+      : await fetch(browser.runtime.getURL(`/_locales/${language}/messages.json` as '/'))
+          .then((r) => r.json() as Promise<Messages>)
+          .catch(() => undefined);
+}
+
+const message = (name: string, subs: string[]) =>
+  dictionary
+    ? subs.reduce((m, s, i) => m.replaceAll(`$${i + 1}`, s), dictionary[name]?.message ?? '')
+    : browser.i18n.getMessage(name as MessageName, subs);
+
+export const t = (key: string, subs: (string | number)[] = []): string =>
+  message(key.replaceAll('.', '_'), subs.map(String));
+
+export const plural = (key: string, n: number): string => {
+  const forms = t(key, [n]).split(' | ');
+  return (n === 1 ? forms[0] : forms.at(-1)) ?? '';
+};
 
 const labelOr = (prefix: string, key: string) => t(`${prefix}.${key}`) || key;
 

@@ -1,4 +1,5 @@
 extName: Mocado
+htmlLang: pt-BR
 extDescription: Gera e preenche dados de teste brasileiros (CPF, CNPJ, endereço…) direto no formulário. Tudo local.
 disclaimer: Dados fictícios, matematicamente válidos, apenas para testes de software.
 
@@ -17,10 +18,11 @@ popup:
   history: Histórico
   options: Opções
   recent: Últimos perfis
+  showMore: Mostrar mais ($1)
+  showLess: Mostrar menos
   reuse: Reusar
   pinned: 'Próximo preenchimento usará: $1'
   unpin: Desafixar
-  fictitious: Fictício
   standalone: Gerador avulso
 
 gen:
@@ -188,6 +190,10 @@ options:
   themeSystem: Do sistema
   themeLight: Claro
   themeDark: Escuro
+  language: Idioma
+  languageAuto: Do navegador
+  languagePt: Português (Brasil)
+  languageEn: English
   fillPasswords: Preencher campos de senha
   observe: Preencher campos que aparecem depois (SPAs, modais, wizards)
   shortcuts: Atalhos

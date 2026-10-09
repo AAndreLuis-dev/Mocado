@@ -2,6 +2,8 @@ import { UFS, type CnpjKind, type UF } from '@mocado/core';
 
 export type Theme = 'system' | 'light' | 'dark';
 export const THEMES: readonly Theme[] = ['system', 'light', 'dark'];
+export type Language = 'auto' | 'pt_BR' | 'en';
+export const LANGUAGES: readonly Language[] = ['auto', 'pt_BR', 'en'];
 export const CNPJ_KINDS: readonly CnpjKind[] = ['numerico', 'alfanumerico', 'aleatorio'];
 
 export const IDADE_MAX = 120;
@@ -14,6 +16,7 @@ export interface Settings {
   idadeMax: number;
   blockedDomains: string[];
   theme: Theme;
+  language: Language;
   fillPasswords: boolean;
   observe: boolean;
 }
@@ -26,6 +29,7 @@ export const DEFAULT_SETTINGS: Settings = {
   idadeMax: 60,
   blockedDomains: [],
   theme: 'system',
+  language: 'auto',
   fillPasswords: false,
   observe: true,
 };
@@ -54,6 +58,7 @@ export function normalizeSettings(raw: unknown): Settings {
       ? stored.blockedDomains.filter((domain): domain is string => typeof domain === 'string')
       : defaults.blockedDomains,
     theme: oneOf(THEMES, stored.theme, defaults.theme),
+    language: oneOf(LANGUAGES, stored.language, defaults.language),
     fillPasswords: bool(stored.fillPasswords, defaults.fillPasswords),
     observe: bool(stored.observe, defaults.observe),
   };

@@ -22,8 +22,8 @@ export function ManageApp({ initial }: { initial: Tab }) {
   }, [initial]);
 
   return (
-    <div className="min-h-screen bg-papel font-sans text-tinta">
-      <div className="mx-auto max-w-4xl px-3 pt-6 pb-16 sm:px-8 sm:pt-10">
+    <div className="min-h-screen bg-ficha font-sans text-tinta">
+      <div className="mx-auto max-w-4xl px-4 pt-6 pb-16 sm:px-8 sm:pt-10">
         <header className="mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 px-1">
           <div className="flex items-center gap-2.5">
             <Logo size={30} />
@@ -32,20 +32,17 @@ export function ManageApp({ initial }: { initial: Tab }) {
           <p className="text-xs text-grafite">{t('disclaimer')}</p>
         </header>
 
-        <nav
-          role="tablist"
-          className="relative z-10 -mb-px flex gap-1 overflow-x-auto px-3 sm:px-5"
-        >
+        <nav role="tablist" className="flex gap-6 overflow-x-auto border-b border-linha">
           {TABS.map((id) => (
             <a
               key={id}
               role="tab"
               href={`#${id}`}
               aria-selected={tab === id}
-              className={`shrink-0 rounded-t-lg border px-4 pt-2 pb-2 text-sm font-semibold transition-colors ${
+              className={`-mb-px shrink-0 border-b-2 pb-2.5 text-[15px] font-semibold transition-colors ${
                 tab === id
-                  ? 'border-tinta/25 border-b-ficha bg-ficha text-tinta'
-                  : 'border-transparent text-grafite hover:bg-pauta hover:text-tinta'
+                  ? 'border-caneta text-tinta'
+                  : 'border-transparent text-grafite hover:text-tinta'
               }`}
             >
               {t(`tabs.${id}`)}
@@ -53,10 +50,7 @@ export function ManageApp({ initial }: { initial: Tab }) {
           ))}
         </nav>
 
-        <main
-          role="tabpanel"
-          className="rounded-lg border border-tinta/25 bg-ficha px-4 pt-6 pb-8 shadow-[0_1px_0_var(--linha),0_12px_32px_-24px_rgb(28_35_48/0.35)] sm:px-8 sm:pt-8"
-        >
+        <main role="tabpanel" className="pt-6">
           <header className="mb-6">
             <h1 className="sr-only">{t(`tabs.${tab}`)}</h1>
             <p className="max-w-prose text-[15px] text-grafite">{t(`tabs.${tab}Hint`)}</p>

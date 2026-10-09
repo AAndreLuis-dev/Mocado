@@ -1,9 +1,11 @@
 import { UFS } from '@mocado/core';
+import { Check } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import {
   CNPJ_KINDS,
   DEFAULT_SETTINGS,
   IDADE_MAX,
+  LANGUAGES,
   parseDomains,
   THEMES,
   withSetting,
@@ -13,7 +15,6 @@ import { optionLabel, t } from '../../infra/browser/i18n';
 import { shortcuts as loadShortcuts } from '../../infra/browser/navigation';
 import { preferences } from '../../infra/container';
 import { Kbd } from '../components/controls';
-import { Stamp } from '../components/brand';
 import {
   Band,
   Box,
@@ -29,6 +30,12 @@ const THEME_LABEL = {
   system: 'options.themeSystem',
   light: 'options.themeLight',
   dark: 'options.themeDark',
+};
+
+const LANGUAGE_LABEL = {
+  auto: 'options.languageAuto',
+  pt_BR: 'options.languagePt',
+  en: 'options.languageEn',
 };
 
 type Shortcut = { name?: string; description?: string; shortcut?: string };
@@ -142,9 +149,9 @@ export function Options() {
         </Box>
 
         <Band>{t('options.sectionLook')}</Band>
-        <Box span="full">
+        <Box span={2}>
           <fieldset className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            <legend className="mb-1.5 text-[11.5px] text-grafite">{t('options.theme')}</legend>
+            <legend className="mb-2 text-xs font-medium text-grafite">{t('options.theme')}</legend>
             {THEMES.map((theme) => (
               <PenRadio
                 key={theme}
@@ -156,6 +163,23 @@ export function Options() {
               />
             ))}
           </fieldset>
+        </Box>
+        <Box span={2} label={t('options.language')} htmlFor="language">
+          <PenSelect
+            id="language"
+            value={settings.language}
+            onChange={(e) =>
+              void set('language', e.target.value as Settings['language']).then(() =>
+                location.reload(),
+              )
+            }
+          >
+            {LANGUAGES.map((language) => (
+              <option key={language} value={language}>
+                {t(LANGUAGE_LABEL[language])}
+              </option>
+            ))}
+          </PenSelect>
         </Box>
 
         <Band>{t('options.shortcuts')}</Band>
@@ -170,18 +194,17 @@ export function Options() {
               )}
             </Box>
           ))}
-        <Box span="full" dense>
-          <span className="text-xs text-grafite">{t('options.shortcutsHint')}</span>
-        </Box>
+        <p className="col-span-full text-xs text-grafite">{t('options.shortcutsHint')}</p>
       </FormGrid>
 
       <p className="mt-4 text-sm text-grafite">{t('options.privacy')}</p>
 
       <p role="status" aria-live="polite" className="pointer-events-none fixed right-8 bottom-8">
         {saved && (
-          <Stamp replay={saves} className="bg-ficha/85 px-3 py-1 text-[15px]">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-tinta px-3.5 py-1.5 text-sm font-semibold text-ficha shadow-lg">
+            <Check size={15} aria-hidden />
             {t('options.saved')}
-          </Stamp>
+          </span>
         )}
       </p>
     </>

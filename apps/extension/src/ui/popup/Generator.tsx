@@ -3,7 +3,6 @@ import { useMemo, useState } from 'react';
 import { defaultOptions, GENERATORS, type GeneratorDef } from '../../domain/generators';
 import { fieldLabel, genLabel, optionLabel, t } from '../../infra/browser/i18n';
 import { Button, CopyButton, CopyIconButton } from '../components/controls';
-import { Stamp } from '../components/brand';
 import {
   Band,
   Box,
@@ -77,7 +76,7 @@ export function Generator() {
           </PenSelect>
         </Box>
       ))}
-      <Box span={optionEntries.length % 2 ? 1 : 'full'} className="justify-center">
+      <Box span={optionEntries.length % 2 ? 1 : 'full'} className="justify-end pb-1.5">
         <PenCheck
           label={t('popup.masked')}
           checked={masked}
@@ -89,31 +88,22 @@ export function Generator() {
       </Box>
 
       {entries === null ? (
-        <Box span="full" label={genLabel(gen.id)} className="relative pb-3">
+        <div className="col-span-full flex items-center gap-3 border-t border-linha pt-3">
           <output
             data-testid="result"
-            className={`block pr-24 font-mono text-[21px] leading-tight break-all tabular-nums ${pen}`}
+            className={`min-w-0 flex-1 font-mono text-[20px] leading-tight break-all tabular-nums ${pen}`}
           >
             {result as string}
           </output>
-          <div className="mt-2">
-            <CopyButton value={result as string} />
-          </div>
-          <Stamp
-            decorative
-            replay={`${gen.id}:${round}:${JSON.stringify(opts)}:${masked}`}
-            className="absolute top-2.5 right-3"
-          >
-            {t('popup.fictitious')}
-          </Stamp>
-        </Box>
+          <CopyButton value={result as string} />
+        </div>
       ) : (
         <>
           <div
             data-testid="result-fields"
-            className="relative col-span-full max-h-72 overflow-y-auto"
+            className="col-span-full max-h-72 overflow-y-auto border-t border-linha pt-3"
           >
-            <FormGrid cols={2} fixed bare className="grid-flow-row-dense">
+            <FormGrid cols={2} fixed className="grid-flow-row-dense">
               {entries.map(([k, v]) => (
                 <ValueBox
                   key={k}
@@ -125,19 +115,12 @@ export function Generator() {
               ))}
             </FormGrid>
           </div>
-          <Box span="full" dense className="relative flex-row items-center">
+          <div className="col-span-full">
             <CopyButton
               value={entries.map(([k, v]) => `${fieldLabel(k)}: ${v}`).join('\n')}
               text={t('popup.copyAll')}
             />
-            <Stamp
-              decorative
-              replay={`${gen.id}:${round}:${JSON.stringify(opts)}:${masked}`}
-              className="ml-auto"
-            >
-              {t('popup.fictitious')}
-            </Stamp>
-          </Box>
+          </div>
         </>
       )}
     </FormGrid>

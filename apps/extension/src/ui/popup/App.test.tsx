@@ -84,4 +84,15 @@ describe('popup', () => {
     await user.click(screen.getByRole('button', { name: /preencher/i }));
     expect(await screen.findByText(/domínios bloqueados/)).toBeTruthy();
   });
+
+  test('the language button switches to English and saves it', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole('button', { name: 'Idioma: English' }));
+    await vi.waitFor(async () =>
+      expect((await fakeBrowser.storage.local.get('settings')).settings).toMatchObject({
+        language: 'en',
+      }),
+    );
+  });
 });

@@ -2,10 +2,15 @@ import type { FillResult } from '@/src/application/fill-result';
 import { createMenus, onCommand, onMenuClick } from '@/src/infra/browser/menus';
 import type { BackgroundMessage } from '@/src/infra/browser/messages';
 import { fillField, fillForm } from '@/src/infra/container';
+import { normalizeSettings } from '@/src/domain/settings';
 
 export default defineBackground(() => {
-  browser.runtime.onInstalled.addListener(createMenus);
-  browser.runtime.onStartup.addListener(createMenus);
+  browser.runtime.onInstalled.addListener(() => void createMenus());
+  browser.runtime.onStartup.addListener(() => void createMenus());
+  browser.storage.onChanged.addListener(({ settings }) => {
+    const language = (v: unknown) => normalizeSettings(v).language;
+    if (settings && language(settings.oldValue) !== language(settings.newValue)) void createMenus();
+  });
   browser.contextMenus.onClicked.addListener((info, tab) => void onMenuClick(info, tab));
   browser.commands.onCommand.addListener((command, tab) => void onCommand(command, tab));
 

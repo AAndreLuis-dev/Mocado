@@ -26,29 +26,26 @@ const Fixed = createContext(false);
 export function FormGrid({
   cols = 2,
   fixed = false,
-  bare = false,
   className = '',
   children,
 }: {
   cols?: keyof typeof COLS;
   fixed?: boolean;
-  bare?: boolean;
   className?: string;
   children: ReactNode;
 }) {
   const layout = fixed ? COLS[cols][1] : `grid-cols-1 ${COLS[cols][0]}`;
-  const rules = bare ? '' : 'border-t border-l border-tinta/25';
   return (
     <Fixed.Provider value={fixed}>
-      <div className={`grid ${layout} ${rules} ${className}`}>{children}</div>
+      <div className={`grid ${layout} gap-x-4 gap-y-3 ${className}`}>{children}</div>
     </Fixed.Provider>
   );
 }
 
 export function Band({ children, aside }: { children: ReactNode; aside?: ReactNode }) {
   return (
-    <div className="col-span-full flex min-h-9 items-center justify-between gap-3 border-r border-b border-tinta/25 bg-pauta px-3 py-1">
-      <h2 className="text-[13px] font-bold">{children}</h2>
+    <div className="col-span-full flex min-h-8 items-center justify-between gap-3 pt-5 first:pt-0">
+      <h2 className="text-[15px] font-bold">{children}</h2>
       {aside}
     </div>
   );
@@ -58,24 +55,20 @@ export function Box({
   label,
   htmlFor,
   span = 1,
-  dense = false,
   className = '',
   children,
 }: {
   label?: ReactNode;
   htmlFor?: string;
   span?: keyof typeof SPAN;
-  dense?: boolean;
   className?: string;
   children: ReactNode;
 }) {
   const fixed = useContext(Fixed);
   return (
-    <div
-      className={`flex min-w-0 ${dense ? 'py-2' : 'min-h-16 pt-1.5 pb-2'} flex-col gap-1 border-r border-b border-tinta/25 px-3 transition-colors focus-within:bg-caneta-claro/60 ${SPAN[span][fixed ? 1 : 0]} ${className}`}
-    >
+    <div className={`flex min-w-0 flex-col gap-1 ${SPAN[span][fixed ? 1 : 0]} ${className}`}>
       {label && (
-        <label htmlFor={htmlFor} className="text-[11.5px] leading-tight text-grafite">
+        <label htmlFor={htmlFor} className="text-xs leading-tight font-medium text-grafite">
           {label}
         </label>
       )}
@@ -86,10 +79,13 @@ export function Box({
 
 export const pen = 'font-semibold text-caneta';
 
+const field =
+  'w-full rounded-lg border border-linha bg-papel px-3 py-1.5 text-[15px] transition-colors outline-none hover:border-grafite/40 focus:border-caneta focus:bg-ficha';
+
 export function PenInput({ className = '', ...props }: InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
-      className={`w-full bg-transparent text-[15px] outline-none placeholder:font-normal placeholder:text-grafite/60 ${pen} ${className}`}
+      className={`${field} placeholder:font-normal placeholder:text-grafite/60 ${pen} ${className}`}
       {...props}
     />
   );
@@ -102,16 +98,13 @@ export function PenSelect({
 }: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <span className={`relative flex ${className}`}>
-      <select
-        className={`w-full cursor-pointer appearance-none bg-transparent pr-6 text-[15px] outline-none ${pen}`}
-        {...props}
-      >
+      <select className={`${field} cursor-pointer appearance-none pr-9 ${pen}`} {...props}>
         {children}
       </select>
       <ChevronDown
-        size={15}
+        size={16}
         aria-hidden
-        className="pointer-events-none absolute top-1/2 right-0 -translate-y-1/2 text-grafite"
+        className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-grafite"
       />
     </span>
   );
@@ -123,7 +116,7 @@ export function PenTextarea({
 }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return (
     <textarea
-      className={`w-full resize-y bg-transparent bg-[linear-gradient(transparent_calc(1.75rem-1px),var(--pauta)_calc(1.75rem-1px))] bg-[length:100%_1.75rem] font-mono text-[14px] leading-7 outline-none placeholder:font-normal placeholder:text-grafite/60 ${pen} ${className}`}
+      className={`${field} resize-y font-mono text-[14px] leading-6 placeholder:font-normal placeholder:text-grafite/60 ${pen} ${className}`}
       {...props}
     />
   );
@@ -142,7 +135,7 @@ export function PenCheck({
       <span className="relative mt-0.5 grid size-[18px] shrink-0">
         <input
           type="checkbox"
-          className="peer size-full cursor-pointer appearance-none rounded-[2px] border-[1.5px] border-tinta/60 bg-ficha"
+          className="peer size-full cursor-pointer appearance-none rounded-[5px] border-[1.5px] border-tinta/60 bg-ficha"
           {...props}
         />
         <svg
@@ -195,7 +188,7 @@ export function PenRadio({
 export function ValueBox({
   label,
   value,
-  span,
+  span = 1,
   action,
 }: {
   label: string;
@@ -203,18 +196,20 @@ export function ValueBox({
   span?: keyof typeof SPAN;
   action?: ReactNode;
 }) {
+  const fixed = useContext(Fixed);
   return (
-    <Box label={label} span={span}>
-      <span className="flex items-center gap-1">
+    <div className={`flex min-w-0 items-center gap-1 ${SPAN[span][fixed ? 1 : 0]}`}>
+      <span className="flex min-w-0 flex-1 flex-col">
+        <span className="text-[11px] leading-tight text-grafite">{label}</span>
         <span
-          className={`min-w-0 flex-1 truncate font-mono text-[13px] tracking-tight tabular-nums ${pen}`}
+          className={`truncate font-mono text-[13px] tracking-tight tabular-nums ${pen}`}
           title={value}
         >
           {value}
         </span>
-        {action}
       </span>
-    </Box>
+      {action}
+    </div>
   );
 }
 

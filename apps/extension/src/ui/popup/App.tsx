@@ -1,16 +1,23 @@
-import { History, Settings2, WandSparkles } from 'lucide-react';
+import { History, Languages, Settings2, WandSparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { t } from '../../infra/browser/i18n';
 import { sendToBackground } from '../../infra/browser/messages';
 import { activeTabId, openHistory, openOptions, shortcuts } from '../../infra/browser/navigation';
+import { preferences } from '../../infra/container';
 import { Button, Kbd } from '../components/controls';
 import { Logo } from '../components/brand';
 import { Generator } from './Generator';
 import { Recent } from './Recent';
 
+const OTHER_LANGUAGE = {
+  en: { id: 'pt_BR', code: 'PT', label: 'options.languagePt' },
+  'pt-BR': { id: 'en', code: 'EN', label: 'options.languageEn' },
+} as const;
+
 export function App() {
   const [status, setStatus] = useState('');
   const [fillKeys, setFillKeys] = useState('');
+  const other = OTHER_LANGUAGE[t('htmlLang') === 'en' ? 'en' : 'pt-BR'];
 
   useEffect(() => {
     void shortcuts().then((cmds) =>
@@ -50,13 +57,25 @@ export function App() {
           >
             {t('popup.options')}
           </Button>
+          <Button
+            variant="ghost"
+            className="min-h-7 px-2"
+            icon={<Languages size={15} />}
+            aria-label={`${t('options.language')}: ${t(other.label)}`}
+            title={`${t('options.language')}: ${t(other.label)}`}
+            onClick={() =>
+              void preferences.setSetting('language', other.id).then(() => location.reload())
+            }
+          >
+            {other.code}
+          </Button>
         </nav>
       </header>
 
       <div className="px-4 pb-4">
         <Button
           variant="primary"
-          className="h-11 w-full rounded-md text-[15px]"
+          className="h-11 w-full rounded-xl text-[15px]"
           icon={<WandSparkles size={17} />}
           onClick={() => void fillPage()}
         >
@@ -64,10 +83,7 @@ export function App() {
           {fillKeys && <Kbd keys={fillKeys} className="ml-auto opacity-80" />}
         </Button>
         {status && (
-          <p
-            role="alert"
-            className="mt-2 border-l-4 border-erro bg-erro-claro px-3 py-2 text-[13px] text-erro"
-          >
+          <p role="alert" className="mt-2 rounded-lg bg-erro-claro px-3 py-2 text-[13px] text-erro">
             {status}
           </p>
         )}

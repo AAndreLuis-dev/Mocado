@@ -18,6 +18,7 @@ describe('normalizeSettings', () => {
       cnpjTipo: 'hex',
       uf: 'XX',
       theme: 'neon',
+      language: 'fr',
       masked: 'yes',
       blockedDomains: ['a.test', 3, null],
       idadeMin: 200,
@@ -27,13 +28,15 @@ describe('normalizeSettings', () => {
       cnpjTipo: 'numerico',
       uf: '',
       theme: 'system',
+      language: 'auto',
       masked: true,
       blockedDomains: ['a.test'],
       idadeMin: 120,
       idadeMax: 120,
     });
-    expect(normalizeSettings({ uf: 'SP', idadeMin: 30.4 })).toMatchObject({
+    expect(normalizeSettings({ uf: 'SP', idadeMin: 30.4, language: 'en' })).toMatchObject({
       uf: 'SP',
+      language: 'en',
       idadeMin: 30,
     });
   });

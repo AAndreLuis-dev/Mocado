@@ -18,14 +18,10 @@ export function Overrides() {
 
   const hosts = Object.keys(data).sort();
   if (hosts.length === 0)
-    return (
-      <p className="border-2 border-dashed border-linha px-6 py-14 text-center text-grafite">
-        {t('overrides.empty')}
-      </p>
-    );
+    return <p className="py-14 text-center text-grafite">{t('overrides.empty')}</p>;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       {hosts.map((host) => (
         <FormGrid key={host} cols={4}>
           <Band
@@ -68,7 +64,7 @@ export function Overrides() {
                     ))}
                   </PenSelect>
                 </Box>
-                <Box className="items-start justify-center">
+                <Box className="items-start justify-end">
                   <Button
                     variant="ghost"
                     icon={<X size={15} />}

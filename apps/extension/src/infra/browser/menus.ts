@@ -1,6 +1,6 @@
 import type { FieldType } from '@mocado/core';
-import { t, fieldLabel } from './i18n';
-import { fillField, fillForm } from '../container';
+import { t, fieldLabel, loadLanguage } from './i18n';
+import { fillField, fillForm, preferences } from '../container';
 import { activeTabId, openHistory } from './navigation';
 
 export const MENU_TYPES: FieldType[] = [
@@ -34,7 +34,8 @@ export const MENU_TYPES: FieldType[] = [
   'texto',
 ];
 
-export function createMenus() {
+export async function createMenus() {
+  await loadLanguage((await preferences.settings()).language);
   browser.contextMenus.removeAll(() => {
     const add = (props: Parameters<typeof browser.contextMenus.create>[0]) =>
       browser.contextMenus.create(props);
