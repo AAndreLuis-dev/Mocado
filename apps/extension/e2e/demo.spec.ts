@@ -34,7 +34,7 @@ test('demo frames', async ({ context, sw, fill }) => {
   const extId = new URL(sw.url()).host;
   const hist = await context.newPage();
   await hist.setViewportSize({ width: 1280, height: 800 });
-  await hist.goto(`chrome-extension://${extId}/history.html`);
+  await hist.goto(`chrome-extension://${extId}/profiles.html`);
   await shot(hist, 'Todo preenchimento vai para o histórico');
   await hist.getByRole('searchbox').fill(cpf);
   await hist.getByRole('button', { name: 'Ver dados' }).first().click();

@@ -1,5 +1,5 @@
 export const openHistory = () =>
-  browser.tabs.create({ url: browser.runtime.getURL('/history.html') });
+  browser.tabs.create({ url: browser.runtime.getURL('/profiles.html') });
 
 export const openOptions = () => browser.runtime.openOptionsPage();
 

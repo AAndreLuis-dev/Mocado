@@ -15,7 +15,7 @@ test('histórico: busca pelo CPF, reuso, export/import', async ({
   const cpf = await form.locator('#cpf').inputValue();
 
   const hist = await context.newPage();
-  await hist.goto(`chrome-extension://${extId}/history.html`);
+  await hist.goto(`chrome-extension://${extId}/profiles.html`);
   await expect(hist.getByTestId('record')).toHaveCount(1);
 
   await hist.getByRole('searchbox').fill(cpf.replace(/\D/g, ''));
