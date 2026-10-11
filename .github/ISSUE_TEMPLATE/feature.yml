@@ -1,0 +1,17 @@
+name: Sugestão
+description: Um gerador, tipo de campo ou recurso novo
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Qual problema isso resolve
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposta
+      description: Para um documento novo, inclua a regra do dígito verificador e um exemplo oficial, se houver.
+    validations:
+      required: true

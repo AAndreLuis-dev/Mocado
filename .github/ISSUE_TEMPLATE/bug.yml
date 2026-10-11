@@ -1,0 +1,39 @@
+name: Bug
+description: Algo não funciona, ou um formulário é preenchido errado
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: O que aconteceu
+      description: E o que você esperava que acontecesse.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Como reproduzir
+      description: >-
+        Passos, e a URL se o formulário for público. Se não for, cole o HTML do campo
+        (botão direito → Inspecionar → Copiar outerHTML), sem dados reais.
+      placeholder: |
+        1. Abrir https://…
+        2. Ctrl+Shift+F
+        3. O campo "Documento" recebeu um CEP
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Navegador e versão
+      placeholder: Chrome 141, Firefox 143…
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versão do Mocado
+      description: Em chrome://extensions ou about:addons.
+      placeholder: 0.1.0
+    validations:
+      required: true
