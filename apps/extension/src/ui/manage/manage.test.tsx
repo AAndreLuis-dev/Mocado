@@ -63,6 +63,7 @@ describe('history', () => {
     await user.type(within(record).getByLabelText('Rótulo do perfil'), 'admin teste');
     await user.tab();
     await vi.waitFor(async () => expect((await repo.get('a'))?.label).toBe('admin teste'));
+    await vi.waitFor(() => expect(screen.getByTestId('record')).not.toBe(record));
 
     await user.click(screen.getByRole('button', { name: 'Reusar este perfil' }));
     await vi.waitFor(async () => expect(await pinStore.get()).toBe('a'));
