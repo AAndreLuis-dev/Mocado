@@ -1,5 +1,12 @@
 # Mocado
 
+[![CI](https://github.com/AAndreLuis-dev/Mocado/actions/workflows/ci.yml/badge.svg)](https://github.com/AAndreLuis-dev/Mocado/actions/workflows/ci.yml)
+[![Licença: MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-2448c8.svg)](LICENSE)
+![Manifest V3](https://img.shields.io/badge/Manifest-V3-2448c8.svg)
+![Chrome · Edge · Brave · Opera · Firefox](https://img.shields.io/badge/Chrome%20%C2%B7%20Edge%20%C2%B7%20Brave%20%C2%B7%20Opera%20%C2%B7%20Firefox-suportados-7a2e8e.svg)
+
+![Mocado: dados de teste brasileiros, preenchidos em um atalho](docs/images/promo-marquee-1400x560.png)
+
 Extensão de navegador que gera dados de teste brasileiros válidos, preenche formulários com eles e guarda um histórico para você saber depois qual CPF foi usado em qual cadastro.
 
 > ⚠️ **Dados fictícios, matematicamente válidos, apenas para testes de software.**
@@ -7,6 +14,13 @@ Extensão de navegador que gera dados de teste brasileiros válidos, preenche fo
 ![Demonstração do Mocado preenchendo formulários e buscando no histórico](docs/demo.gif)
 
 Funciona no Chrome, Edge, Brave, Opera e Firefox. Tudo roda no navegador: sem rede, sem telemetria, sem conta.
+
+## Telas
+
+|                                                                                         |                                                                                               |
+| --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| ![Preencher o formulário inteiro com um atalho](docs/images/screenshot-1-fill.png)      | ![Histórico: cole um CPF e descubra onde ele foi usado](docs/images/screenshot-3-history.png) |
+| ![Gerador avulso no popup, tema claro e escuro](docs/images/screenshot-4-generator.png) | ![Respeita máscaras, tudo local](docs/images/screenshot-5-local.png)                          |
 
 ## Como usar
 
@@ -140,6 +154,16 @@ pnpm zip                             # ZIPs para Chrome, Firefox e código-fonte
 
 Para o e2e, instale o Chromium do Playwright uma vez: `pnpm --filter extension exec playwright install chromium`. O Playwright não consegue apertar atalhos de extensão, então `pnpm e2e` usa um build separado (`MOCADO_E2E=1`, saída em `.output/e2e`) que adiciona `http://localhost/*` às permissões; os testes chamam os mesmos handlers de atalho e menu pelo `globalThis.mocado` do background.
 
+### Testes
+
+| Camada                                                       | Onde                                           | Ferramenta                                                                                  |
+| ------------------------------------------------------------ | ---------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Geradores e validadores                                      | `packages/core/test/`                          | Vitest, cobertura mínima de 90% das linhas                                                  |
+| Domínio, casos de uso, detecção, preenchimento, storage e UI | `apps/extension/src/**/*.test.ts(x)`           | Vitest + jsdom + Testing Library + `fakeBrowser` do WXT, cobertura mínima de 85% das linhas |
+| A extensão de verdade num Chromium                           | `apps/extension/e2e/` contra `apps/playground` | Playwright                                                                                  |
+
+`pnpm test` falha se a cobertura cair abaixo do mínimo; o relatório fica em `coverage/` de cada pacote. Para rodar um teste só: `pnpm --filter extension exec vitest run src/ui/manage` ou `pnpm --filter extension exec playwright test e2e/fill.spec.ts` (depois de `MOCADO_E2E=1 pnpm --filter extension exec wxt build`).
+
 Regras do projeto:
 
 - **Commits** em [Conventional Commits](https://www.conventionalcommits.org/pt-br/) (`feat(core): …`, `fix(extension): …`).
@@ -149,7 +173,7 @@ Regras do projeto:
 - **Permissões:** só as quatro da tabela acima. Nada de host permissions fixas, rede ou telemetria.
 - **Novo tipo de campo:** adicione em `FIELD_TYPES` (`packages/core/src/profiles.ts`), os sinônimos em `synonyms.ts`, casos em `classify.test.ts` e o rótulo `field.<tipo>` nos dois locales.
 - **Formulário que o Mocado preenche mal:** crie uma página em `apps/playground` e um caso no e2e.
-- Ícones: `pnpm --filter extension icons` gera os PNGs a partir de `assets/icon.svg`. GIF e screenshots: `pnpm --filter extension demo`.
+- Ícones: `pnpm --filter extension icons` gera os PNGs a partir de `assets/icon.svg`. GIF e imagens de `docs/images/` (README e lojas): `pnpm --filter extension demo`.
 
 ## Publicação
 
@@ -175,6 +199,10 @@ pnpm install --frozen-lockfile
 pnpm --filter extension exec wxt build -b firefox --mv3
 # saída: apps/extension/.output/firefox-mv3 (igual ao mocado-firefox.zip; minificado, não ofuscado)
 ```
+
+## Contribuindo
+
+Bugs, formulários preenchidos errado e ideias de geradores entram pelas [issues](https://github.com/AAndreLuis-dev/Mocado/issues/new/choose). Para mandar código, veja o [guia de contribuição](.github/CONTRIBUTING.md): fork, `pnpm check` + `pnpm e2e` verdes e PR em Conventional Commits. Vulnerabilidades: [relato privado](.github/SECURITY.md).
 
 ## Licença
 
