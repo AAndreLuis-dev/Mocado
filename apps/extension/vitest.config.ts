@@ -8,5 +8,6 @@ export default defineConfig({
     setupFiles: ['vitest.setup.ts'],
     include: ['src/**/*.test.{ts,tsx}', 'entrypoints/**/*.test.{ts,tsx}'],
     passWithNoTests: true,
+    coverage: { include: ['src/**'], thresholds: { lines: 85 } },
   },
 });
